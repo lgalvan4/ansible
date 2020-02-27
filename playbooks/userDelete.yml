@@ -1,0 +1,9 @@
+---
+- name: Remove a User
+  hosts: win
+  gather_facts: false
+  tasks:
+    - name: Remove User
+      win_user:
+        name: ansible
+        state: absent
