@@ -1,0 +1,10 @@
+---
+- name: Query a user
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Query User
+      win_user:
+        name: ansibletest
+        password: "@ns1bl3"
+        state: query
