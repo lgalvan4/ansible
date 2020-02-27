@@ -5,6 +5,6 @@
   tasks:
     - name: Delete User
       win_user:
-        name: ansible
+        name: ansibletest
         password: "@ns1bl3"
         state: absent
