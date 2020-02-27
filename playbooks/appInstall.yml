@@ -1,0 +1,12 @@
+---
+- hosts: win
+  gather_facts: no
+  tasks:
+  - name: Manage Google Chrome
+    win_chocolatey:
+      name: googlechrome
+      state: present
+  - name: Manage Firefox
+    win_chocolatey:
+      name: firefox
+      state: present
