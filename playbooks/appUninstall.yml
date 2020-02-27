@@ -1,0 +1,12 @@
+---
+- hosts: win
+  gather_facts: no
+  tasks:
+  - name: Uninstall Google Chrome
+    win_chocolatey:
+      name: googlechrome
+      state: absent
+  - name: Uninstall Firefox
+    win_chocolatey:
+      name: firefox
+      state: absent
