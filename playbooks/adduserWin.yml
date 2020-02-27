@@ -8,3 +8,5 @@
         name: ansibletest
         password: "@ns1bl3"
         state: present
+        groups:
+            - Administrators
