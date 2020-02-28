@@ -7,6 +7,6 @@
   tasks:
     - name: List Windows Users
       win_command: "net user"
-        args:
-          #stdin: user
-          stdout: always
+      args:
+        #stdin: user
+        stdout: always
