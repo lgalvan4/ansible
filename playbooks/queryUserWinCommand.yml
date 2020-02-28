@@ -6,7 +6,7 @@
     - name: List Windows Users
       win_command: "net user"
       register: command
-      failed_when: command.stderr != ""
+      #failed_when: command.stderr != ""
       args:
         #stdin: user
         stdout: always
