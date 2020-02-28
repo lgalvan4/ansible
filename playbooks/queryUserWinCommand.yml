@@ -1,11 +1,12 @@
+---
 - name: List Users
-    hosts: win
-    gather_facts: false
-    register: ret_code
-    failed_when: diff_cmd.stderr != ""
-    tasks:
-        - name: List Windows Users
-        win_command: "net user"
+  hosts: all
+  gather_facts: false
+  register: ret
+  failed_when: ret.stderr != ""
+  tasks:
+    - name: List Windows Users
+      win_command: "net user"
         args:
-            #stdin: user
-            stdout: always
+          #stdin: user
+          stdout: always
