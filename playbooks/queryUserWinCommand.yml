@@ -2,11 +2,11 @@
 - name: List Users
   hosts: all
   gather_facts: false
-  register: ret
-  failed_when: ret.stderr != ""
   tasks:
     - name: List Windows Users
       win_command: "net user"
+      register: command
+      failed_when: command.stderr != ""
       args:
         #stdin: user
         stdout: always
