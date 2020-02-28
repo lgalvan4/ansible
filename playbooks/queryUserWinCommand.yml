@@ -10,3 +10,5 @@
       args:
         #stdin: user
         stdout: always
+    - debug:
+      var: command.stdout
