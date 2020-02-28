@@ -7,7 +7,6 @@
       win_command: "net user"
       register: command
       failed_when: command.stderr != "" and command.rc != 0
-      debug: var
       args:
         #stdin: user
         stdout: always
