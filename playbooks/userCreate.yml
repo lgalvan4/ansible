@@ -1,6 +1,6 @@
 ---
 - name: Add a User
-  hosts: win
+  hosts: all
   gather_facts: false
   tasks:
     - name: Add User
