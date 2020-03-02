@@ -1,7 +1,8 @@
 ---
 - name: Add a User
   hosts: all
-   vars: windows_user: ansibletest
+    vars: 
+      windows_user: ansibletest
   gather_facts: false
   tasks:
     - name: Add User
