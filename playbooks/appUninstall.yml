@@ -1,5 +1,5 @@
 ---
-- hosts: win
+- hosts: all
   gather_facts: no
   tasks:
   - name: Uninstall Google Chrome
