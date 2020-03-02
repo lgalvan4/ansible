@@ -1,9 +1,11 @@
 ---
 - name: Remove a User
+  vars:
+    windows_user
   hosts: all
   gather_facts: false
   tasks:
     - name: Remove User
       win_user:
-        name: ansible
+        name: "{{ windows_user }}"
         state: absent
