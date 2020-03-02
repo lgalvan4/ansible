@@ -1,8 +1,8 @@
 ---
 - name: Remove a User
+- hosts: all
   vars:
     windows_user
-  hosts: all
   gather_facts: false
   tasks:
     - name: Remove User
