@@ -1,11 +1,12 @@
 ---
+windows_user: ansibletest
 - name: Add a User
   hosts: all
   gather_facts: false
   tasks:
     - name: Add User
       win_user:
-        name: ansible
+        name: windows_user
         password: "4N$1bl32020"
         state: present
         groups:
