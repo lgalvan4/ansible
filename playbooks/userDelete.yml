@@ -2,7 +2,7 @@
 - name: Remove a User
 - hosts: all
   vars:
-    windows_user
+    windows_user: placeholder
   gather_facts: false
   tasks:
     - name: Remove User
