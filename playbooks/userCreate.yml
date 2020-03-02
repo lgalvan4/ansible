@@ -3,12 +3,14 @@
   hosts: all
   vars: 
     windows_user: ansibletest
+    windows_password: "4N$1bl32020"
+    windows_group: "Administrators"
   gather_facts: false
   tasks:
     - name: Add User
       win_user:
         name: "{{ windows_user }}"
-        password: "4N$1bl32020"
+        password: "{{ windows_password }}"
         state: present
         groups:
-         - Administrators
+         - "{{ windows_group }}"
