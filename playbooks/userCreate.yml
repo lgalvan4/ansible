@@ -7,7 +7,7 @@
   tasks:
     - name: Add User
       win_user:
-        name: windows_user
+        name: {{ windows_user }}
         password: "4N$1bl32020"
         state: present
         groups:
