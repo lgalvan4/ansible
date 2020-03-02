@@ -1,6 +1,6 @@
 ---
 - name: Remove a User
-  hosts: win
+  hosts: all
   gather_facts: false
   tasks:
     - name: Remove User
