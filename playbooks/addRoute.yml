@@ -1,0 +1,14 @@
+---
+- name: Add Route To Ansible Host
+  hosts: localhost
+  vars:
+    marcara: placeholder
+    prefijo: placeholder
+    siguiente_salto: placeholder
+  gather_facts: false
+  tasks:
+    - name: configure static route
+      net_static_route:
+        prefix: "{{ prefijo }}"
+        mask: "{{ marcara }}"
+        next_hop: "{{ siguiente_salto }}"
