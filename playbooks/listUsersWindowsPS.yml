@@ -23,5 +23,5 @@
     - name: Print Output
       #debug: var=command.stdout_lines
       #debug: contents
-      debug: msg="{{ command.stdout | replace('\n', '')}}"
+      debug: msg="{{ command.stdout | replace('\n\r', '')}}"
 
