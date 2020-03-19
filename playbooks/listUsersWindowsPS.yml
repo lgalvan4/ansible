@@ -1,0 +1,9 @@
+---
+# This playbook lists the users in Windows hosts
+
+- name: Run powershell script
+  hosts: all 
+  gather_facts: false
+  tasks:
+    - name: Run powershell script
+      script: https://github.com/koolfit/ansible/blob/master/playbooks/windowsFiles/ListUsers.ps1
