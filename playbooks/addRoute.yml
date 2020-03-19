@@ -10,7 +10,7 @@
     # 'argv' is a parameter, indented one level from the module
     - name: Add Static Route for BackUp Net
       register: addrute
-      when: "{{ interface }}" == "10.49.5.209"
+      when: interface == "10.49.5.209"
       command:
         argv:
           - ip route add -net
@@ -20,7 +20,7 @@
     # 'argv' is a parameter, indented one level from the module
     - name: Add Static Route for Internet Net
       register: addrute
-      when: "{{ interface }}" == "10.10.2.155"
+      when: interface == "10.10.2.155"
       command:
         argv:
           - ip route add -net
