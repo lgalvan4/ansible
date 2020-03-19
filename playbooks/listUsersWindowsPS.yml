@@ -7,12 +7,12 @@
   tasks:
     - name: Run powershell script
       win_shell: |
-        Get-WmiObject -Class Win32_UserAccount
-        #$adsi = [ADSI]"WinNT://$env:COMPUTERNAME"
-        #$adsi.Children | where {$_.SchemaClassName -eq 'user'} | Foreach-Object {
-        #$groups = $_.Groups() | Foreach-Object {$_.GetType().InvokeMember("Name", 'GetProperty', $null, $_, $null)}
-        #$_ | Select-Object @{n='UserName';e={$_.Name}},@{n='Groups';e={$groups -join ';'}}
-        #}
+        #Get-WmiObject -Class Win32_UserAccount
+        $adsi = [ADSI]"WinNT://$env:COMPUTERNAME"
+        $adsi.Children | where {$_.SchemaClassName -eq 'user'} | Foreach-Object {
+        $groups = $_.Groups() | Foreach-Object {$_.GetType().InvokeMember("Name", 'GetProperty', $null, $_, $null)}
+        $_ | Select-Object @{n='UserName';e={$_.Name}},@{n='Groups';e={$groups -join ';'}}
+        }
       register: command
       #failed_when: command.stderr != "" and command.rc != 0
       args:
