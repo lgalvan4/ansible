@@ -18,6 +18,8 @@
       args:
         #stdin: user
         stdout: always
+        contents: "{{ command.stdout_lines | replace('\n', '')}}"
         
     - name: Print Output
-      debug: var=command.stdout_lines | replace('\n', '')
+      #debug: var=command.stdout_lines
+      debug: var=contents
