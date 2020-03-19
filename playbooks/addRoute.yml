@@ -1,28 +1,30 @@
 ---
 - name: Add Route To Ansible Host
+  #hosts: 127.0.0.1
   hosts: localhost
   connection: local
   vars:
     interface: placeholder
     mask: placeholder
     destination: placeholder
-    action: placeholder
+    route_action: placeholder
   gather_facts: false
   tasks:
     - name: Add Static Route 
-      when: action == "add"
+      when: route_action == "add"
       register: output
-      command: /sbin/route add -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"
+      shell: /sbin/route add -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"
 
     - name: Delete Static Route 
-      when: action == "delete"
+      when: route_action == "delete"
       register: output
-      command: /sbin/route del -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"
+      shell: /sbin/route del -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"
 
     - name: List Static Routes 
-      when: action == "list"
+      when: route_action == "list"
       register: output
-      command: /sbin/route -n
+      #command: route -n
+      shell: route -n
 
     - name: Print Output
-      debug: var=output
+      debug: var=output.stdout_lines
