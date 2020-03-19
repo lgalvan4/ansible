@@ -1,6 +1,7 @@
 ---
 - name: Add Route To Ansible Host
   hosts: localhost
+  connection: local
   vars:
     interface: placeholder
     mask: placeholder
