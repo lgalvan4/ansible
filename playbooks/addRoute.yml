@@ -25,7 +25,7 @@
       register: output
       command: 
         chdir: /sbin/
-        argv: route
+        argv: 
           - route
           - -n
       #command: /sbin/route -n
