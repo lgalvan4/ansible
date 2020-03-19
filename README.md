@@ -1,2 +1,2 @@
 # ansible
-Ansible AWX Test Project Repo
+Ansible AWX Project Repo
