@@ -24,7 +24,7 @@
       when: route_action == "list"
       register: output
       #command: route -n
-      shell: route -n
+      shell: /sbin/route -n
 
     - name: Print Output
       debug: var=output.stdout_lines
