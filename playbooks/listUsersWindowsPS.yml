@@ -20,4 +20,4 @@
         stdout: always
         
     - name: Print Output
-      debug: var=command.stdout_lines
+      debug: var=command.stdout_lines | replace('\n', '')
