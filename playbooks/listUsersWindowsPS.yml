@@ -13,3 +13,11 @@
         #$groups = $_.Groups() | Foreach-Object {$_.GetType().InvokeMember("Name", 'GetProperty', $null, $_, $null)}
         #$_ | Select-Object @{n='UserName';e={$_.Name}},@{n='Groups';e={$groups -join ';'}}
         #}
+      register: command
+      #failed_when: command.stderr != "" and command.rc != 0
+      args:
+        #stdin: user
+        stdout: always
+        
+    - name: Print Output
+      debug: var=command.stdout_lines
