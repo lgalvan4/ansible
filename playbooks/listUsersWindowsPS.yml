@@ -6,4 +6,4 @@
   gather_facts: false
   tasks:
     - name: Run powershell script
-      script: https://github.com/koolfit/ansible/blob/master/playbooks/windowsFiles/ListUsers.ps1
+      script: files/ListUsers.ps1
