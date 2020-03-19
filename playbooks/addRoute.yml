@@ -11,17 +11,17 @@
     - name: Add Static Route 
       when: action == "add"
       register: output
-      command: route add -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"
+      command: /sbin/route add -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"
 
-    - name: Add Static Route 
+    - name: Delete Static Route 
       when: action == "delete"
       register: output
-      command: route del -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"
+      command: /sbin/route del -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"
 
-    - name: Add Static Route 
+    - name: List Static Routes 
       when: action == "list"
       register: output
-      command: route -n
+      command: /sbin/route -n
 
     - name: Print Output
-      debug: var=output.sdout_lines
+      debug: var=output.stdout_lines
