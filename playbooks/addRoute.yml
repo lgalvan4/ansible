@@ -23,8 +23,9 @@
     - name: List Static Routes 
       when: route_action == "list"
       register: output
-      chdir: /sbin/
-      command: route -n
+      command: 
+        chdir: /sbin/
+        cmd: route -n
       #command: /sbin/route -n
 
     - name: Print Output
