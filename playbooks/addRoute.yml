@@ -26,7 +26,8 @@
       command: 
         chdir: /sbin/
         argv: 
-          - ls
+          - which
+          - route
       #command: /sbin/route -n
 
     - name: Print Output
