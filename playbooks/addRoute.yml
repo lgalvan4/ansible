@@ -25,4 +25,4 @@
       command: /sbin/route -n
 
     - name: Print Output
-      debug: var=output.stdout_lines
+      debug: var=output
