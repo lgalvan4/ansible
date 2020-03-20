@@ -23,11 +23,10 @@
     - name: List Static Routes 
       when: route_action == "list"
       register: output
-      command: 
+      shell: 
+        cmd: whoami
         chdir: /sbin/
-        argv: 
-          - which
-          - route
+
       #command: /sbin/route -n
 
     - name: Print Output
