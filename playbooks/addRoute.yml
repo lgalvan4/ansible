@@ -24,7 +24,7 @@
       when: route_action == "list"
       register: output
       shell: 
-        cmd: ifconfig
+        cmd: ping -c 4 www.google.com
         #chdir: /etc/ansible
 
       #command: /sbin/route -n
