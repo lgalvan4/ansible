@@ -24,8 +24,8 @@
       when: route_action == "list"
       register: output
       shell: 
-        cmd: ls -la
-        chdir: /etc/ansible
+        cmd: hostnamectl
+        #chdir: /etc/ansible
 
       #command: /sbin/route -n
 
