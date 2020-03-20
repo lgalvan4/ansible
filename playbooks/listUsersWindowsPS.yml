@@ -1,7 +1,7 @@
 ---
 # This playbook lists the users in Windows hosts
 
-- name: Run powershell script
+- name: List users in MS Windows hosts
   hosts: all 
   gather_facts: false
   tasks:
