@@ -24,8 +24,8 @@
       when: route_action == "list"
       register: output
       shell: 
-        cmd: route -n
-        chdir: /sbin/
+        cmd: ls -la
+        chdir: /etc/ansible/playbooks
 
       #command: /sbin/route -n
 
