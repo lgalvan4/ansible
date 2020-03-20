@@ -24,7 +24,7 @@
       when: route_action == "list"
       register: output
       shell: 
-        cmd: whoami
+        cmd: route -n
         chdir: /sbin/
 
       #command: /sbin/route -n
