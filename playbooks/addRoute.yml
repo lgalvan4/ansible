@@ -1,7 +1,7 @@
 ---
 - name: Add Route To Ansible Host
   #hosts: 127.0.0.1
-  hosts: localhost
+  hosts: 10.49.5.209
   connection: local
   vars:
     interface: placeholder
@@ -24,57 +24,9 @@
       #when: route_action == "list"
       register: output
       shell:
-        #cmd: /sbin/route -n
-        cmd: ping -c 4 172.18.0.1
+        cmd: /sbin/route -n
+        #cmd: ping -c 4 10.49.5.209
         #chdir: /etc/ansible
-
-    - name: Print Output
-      debug: var=output.stdout_lines
-
-    - name: List Static Routes 
-      register: output
-      shell: 
-        cmd: ping -c 4 172.19.0.1
-
-    - name: Print Output
-      debug: var=output.stdout_lines
-
-    - name: List Static Routes 
-      register: output
-      shell: 
-        cmd: ping -c 4 172.17.0.1
-
-    - name: Print Output
-      debug: var=output.stdout_lines
-
-    - name: List Static Routes 
-      register: output
-      shell: 
-        cmd: ping -c 4 10.49.5.209
-
-    - name: Print Output
-      debug: var=output.stdout_lines
-
-    - name: List Static Routes 
-      register: output
-      shell: 
-        cmd: ping -c 4 10.10.2.155
-
-    - name: Print Output
-      debug: var=output.stdout_lines
-
-    - name: List Static Routes 
-      register: output
-      shell: 
-        cmd: ping -c 4 192.168.80.24
-
-    - name: Print Output
-      debug: var=output.stdout_lines
-
-    - name: List Static Routes 
-      register: output
-      shell: 
-        cmd: ping -c 4 192.168.0.41
 
     - name: Print Output
       debug: var=output.stdout_lines
