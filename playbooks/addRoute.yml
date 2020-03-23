@@ -10,20 +10,22 @@
     route_action: placeholder
   gather_facts: false
   tasks:
-    - name: Add Static Route 
-      when: route_action == "add"
-      register: output
-      shell: /sbin/route add -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"
+    #- name: Add Static Route 
+    #  when: route_action == "add"
+    #  register: output
+    #  shell: /sbin/route add -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"
 
-    - name: Delete Static Route 
-      when: route_action == "delete"
-      register: output
-      shell: /sbin/route del -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"
+    #- name: Delete Static Route 
+    #  when: route_action == "delete"
+    #  register: output
+    #  shell: /sbin/route del -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"
 
     - name: List Static Routes 
       #when: route_action == "list"
       register: output
-      shell: linuxFiles/addRoute.sh
+      command: chmod +x linuxFiles/foo-install.sh
+      command: cd linuxFiles/
+      shell: ./addRoute.sh
         #cmd: /sbin/route -n
         #cmd: ping -c 4 10.49.5.209
         #chdir: /etc/ansible
