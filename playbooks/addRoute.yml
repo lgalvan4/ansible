@@ -23,7 +23,7 @@
     - name: List Static Routes 
       #when: route_action == "list"
       register: output
-      shell: pwd && ls -la || cd linuxFiles || chmod +x addRoute.sh || linuxFiles/addRoute.sh
+      shell: pwd && cd linuxFiles && ls -la || chmod +x addRoute.sh || linuxFiles/addRoute.sh
         #cmd: /sbin/route -n
         #cmd: ping -c 4 10.49.5.209
         #chdir: /etc/ansible
