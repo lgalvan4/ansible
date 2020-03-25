@@ -23,7 +23,8 @@
     - name: List Static Routes 
       #when: route_action == "list"
       register: output
-      shell: ssh -oStrictHostKeyChecking=no ubuntu@10.49.5.209 "route -n"
+      shell: cd ~/.ssh && cat id_rsa.pub
+      #shell: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 "route -n"
       #shell: pwd && cd linuxFiles && chmod 777 addRoute.sh && ls -la && ./addRoute.sh
         #cmd: /sbin/route -n
         #cmd: ping -c 4 10.49.5.209
