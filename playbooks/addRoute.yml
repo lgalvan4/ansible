@@ -23,7 +23,8 @@
     - name: List Static Routes 
       #when: route_action == "list"
       register: output
-      shell: ssh ubuntu@10.49.5.209 "route -n"
+      shell: cd ~ && echo |1|BK9rfiP7f2uSfCx5ggsChbX2LJg=|XXRFI81ATUzz8ceSuENN4G8yyT8= ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMnV10rXVHT1+S8A+9JBL+EyIAyqKdu4W5OmCisNzd8Zc/bygUkhh3Rnrb3vN2vxUbKDmGYP2BG6SOKPIo0vVJU= >> .ssh/known_hosts || ssh ubuntu@10.49.5.209 "route -n"
+      #shell: ssh ubuntu@10.49.5.209 "route -n"
       #shell: pwd && cd linuxFiles && chmod 777 addRoute.sh && ls -la && ./addRoute.sh
         #cmd: /sbin/route -n
         #cmd: ping -c 4 10.49.5.209
