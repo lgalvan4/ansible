@@ -1,5 +1,5 @@
 #!/bin/sh
 echo "swithing path"
-ls -la
 cd /sbin/
+ls -la
 route -n
