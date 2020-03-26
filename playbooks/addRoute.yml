@@ -23,10 +23,11 @@
     - name: List Static Routes 
       #when: route_action == "list"
       register: output
-      expect:
-        command: ssh-copy-id ubuntu@10.49.5.209
-        responses: 
-          (?i)password: "atomic"
+      shell: apt-get update -y && apt-get install -y python-pexpect
+      #expect:
+        # command: ssh-copy-id ubuntu@10.49.5.209
+        # responses: 
+        #   (?i)password: "atomic"
       #shell: cd /root/.ssh && cat id_rsa.pub
       #shell: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 "route -n"
       #shell: pwd && cd linuxFiles && chmod 777 addRoute.sh && ls -la && ./addRoute.sh
