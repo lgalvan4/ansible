@@ -24,7 +24,7 @@
       #when: route_action == "list"
       register: output
       expect:
-        command: ssh-copy-id  ubuntu@10.49.5.209
+        command: ssh-copy-id ubuntu@10.49.5.209
         responses: 
           (?i)password: "atomic"
       #shell: cd /root/.ssh && cat id_rsa.pub
