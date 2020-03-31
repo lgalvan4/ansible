@@ -14,7 +14,7 @@
       when: route_action == "add"
       register: output
       expect:
-        command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'route add -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"'
+        command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'sudo route add -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"'
         responses: 
           (?i)password: "atomic"
       #shell: /sbin/route add -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"
@@ -23,7 +23,7 @@
       when: route_action == "delete"
       register: output
       expect:
-        command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'route del -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"'
+        command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'sudo route del -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"'
         responses: 
           (?i)password: "atomic"
       #shell: /sbin/route del -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"
