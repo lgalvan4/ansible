@@ -13,28 +13,35 @@
     - name: Add Static Route 
       when: route_action == "add"
       register: output
-      shell: /sbin/route add -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"
+      expect:
+        command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'route add -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"'
+        responses: 
+          (?i)password: "atomic"
+      #shell: /sbin/route add -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"
 
     - name: Delete Static Route 
       when: route_action == "delete"
       register: output
-      shell: /sbin/route del -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"
+      expect:
+        command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'route del -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"'
+        responses: 
+          (?i)password: "atomic"
+      #shell: /sbin/route del -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"
 
     - name: List Static Routes 
-      #when: route_action == "list"
+      when: route_action == "list"
       register: output
-      #pip:
-      #  name: pexpect
-      #become: yes
       expect:
-         command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 "route -n"
-         responses: 
-           (?i)password: "atomic"
-      #shell: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 "route -n"
-      #shell: pwd && cd linuxFiles && chmod 777 addRoute.sh && ls -la && ./addRoute.sh
-        #cmd: /sbin/route -n
-        #cmd: ping -c 4 10.49.5.209
-        #chdir: /etc/ansible
+        command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'route -n'
+        responses: 
+          (?i)password: "atomic"
+      #shell: /sbin/route -n
+
+#    - name: Install pexpect
+#      register: output
+#      pip:
+#        name: pexpect
+#      become: yes
 
     - name: Print Output
       debug: var=output.stdout_lines
