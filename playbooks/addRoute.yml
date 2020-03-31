@@ -12,36 +12,45 @@
   tasks:
     - name: Add Static Route 
       when: route_action == "add"
-      register: output
+      register: addoutput
       expect:
         command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'sudo route add -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"'
         responses: 
           (?i)password: "atomic"
       #shell: /sbin/route add -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"
 
+    - name: Print Add Output
+      when: route_action == "add"
+      debug: var=addoutput.stdout_lines
+
     - name: Delete Static Route 
       when: route_action == "delete"
-      register: output
+      register: deloutput
       expect:
         command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'sudo route del -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"'
         responses: 
           (?i)password: "atomic"
       #shell: /sbin/route del -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"
 
+    - name: Print Del Output
+      when: route_action == "delete"
+      debug: var=deloutput.stdout_lines
+
     - name: List Static Routes 
       when: route_action == "list"
-      register: output
+      register: listoutput
       expect:
         command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'route -n'
         responses: 
           (?i)password: "atomic"
       #shell: /sbin/route -n
 
+    - name: Print Del Output
+      when: route_action == "list"
+      debug: var=listoutput.stdout_lines
+
 #    - name: Install pexpect
 #      register: output
 #      pip:
 #        name: pexpect
 #      become: yes
-
-    - name: Print Output
-      debug: var=output.stdout_lines
