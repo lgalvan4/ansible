@@ -45,7 +45,7 @@
           (?i)password: "atomic"
       #shell: /sbin/route -n
 
-    - name: Print Del Output
+    - name: Print List Output
       when: route_action == "list"
       debug: var=listoutput.stdout_lines
 
