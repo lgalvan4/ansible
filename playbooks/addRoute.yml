@@ -59,7 +59,7 @@
       #shell: /sbin/route -n
       ignore_errors: True
 
-    - name: Delete Static Route Error
+    - name: List Static Route Error
       when: route_action == "list" and listoutput.rc != 0
       fail:
         msg: 'LIST ROUTES FAILIED: "{{ listoutput.stdout_lines }}"'
