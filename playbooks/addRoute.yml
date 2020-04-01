@@ -23,7 +23,7 @@
     - name: Add Static Route Error
       when: route_action == "add" and addoutput.rc != 0
       fail:
-        msg: "ADD ROUTE FAILIED: addoutput.stdout_lines"
+        msg: 'ADD ROUTE FAILIED: "{{ addoutput.stdout_lines }}"'
 
 
     - name: Print Add Output
@@ -43,7 +43,7 @@
     - name: Delete Static Route Error
       when: route_action == "delete" and deloutput.rc != 0
       fail:
-        msg: "DELETE ROUTE FAILIED: deloutput.stdout_lines"
+        msg: 'DELETE ROUTE FAILIED: "{{ deloutput.stdout_lines }}"'
 
     - name: Print Del Output
       when: route_action == "delete" and deloutput.rc == 0
@@ -62,7 +62,7 @@
     - name: Delete Static Route Error
       when: route_action == "list" and listoutput.rc != 0
       fail:
-        msg: "DELETE ROUTE FAILIED: listoutput.stdout_lines "
+        msg: 'LIST ROUTES FAILIED: "{{ listoutput.stdout_lines }}"'
 
     - name: Print List Output
       when: route_action == "list" and listoutput.rc == 0
