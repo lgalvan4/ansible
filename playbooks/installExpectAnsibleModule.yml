@@ -1,0 +1,14 @@
+---
+- name: Install Expect Ansible Module
+  hosts: 10.49.5.209
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Install pexpect
+      register: output
+      pip:
+        name: pexpect
+      become: yes
+
+    - name: Print Output
+      debug: var=output.stdout_lines

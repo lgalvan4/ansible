@@ -1,6 +1,5 @@
 ---
 - name: Add Route To Ansible Host
-  #hosts: 127.0.0.1
   hosts: 10.49.5.209
   connection: local
   vars:
@@ -10,6 +9,7 @@
     route_action: placeholder
   gather_facts: false
   tasks:
+#------------------------------- ADD ROUTE TASK
     - name: Add Static Route 
       when: route_action == "add"
       register: addoutput
@@ -17,7 +17,6 @@
         command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'sudo route add -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"'
         responses: 
           (?i)password: "atomic"
-      #shell: /sbin/route add -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"
       ignore_errors: True
       no_log: True
 
@@ -26,11 +25,11 @@
       fail:
         msg: 'ADD ROUTE FAILIED: "{{ addoutput.stdout_lines }}"'
 
-
     - name: Print Add Output
       when: route_action == "add" and addoutput.rc == 0
       debug: var=addoutput.stdout_lines
 
+#------------------------------- DELETE ROUTE TASK
     - name: Delete Static Route 
       when: route_action == "delete"
       register: deloutput
@@ -38,7 +37,6 @@
         command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'sudo route del -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"'
         responses: 
           (?i)password: "atomic"
-      #shell: /sbin/route del -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"
       ignore_errors: True
       no_log: True
 
@@ -51,6 +49,7 @@
       when: route_action == "delete" and deloutput.rc == 0
       debug: var=deloutput.stdout_lines
 
+#------------------------------- LIST ROUTES TASK
     - name: List Static Routes 
       when: route_action == "list"
       register: listoutput
@@ -58,7 +57,6 @@
         command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'route -n'
         responses: 
           (?i)password: "atomic"
-      #shell: /sbin/route -n
       ignore_errors: True
       no_log: True
 
@@ -71,8 +69,22 @@
       when: route_action == "list" and listoutput.rc == 0
       debug: var=listoutput.stdout_lines
 
-#    - name: Install pexpect
-#      register: output
-#      pip:
-#        name: pexpect
-#      become: yes
+#------------------------------- RESTART NETWORK SERVICE TASK
+    - name: Restart Network Service
+      when: route_action == "restart"
+      register: restarttoutput
+      expect:
+        command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'sudo  systemctl restart NetworkManager.service'
+        responses: 
+          (?i)password: "atomic"
+      ignore_errors: True
+      no_log: True
+
+    - name: Restart Network Service Error
+      when: route_action == "restart" and restarttoutput.rc != 0
+      fail:
+        msg: 'RESTART NETWORK SERVICE FAILIED: "{{ restarttoutput.stdout_lines }}"'
+
+    - name: Print Restart Network Service Output
+      when: route_action == "restart" and restarttoutput.rc == 0
+      debug: var=restarttoutput.stdout_lines
