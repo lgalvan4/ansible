@@ -19,11 +19,12 @@
           (?i)password: "atomic"
       #shell: /sbin/route add -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"
       ignore_errors: True
+      no_log: True
 
-    #- name: Add Static Route Error
-    #  when: route_action == "add" and addoutput.rc != 0
-    #  fail:
-    #    msg: 'ADD ROUTE FAILIED: "{{ addoutput.stdout_lines }}"'
+    - name: Add Static Route Error
+      when: route_action == "add" and addoutput.rc != 0
+      fail:
+        msg: 'ADD ROUTE FAILIED: "{{ addoutput.stdout_lines }}"'
 
 
     - name: Print Add Output
@@ -39,11 +40,12 @@
           (?i)password: "atomic"
       #shell: /sbin/route del -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"
       ignore_errors: True
+      no_log: True
 
-    #- name: Delete Static Route Error
-    #  when: route_action == "delete" and deloutput.rc != 0
-    #  fail:
-    #    msg: 'DELETE ROUTE FAILIED: "{{ deloutput.stdout_lines }}"'
+    - name: Delete Static Route Error
+      when: route_action == "delete" and deloutput.rc != 0
+      fail:
+        msg: 'DELETE ROUTE FAILIED: "{{ deloutput.stdout_lines }}"'
 
     - name: Print Del Output
       when: route_action == "delete" and deloutput.rc == 0
@@ -58,11 +60,12 @@
           (?i)password: "atomic"
       #shell: /sbin/route -n
       ignore_errors: True
+      no_log: True
 
-    #- name: List Static Route Error
-    #  when: route_action == "list" and listoutput.rc != 0
-    #  fail:
-    #    msg: 'LIST ROUTES FAILIED: "{{ listoutput.stdout_lines }}"'
+    - name: List Static Route Error
+      when: route_action == "list" and listoutput.rc != 0
+      fail:
+        msg: 'LIST ROUTES FAILIED: "{{ listoutput.stdout_lines }}"'
 
     - name: Print List Output
       when: route_action == "list" and listoutput.rc == 0
