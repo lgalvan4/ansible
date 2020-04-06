@@ -7,6 +7,7 @@
     mask: placeholder
     destination: placeholder
     route_action: placeholder
+    sshpass: "atomic"
   gather_facts: false
   tasks:
 #------------------------------- ADD ROUTE TASK
@@ -16,7 +17,7 @@
       expect:
         command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'sudo route add -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"'
         responses: 
-          (?i)password: "atomic"
+          (?i)password: "{{ sshpass }}"
       ignore_errors: True
       no_log: True
 
@@ -36,7 +37,7 @@
       expect:
         command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'sudo route del -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"'
         responses: 
-          (?i)password: "atomic"
+          (?i)password: "{{ sshpass }}"
       ignore_errors: True
       no_log: True
 
@@ -56,7 +57,7 @@
       expect:
         command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'route -n'
         responses: 
-          (?i)password: "atomic"
+          (?i)password: "{{ sshpass }}"
       ignore_errors: True
       no_log: True
 
@@ -74,9 +75,9 @@
       when: route_action == "restart"
       register: restarttoutput
       expect:
-        command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'sudo  systemctl restart NetworkManager.service'
+        command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'sudo  /etc/init.d/networking restart'
         responses: 
-          (?i)password: "atomic"
+          (?i)password: "{{ sshpass }}"
       ignore_errors: True
       no_log: True
 
