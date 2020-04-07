@@ -23,7 +23,7 @@
       no_log: True
 
     - name: Add Static Internet Route Error
-      when: route_action == "add" and addoutput_internet.rc != 0 
+      when: route_action == "add" and interface == "10.10.2.254" and addoutput_internet.rc != 0 
       fail:
         msg: 'ADD ROUTE FAILIED: "{{ addoutput_internet.stdout_lines }}"'
 
@@ -44,7 +44,7 @@
       no_log: True
 
     - name: Add Static Backup Route Error
-      when: route_action == "add" and addoutput_backup.rc != 0
+      when: route_action == "add" and interface == "10.49.5.195" and addoutput_backup.rc != 0
       fail:
         msg: 'ADD ROUTE FAILIED: "{{ addoutput_backup.stdout_lines }}"'
 
