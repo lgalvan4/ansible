@@ -13,7 +13,7 @@
 #------------------------------- ADD ROUTE INTERNET TASK
     - name: Add Static Route to Internet
       when: route_action == "add" and interface == "10.10.2.254"
-      register: addoutput
+      register: addoutput_internet
       expect:
         #command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'sudo route add -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"'
         command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'echo up route add -net "{{ destination }}" netmask "{{ mask }}" gw 10.10.2.254 dev ens4 | sudo tee -a /etc/network/interfaces'
@@ -22,19 +22,19 @@
       ignore_errors: True
       no_log: True
 
-    - name: Add Static Route Error
-      when: route_action == "add" and addoutput.rc != 0
+    - name: Add Static Internet Route Error
+      when: route_action == "add" and addoutput_internet.rc != 0 
       fail:
-        msg: 'ADD ROUTE FAILIED: "{{ addoutput.stdout_lines }}"'
+        msg: 'ADD ROUTE FAILIED: "{{ addoutput_internet.stdout_lines }}"'
 
     - name: Print Add Output
-      when: route_action == "add" and addoutput.rc == 0
-      debug: var=addoutput.stdout_lines
+      when: route_action == "add" and addoutput_internet.rc == 0
+      debug: var=addoutput_internet.stdout_lines
 
 #------------------------------- ADD ROUTE BACKUP TASK
     - name: Add Static Route to BackUp
       when: route_action == "add" and interface == "10.49.5.195"
-      register: addoutput
+      register: addoutput_backup
       expect:
         #command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'sudo route add -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"'
         command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'echo up route add -net "{{ destination }}" netmask "{{ mask }}" gw 10.49.5.195 dev ens3 | sudo tee -a /etc/network/interfaces'
@@ -43,14 +43,14 @@
       ignore_errors: True
       no_log: True
 
-    - name: Add Static Route Error
-      when: route_action == "add" and addoutput.rc != 0
+    - name: Add Static Backup Route Error
+      when: route_action == "add" and addoutput_backup.rc != 0
       fail:
-        msg: 'ADD ROUTE FAILIED: "{{ addoutput.stdout_lines }}"'
+        msg: 'ADD ROUTE FAILIED: "{{ addoutput_backup.stdout_lines }}"'
 
     - name: Print Add Output
-      when: route_action == "add" and addoutput.rc == 0
-      debug: var=addoutput.stdout_lines
+      when: route_action == "add" and addoutput_backup.rc == 0
+      debug: var=addoutput_backup.stdout_lines
 
 #------------------------------- DELETE ROUTE TASK
     - name: Delete Static Route 
