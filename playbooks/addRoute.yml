@@ -8,6 +8,8 @@
     destination: placeholder
     route_action: placeholder
     sshpass: "atomic"
+    addoutput_internet.rc: 0
+    addoutput_backup.rc: 0
   gather_facts: false
   tasks:
 #------------------------------- ADD ROUTE INTERNET TASK
