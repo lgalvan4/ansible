@@ -58,7 +58,7 @@
       register: deloutput
       expect:
         #command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'sudo route del -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"'
-        command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'sudo sed -i '/up route add -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"/d' /etc/network/interfaces'
+        command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 sudo sed -i '/up route add -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"/d' /etc/network/interfaces
         responses: 
           (?i)password: "{{ sshpass }}"
       ignore_errors: True
