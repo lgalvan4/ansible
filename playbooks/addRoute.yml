@@ -55,14 +55,14 @@
           ignore_errors: True
           no_log: True
 
-      - name: Add Backup Route Error
-        when: addoutput_backup.rc != 0 # route_action == "add" and interface == "10.49.5.195" and 
-        fail:
-          msg: 'ADD ROUTE FAILIED: "{{ addoutput_backup.stdout_lines }}"'
+        - name: Add Backup Route Error
+          when: addoutput_backup.rc != 0 # route_action == "add" and interface == "10.49.5.195" and 
+          fail:
+            msg: 'ADD ROUTE FAILIED: "{{ addoutput_backup.stdout_lines }}"'
 
-      - name: Print Add Output
-        when: addoutput_backup.rc == 0 #route_action == "add" and 
-        debug: var=addoutput_backup.stdout_lines
+        - name: Print Add Output
+          when: addoutput_backup.rc == 0 #route_action == "add" and 
+          debug: var=addoutput_backup.stdout_lines
 
 #------------------------------- DELETE ROUTE TASK
     - name: Delete Route
