@@ -12,6 +12,19 @@
       rc: 0
     addoutput_backup: 
       rc: 0
+
+    # SSH COMMAND BASE
+    ssh_base: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209
+    
+    #ADD ROUTE COMMANDS
+    add_tmp_rute: sudo route add -net {{ destination }} netmask {{ mask }} gw {{ interface }}
+    add_static_route_internet: echo up route add -net "{{ destination }}" netmask "{{ mask }}" gw 10.10.2.254 dev #ens4 
+    tee: sudo tee -a /etc/network/interfaces
+
+    #DELETE ROUTE COMMANDS
+    del_tmp_route: sudo route del -net {{ destination }} netmask {{ mask }} gw {{ interface }}
+    del static_route: "sudo sed -i '/up route add -net {{ destination }} netmask {{ mask }} gw {{ interface }}/d' /etc/network/interfaces"
+
   gather_facts: false
   tasks:
 #------------------------------- ADD ROUTE INTERNET TASK
@@ -19,8 +32,8 @@
       when: route_action == "add" and interface == "10.10.2.254"
       register: addoutput_internet
       expect:
-        #command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'sudo route add -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"'
-        command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'echo up route add -net "{{ destination }}" netmask "{{ mask }}" gw 10.10.2.254 dev ens4 | sudo tee -a /etc/network/interfaces'
+        #command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'echo up route add -net "{{ destination }}" netmask "{{ mask }}" gw 10.10.2.254 dev ens4 | sudo tee -a /etc/network/interfaces'
+        command: {{ ssh_base }} '{{ add_static_route_internet }} ens4 | {{ tee }} && {{ add_tmp_rute }}'
         responses: 
           (?i)password: "{{ sshpass }}"
       ignore_errors: True
@@ -40,7 +53,6 @@
       when: route_action == "add" and interface == "10.49.5.195"
       register: addoutput_backup
       expect:
-        #command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'sudo route add -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"'
         command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'echo up route add -net "{{ destination }}" netmask "{{ mask }}" gw 10.49.5.195 dev ens3 | sudo tee -a /etc/network/interfaces'
         responses: 
           (?i)password: "{{ sshpass }}"
@@ -61,7 +73,7 @@
       when: route_action == "delete"
       register: deloutput
       expect:
-        #command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'sudo route del -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"'
+        
         command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 "sudo sed -i '/up route add -net {{ destination }} netmask {{ mask }} gw {{ interface }}/d' /etc/network/interfaces"
         responses: 
           (?i)password: "{{ sshpass }}"
@@ -117,5 +129,16 @@
       when: route_action == "restart" and restarttoutput.rc == 0
       debug: var=restarttoutput.stdout_lines
 
+#ADD TMP ROUTE
+# command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'sudo route add -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"'
+
+#DELETE TMP ROUTE
+# command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'sudo route del -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"'
+
+# ADD STATIC ROUTE
 # echo up route add -net 192.168.1.1 netmask 255.255.255.0 gw 10.10.2.254 dev ens4 | sudo tee -a /etc/network/interfaces
+# command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'echo up route add -net "{{ destination }}" netmask "{{ mask }}" gw 10.10.2.254 dev ens4 | sudo tee -a /etc/network/interfaces'
+
+# DELETE STATIC ROUTE
 # sudo sed -i '/up route add -net 192.168.1.1 netmask 255.255.255.0 gw 10.10.2.254 dev ens4/d' /etc/network/interfaces
+# command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 "sudo sed -i '/up route add -net {{ destination }} netmask {{ mask }} gw {{ interface }}/d' /etc/network/interfaces"
