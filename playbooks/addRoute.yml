@@ -30,22 +30,24 @@
 #------------------------------- ADD ROUTE INTERNET TASK
     - name: Add Static Route to Internet
       when: route_action == "add" and interface == "10.10.2.254"
-      register: addoutput_internet
-      expect:
-        command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 '{{ add_static_route_internet }} ens4 | {{ tee }} && {{ add_tmp_rute }}'
-        responses: 
-          (?i)password: "{{ sshpass }}"
-      ignore_errors: True
-      #no_log: True
+      block:
+        - name: Add Route
+          register: addoutput_internet
+          expect:
+            command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 '{{ add_static_route_internet }} ens4 | {{ tee }} && {{ add_tmp_rute }}'
+            responses: 
+              (?i)password: "{{ sshpass }}"
+          ignore_errors: True
+          #no_log: True
 
-    - name: Add Static Internet Route Error
-      when: route_action == "add" and interface == "10.10.2.254" and addoutput_internet.rc != 0 
-      fail:
-        msg: 'ADD ROUTE FAILIED: "{{ addoutput_internet.stdout_lines }}"'
+        - name: Add Static Internet Route Error
+          when: addoutput_internet.rc != 0 #route_action == "add" and interface == "10.10.2.254" and 
+          fail:
+            msg: 'ADD ROUTE FAILIED: "{{ addoutput_internet.stdout_lines }}"'
 
-    - name: Print Add Output
-      when: route_action == "add" and addoutput_internet.rc == 0
-      debug: var=addoutput_internet.stdout_lines
+        - name: Print Add Output
+          when: addoutput_internet.rc == 0 # route_action == "add" and 
+          debug: var=addoutput_internet.stdout_lines
 
 #------------------------------- ADD ROUTE BACKUP TASK
     - name: Add Static Route to BackUp
