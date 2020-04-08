@@ -71,7 +71,7 @@
         - name: Deleting Route
           register: deloutput
           expect:
-            command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 "{{ del_tmp_route }} || {{ del_static_route }}"
+            command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 "{{ del_tmp_route }} && {{ del_static_route }}"
             responses: 
               (?i)password: "{{ sshpass }}"
           ignore_errors: True
@@ -93,7 +93,7 @@
         - name: Listing Routes
           register: listoutput
           expect:
-            command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'route -n || cat /etc/network/interfaces'
+            command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'route -n && cat /etc/network/interfaces'
             responses: 
               (?i)password: "{{ sshpass }}"
           ignore_errors: True
@@ -115,7 +115,7 @@
         - name: Restarting Network
           register: restartoutput
           expect:
-            command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'sudo  /etc/init.d/networking restart || sudo ifdown ens3 && sudo ifup ens3 || sudo ifdown ens4 && sudo ifup ens4'
+            command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'sudo  /etc/init.d/networking restart && sudo ifdown ens3 && sudo ifup ens3 && sudo ifdown ens4 && sudo ifup ens4'
             responses: 
               (?i)password: "{{ sshpass }}"
           ignore_errors: True
