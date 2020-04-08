@@ -11,7 +11,7 @@
     
     #ADD ROUTE COMMANDS
     add_tmp_rute: sudo route add -net {{ destination }} netmask {{ mask }} gw {{ interface }}
-    add_static_route_internet: echo up route add -net {{ destination }} netmask {{ mask }} gw 10.10.2.254 dev
+    add_static_route_internet: echo up route add -net {{ destination }} netmask {{ mask }} gw {{ interface }} dev
     tee: sudo tee -a /etc/network/interfaces
 
     #DELETE ROUTE COMMANDS
