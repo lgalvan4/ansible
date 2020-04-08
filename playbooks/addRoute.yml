@@ -18,7 +18,7 @@
     
     #ADD ROUTE COMMANDS
     add_tmp_rute: sudo route add -net {{ destination }} netmask {{ mask }} gw {{ interface }}
-    add_static_route_internet: echo up route add -net "{{ destination }}" netmask "{{ mask }}" gw 10.10.2.254 dev #ens4 
+    add_static_route_internet: echo up route add -net {{ destination }} netmask {{ mask }} gw 10.10.2.254 dev
     tee: sudo tee -a /etc/network/interfaces
 
     #DELETE ROUTE COMMANDS
@@ -32,12 +32,11 @@
       when: route_action == "add" and interface == "10.10.2.254"
       register: addoutput_internet
       expect:
-        #command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'echo up route add -net "{{ destination }}" netmask "{{ mask }}" gw 10.10.2.254 dev ens4 | sudo tee -a /etc/network/interfaces'
-        command: {{ ssh_base }} '{{ add_static_route_internet }} ens4 | {{ tee }} && {{ add_tmp_rute }}'
+        command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 '{{ add_static_route_internet }} ens4 | {{ tee }} && {{ add_tmp_rute }}'
         responses: 
           (?i)password: "{{ sshpass }}"
       ignore_errors: True
-      no_log: True
+      #no_log: True
 
     - name: Add Static Internet Route Error
       when: route_action == "add" and interface == "10.10.2.254" and addoutput_internet.rc != 0 
