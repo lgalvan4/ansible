@@ -23,7 +23,7 @@
 
     #DELETE ROUTE COMMANDS
     del_tmp_route: sudo route del -net {{ destination }} netmask {{ mask }} gw {{ interface }}
-    del static_route: "sudo sed -i '/up route add -net {{ destination }} netmask {{ mask }} gw {{ interface }}/d' /etc/network/interfaces"
+    del_static_route: "sudo sed -i '/up route add -net {{ destination }} netmask {{ mask }} gw {{ interface }}/d' /etc/network/interfaces"
 
   gather_facts: false
   tasks:
