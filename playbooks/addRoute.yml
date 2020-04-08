@@ -8,13 +8,6 @@
     destination: placeholder
     route_action: placeholder
     sshpass: "atomic"
-    addoutput_internet:
-      rc: 0
-    addoutput_backup: 
-      rc: 0
-
-    # SSH COMMAND BASE
-    ssh_base: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209
     
     #ADD ROUTE COMMANDS
     add_tmp_rute: sudo route add -net {{ destination }} netmask {{ mask }} gw {{ interface }}
@@ -23,24 +16,24 @@
 
     #DELETE ROUTE COMMANDS
     del_tmp_route: sudo route del -net {{ destination }} netmask {{ mask }} gw {{ interface }}
-    del_static_route: "sudo sed -i '/up route add -net {{ destination }} netmask {{ mask }} gw {{ interface }}/d' /etc/network/interfaces"
+    del_static_route: sudo sed -i '/up route add -net {{ destination }} netmask {{ mask }} gw {{ interface }}/d' /etc/network/interfaces
 
   gather_facts: false
   tasks:
 #------------------------------- ADD ROUTE INTERNET TASK
-    - name: Add Static Route to Internet
+    - name: Add Route to Internet
       when: route_action == "add" and interface == "10.10.2.254"
       block:
-        - name: Add Route
+        - name: Adding Route
           register: addoutput_internet
           expect:
-            command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 '{{ add_static_route_internet }} ens4 | {{ tee }} && {{ add_tmp_rute }}'
+            command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 '{{ add_tmp_rute }} && {{ add_static_route_internet }} ens4 | {{ tee }}'
             responses: 
               (?i)password: "{{ sshpass }}"
           ignore_errors: True
-          #no_log: True
+          no_log: True
 
-        - name: Add Static Internet Route Error
+        - name: Add Internet Route Error
           when: addoutput_internet.rc != 0 #route_action == "add" and interface == "10.10.2.254" and 
           fail:
             msg: 'ADD ROUTE FAILIED: "{{ addoutput_internet.stdout_lines }}"'
@@ -50,85 +43,92 @@
           debug: var=addoutput_internet.stdout_lines
 
 #------------------------------- ADD ROUTE BACKUP TASK
-    - name: Add Static Route to BackUp
+    - name: Add Route to BackUp
       when: route_action == "add" and interface == "10.49.5.195"
-      register: addoutput_backup
-      expect:
-        command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'echo up route add -net "{{ destination }}" netmask "{{ mask }}" gw 10.49.5.195 dev ens3 | sudo tee -a /etc/network/interfaces'
-        responses: 
-          (?i)password: "{{ sshpass }}"
-      ignore_errors: True
-      no_log: True
+      block:
+        - name: Add Route
+          register: addoutput_backup
+          expect:
+            command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 '{{ add_tmp_rute }} && {{ add_static_route_internet }} ens3 | {{ tee }}'
+            responses: 
+              (?i)password: "{{ sshpass }}"
+          ignore_errors: True
+          no_log: True
 
-    - name: Add Static Backup Route Error
-      when: route_action == "add" and interface == "10.49.5.195" and addoutput_backup.rc != 0
-      fail:
-        msg: 'ADD ROUTE FAILIED: "{{ addoutput_backup.stdout_lines }}"'
+      - name: Add Backup Route Error
+        when: addoutput_backup.rc != 0 # route_action == "add" and interface == "10.49.5.195" and 
+        fail:
+          msg: 'ADD ROUTE FAILIED: "{{ addoutput_backup.stdout_lines }}"'
 
-    - name: Print Add Output
-      when: route_action == "add" and addoutput_backup.rc == 0
-      debug: var=addoutput_backup.stdout_lines
+      - name: Print Add Output
+        when: addoutput_backup.rc == 0 #route_action == "add" and 
+        debug: var=addoutput_backup.stdout_lines
 
 #------------------------------- DELETE ROUTE TASK
-    - name: Delete Static Route 
+    - name: Delete Route
       when: route_action == "delete"
-      register: deloutput
-      expect:
-        
-        command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 "sudo sed -i '/up route add -net {{ destination }} netmask {{ mask }} gw {{ interface }}/d' /etc/network/interfaces"
-        responses: 
-          (?i)password: "{{ sshpass }}"
-      ignore_errors: True
-      #no_log: True
+      block:
+        - name: Deleting Route
+          register: deloutput
+          expect:
+            command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 "{{ del_tmp_route }} || {{ del_static_route }}"
+            responses: 
+              (?i)password: "{{ sshpass }}"
+          ignore_errors: True
+          #no_log: True
 
-    - name: Delete Static Route Error
-      when: route_action == "delete" and deloutput.rc != 0
-      fail:
-        msg: 'DELETE ROUTE FAILIED: "{{ deloutput.stdout_lines }}"'
+        - name: Delete Route Error
+          when: deloutput.rc != 0 #route_action == "delete" and 
+          fail:
+            msg: 'DELETE ROUTE FAILIED: "{{ deloutput.stdout_lines }}"'
 
-    - name: Print Del Output
-      when: route_action == "delete" and deloutput.rc == 0
-      debug: var=deloutput.stdout_lines
+        - name: Print Delete Output
+          when: deloutput.rc == 0 #route_action == "delete" and 
+          debug: var=deloutput.stdout_lines
 
 #------------------------------- LIST ROUTES TASK
-    - name: List Static Routes 
+    - name: List Routes 
       when: route_action == "list"
-      register: listoutput
-      expect:
-        command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'route -n && cat /etc/network/interfaces'
-        responses: 
-          (?i)password: "{{ sshpass }}"
-      ignore_errors: True
-      no_log: True
+      block: 
+        - name: Listing Routes
+          register: listoutput
+          expect:
+            command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'route -n || cat /etc/network/interfaces'
+            responses: 
+              (?i)password: "{{ sshpass }}"
+          ignore_errors: True
+          no_log: True
 
-    - name: List Static Route Error
-      when: route_action == "list" and listoutput.rc != 0
-      fail:
-        msg: 'LIST ROUTES FAILIED: "{{ listoutput.stdout_lines }}"'
+        - name: List Static Route Error
+          when: listoutput.rc != 0 #route_action == "list" and 
+          fail:
+            msg: 'LIST ROUTES FAILIED: "{{ listoutput.stdout_lines }}"'
 
-    - name: Print List Output
-      when: route_action == "list" and listoutput.rc == 0
-      debug: var=listoutput.stdout_lines
+        - name: Print List Output
+          when: listoutput.rc == 0 #route_action == "list" and 
+          debug: var=listoutput.stdout_lines
 
 #------------------------------- RESTART NETWORK SERVICE TASK
-    - name: Restart Network Service
+    - name: Restart Network Service and Interfaces
       when: route_action == "restart"
-      register: restarttoutput
-      expect:
-        command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'sudo  /etc/init.d/networking restart'
-        responses: 
-          (?i)password: "{{ sshpass }}"
-      ignore_errors: True
-      no_log: Trueff
+      block:
+        - name: Restarting Network
+          register: restartoutput
+          expect:
+            command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'sudo  /etc/init.d/networking restart || sudo ifdown ens3 && sudo ifup ens3 || sudo ifdown ens4 && sudo ifup ens4'
+            responses: 
+              (?i)password: "{{ sshpass }}"
+          ignore_errors: True
+          no_log: True
 
-    - name: Restart Network Service Error
-      when: route_action == "restart" and restarttoutput.rc != 0
-      fail:
-        msg: 'RESTART NETWORK SERVICE FAILIED: "{{ restarttoutput.stdout_lines }}"'
+        - name: Restart Network Service Error
+          when: restartoutput.rc != 0 #route_action == "restart" and 
+          fail:
+            msg: 'RESTART NETWORK SERVICE FAILIED: "{{ restartoutput.stdout_lines }}"'
 
-    - name: Print Restart Network Service Output
-      when: route_action == "restart" and restarttoutput.rc == 0
-      debug: var=restarttoutput.stdout_lines
+        - name: Print Restart Network Service Output
+          when: restartoutput.rc == 0 #route_action == "restart" and 
+          debug: var=restartoutput.stdout_lines
 
 #ADD TMP ROUTE
 # command: ssh -o StrictHostKeyChecking=no ubuntu@10.49.5.209 'sudo route add -net "{{ destination }}" netmask "{{ mask }}" gw "{{ interface }}"'
