@@ -2,7 +2,7 @@
   hosts: all 
   gather_facts: false
   tasks:
-    - name: List Windows Updates
+    - name: List Windows "{{ update_type }}"
       win_updates:
         category_names: "{{ update_type }}"
         state: searched
