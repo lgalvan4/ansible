@@ -2,8 +2,8 @@
   hosts: all 
   gather_facts: false
   tasks:
-    - name: List Windows Security Updates
+    - name: List Windows Updates
       win_updates:
-        category_names: SecurityUpdates
+        category_names: "{{ update_type }}"
         state: searched
         log_path: C:\ansible_wu.txt
