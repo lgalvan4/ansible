@@ -27,7 +27,7 @@
         - name: testserver
           register: output
           expect:
-            command: ssh -o StrictHostKeyChecking=no kai@10.10.2.9 '{{ test }} | {{ tee }}'
+            command: ssh -o StrictHostKeyChecking=no kai@10.10.2.9 '{{ test }}'
             responses: 
               (?i)password: "{{ sshpass }}"
           ignore_errors: True
