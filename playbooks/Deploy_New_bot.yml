@@ -36,6 +36,7 @@
 
     - name: List Static Routes 
       when: bot_name == "test"
+      warn: false
       register: output
       shell: apt-get update -y && apt-get install -y python-pexpect
 
