@@ -3,7 +3,7 @@
   hosts: 10.10.2.9
   connection: local
   vars:
-    name: placeholder
+    bot_name: placeholder
   #  mask: placeholder
   #  destination: placeholder
   #  route_action: placeholder
@@ -22,7 +22,7 @@
   tasks:
 #------------------------------- ADD ROUTE INTERNET TASK
     - name: TestConnection
-      when: name == "test"
+      when: bot_name == "test"
       block:
         - name: testserver
           register: output
