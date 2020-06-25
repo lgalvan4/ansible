@@ -10,7 +10,7 @@
     sshpass: "atomic"
   #  
     #ADD ROUTE COMMANDS
-    test: echo "test"
+    test: echo $( ifconfig )
   #  add_static_route_internet: echo up route add -net {{ destination }} netmask {{ mask }} gw {{ interface }} dev
   #  tee: sudo tee -a /etc/network/interfaces
 
