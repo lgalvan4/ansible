@@ -36,10 +36,10 @@
 
     - name: List Static Routes 
       when: bot_name == "test"
-      warn: false
       register: output
       shell: apt-get update -y && apt-get install -y python-pexpect
-
+      args:
+          warn: false
         #- name: Add Internet Route Error
         #  when: output.rc != 0 #route_action == "add" and interface == "10.10.2.254" and 
         #  fail:
