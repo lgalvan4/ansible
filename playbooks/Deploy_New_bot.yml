@@ -1,7 +1,6 @@
 ---
 - name: Deploy New Bot
-  #hosts: 10.10.2.9
-  hosts: localhost
+  hosts: 192.168.50.6
   connection: local
   vars:
     bot_name: placeholder
@@ -23,27 +22,22 @@
   tasks:
 #------------------------------- ADD ROUTE INTERNET TASK
     - name: TestConnection
-      when: bot_name == "no"
+      when: bot_name == "test"
       block:
         - name: testserver
           register: output
           expect:
-            command: ssh -o StrictHostKeyChecking=no kai@10.10.2.9 '{{ test }}'
+            command: "{{ test }}" #ssh -o StrictHostKeyChecking=no kai@10.10.2.9 '{{ test }}'
             responses: 
               (?i)password: "{{ sshpass }}"
           ignore_errors: True
           no_log: True
 
-    - name: List Static Routes 
-      when: bot_name == "test"
-      register: output
-      shell: apt-get update -y && apt-get install -y python-pexpect
-      args:
-          warn: false
         #- name: Add Internet Route Error
         #  when: output.rc != 0 #route_action == "add" and interface == "10.10.2.254" and 
         #  fail:
         #    msg: 'ADD ROUTE FAILIED: "{{ output.stdout_lines }}"'
-    - name: Print Output
-      #when: output.rc == 0 # route_action == "add" and 
-      debug: var=output #.stdout_lines
+
+        - name: Print Output
+          #when: output.rc == 0 # route_action == "add" and 
+          debug: var=output #.stdout_lines
