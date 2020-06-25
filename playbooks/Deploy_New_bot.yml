@@ -1,6 +1,7 @@
 ---
 - name: Deploy New Bot
-  hosts: 10.10.2.9
+  #hosts: 10.10.2.9
+  hosts: localhost
   connection: local
   vars:
     bot_name: placeholder
