@@ -1,0 +1,43 @@
+---
+- name: Deploy New Bot
+  hosts: 10.10.2.9
+  connection: local
+  vars:
+    name: placeholder
+  #  mask: placeholder
+  #  destination: placeholder
+  #  route_action: placeholder
+    sshpass: "atomic"
+  #  
+    #ADD ROUTE COMMANDS
+    test: echo "test"
+  #  add_static_route_internet: echo up route add -net {{ destination }} netmask {{ mask }} gw {{ interface }} dev
+  #  tee: sudo tee -a /etc/network/interfaces
+
+    #DELETE ROUTE COMMANDS
+  #  del_tmp_route: sudo route del -net {{ destination }} netmask {{ mask }} gw {{ interface }}
+  #  del_static_route: sudo sed -i '/up route add -net {{ destination }} netmask {{ mask }} gw {{ interface }}/d' /etc/network/interfaces
+
+  gather_facts: false
+  tasks:
+#------------------------------- ADD ROUTE INTERNET TASK
+    - name: TestConnection
+      when: name == "test"
+      block:
+        - name: testserver
+          register: output
+          expect:
+            command: ssh -o StrictHostKeyChecking=no kai@10.10.2.9 '{{ test }} | {{ tee }}'
+            responses: 
+              (?i)password: "{{ sshpass }}"
+          ignore_errors: True
+          no_log: True
+
+        - name: Add Internet Route Error
+          when: output.rc != 0 #route_action == "add" and interface == "10.10.2.254" and 
+          fail:
+            msg: 'ADD ROUTE FAILIED: "{{ output.stdout_lines }}"'
+
+        - name: Print Add Output
+          when: output.rc == 0 # route_action == "add" and 
+          debug: var=output.stdout_lines
