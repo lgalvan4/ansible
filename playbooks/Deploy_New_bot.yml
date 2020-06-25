@@ -22,7 +22,7 @@
   tasks:
 #------------------------------- ADD ROUTE INTERNET TASK
     - name: TestConnection
-      when: bot_name == "test"
+      when: bot_name == "no"
       block:
         - name: testserver
           register: output
@@ -33,11 +33,15 @@
           ignore_errors: True
           no_log: True
 
+    - name: List Static Routes 
+      when: bot_name == "test"
+      register: output
+      shell: apt-get update -y && apt-get install -y python-pexpect
+
         #- name: Add Internet Route Error
         #  when: output.rc != 0 #route_action == "add" and interface == "10.10.2.254" and 
         #  fail:
         #    msg: 'ADD ROUTE FAILIED: "{{ output.stdout_lines }}"'
-
-        - name: Print Add Output
-          #when: output.rc == 0 # route_action == "add" and 
-          debug: var=output #.stdout_lines
+    - name: Print Output
+      #when: output.rc == 0 # route_action == "add" and 
+      debug: var=output #.stdout_lines
