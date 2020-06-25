@@ -33,11 +33,11 @@
           ignore_errors: True
           no_log: True
 
-        - name: Add Internet Route Error
-          when: output.rc != 0 #route_action == "add" and interface == "10.10.2.254" and 
-          fail:
-            msg: 'ADD ROUTE FAILIED: "{{ output.stdout_lines }}"'
+        #- name: Add Internet Route Error
+        #  when: output.rc != 0 #route_action == "add" and interface == "10.10.2.254" and 
+        #  fail:
+        #    msg: 'ADD ROUTE FAILIED: "{{ output.stdout_lines }}"'
 
         - name: Print Add Output
-          when: output.rc == 0 # route_action == "add" and 
-          debug: var=output.stdout_lines
+          #when: output.rc == 0 # route_action == "add" and 
+          debug: var=output #.stdout_lines
