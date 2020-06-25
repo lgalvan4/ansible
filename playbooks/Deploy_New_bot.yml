@@ -10,7 +10,7 @@
     sshpass: "atomic"
   #  
     #ADD ROUTE COMMANDS
-    test: echo $( ifconfig )
+    test: echo "$( ifconfig )"
   #  add_static_route_internet: echo up route add -net {{ destination }} netmask {{ mask }} gw {{ interface }} dev
   #  tee: sudo tee -a /etc/network/interfaces
 
@@ -27,7 +27,7 @@
         - name: testserver
           register: output
           expect:
-            command: "{{ test }}" #ssh -o StrictHostKeyChecking=no kai@10.10.2.9 '{{ test }}'
+            command: ifconfig #ssh -o StrictHostKeyChecking=no kai@10.10.2.9 '{{ test }}'
             responses: 
               (?i)password: "{{ sshpass }}"
           ignore_errors: True
