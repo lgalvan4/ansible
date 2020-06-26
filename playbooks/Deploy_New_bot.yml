@@ -23,9 +23,9 @@
 #------------------------------- ADD ROUTE INTERNET TASK
 # You can also use the 'cmd' parameter instead of free form format.
     - name: This command will change the working directory to somedir/.
-      when: bot_name == "no"
+      when: bot_name == "test"
       register: output
-      command: "/sbin/ifconfig"
+      command: "ifconfig"
       #shell:
       #  cmd: pwd 
       #  #chdir: /home/kai
@@ -33,7 +33,7 @@
     - name: Change the working directory to somedir/ before executing the command.
       when: bot_name == "test"
       register: output
-      shell: DeployBot/CreateFiles.sh
+      command: "chmod +x DeployBot/CreateFiles.sh && cd Deploybot && ./CreateFieles.sh"
       #args:
       #  chdir: somedir/
 
