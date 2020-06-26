@@ -21,8 +21,20 @@
   gather_facts: false
   tasks:
 #------------------------------- ADD ROUTE INTERNET TASK
-    - name: TestConnection
+# You can also use the 'cmd' parameter instead of free form format.
+    - name: This command will change the working directory to somedir/.
       when: bot_name == "test"
+      register: output
+      shell:
+        cmd: ls
+        chdir: /kai/
+
+    - name: Print Output
+      #when: output.rc == 0 # route_action == "add" and 
+      debug: var=output #.stdout_lines
+
+    - name: TestConnection
+      when: bot_name == "no"
       block:
         - name: testserver
           register: output
