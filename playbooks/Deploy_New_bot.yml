@@ -27,7 +27,7 @@
       register: output
       shell:
         cmd: ls
-        chdir: /home/kai
+        #chdir: /home/kai
 
     - name: Print Output
       #when: output.rc == 0 # route_action == "add" and 
