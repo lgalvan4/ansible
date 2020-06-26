@@ -23,17 +23,17 @@
 #------------------------------- ADD ROUTE INTERNET TASK
 # You can also use the 'cmd' parameter instead of free form format.
     - name: This command will change the working directory to somedir/.
-      when: bot_name == "no"
-      register: output
+      when: bot_name == "test"
+      register: output1
       command: "ifconfig"
       #shell:
       #  cmd: pwd 
       #  #chdir: /home/kai
 
-    - name: Change the working directory to somedir/ before executing the command.
-      when: bot_name == "test"
-      register: output1
-      command: "chmod +x DeployBot/CreateFiles.sh"
+    #- name: Change the working directory to somedir/ before executing the command.
+    #  when: bot_name == "test"
+    #  register: output1
+    #  command: "chmod +x DeployBot/CreateFiles.sh"
       #args:
       #  chdir: somedir/
 
@@ -42,17 +42,17 @@
       #when: output.rc == 0 # route_action == "add" and 
       debug: var=output1 #.stdout_lines
 
-    - name: Change the working directory to somedir/ before executing the command.
-      when: bot_name == "test"
-      register: output2
-      command: "DeployBot/CreateFiles.sh"
+    #- name: Change the working directory to somedir/ before executing the command.
+    #  when: bot_name == "test"
+    #  register: output2
+    #  command: "DeployBot/CreateFiles.sh"
       #args:
       #  chdir: somedir/
 
 
-    - name: Print Output
-      #when: output.rc == 0 # route_action == "add" and 
-      debug: var=output2 #.stdout_lines
+    #- name: Print Output
+    #  #when: output.rc == 0 # route_action == "add" and 
+    #  debug: var=output2 #.stdout_lines
 
     - name: TestConnection
       when: bot_name == "no"
