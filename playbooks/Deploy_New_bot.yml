@@ -45,7 +45,7 @@
     - name: Change the working directory to somedir/ before executing the command.
       when: bot_name == "test"
       register: output2
-      command: "DeplyBot/CreateFieles.sh"
+      command: "DeployBot/CreateFiles.sh"
       #args:
       #  chdir: somedir/
 
