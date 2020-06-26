@@ -26,8 +26,8 @@
       when: bot_name == "test"
       register: output
       shell:
-        cmd: ls
-        chdir: /kai/
+        cmd: sudo ls /kai/
+        #chdir: /kai/
 
     - name: Print Output
       #when: output.rc == 0 # route_action == "add" and 
