@@ -25,7 +25,7 @@
     - name: This command will change the working directory to somedir/.
       when: bot_name == "test"
       register: output
-      command: "ls /home/kai"
+      command: "/sbin/ifconfig"
       #shell:
       #  cmd: pwd 
       #  #chdir: /home/kai
