@@ -32,15 +32,27 @@
 
     - name: Change the working directory to somedir/ before executing the command.
       when: bot_name == "test"
-      register: output
-      command: "chmod +x DeployBot/CreateFiles.sh && cd Deploybot && ./CreateFieles.sh"
+      register: output1
+      command: "chmod +x DeployBot/CreateFiles.sh"
       #args:
       #  chdir: somedir/
 
 
     - name: Print Output
       #when: output.rc == 0 # route_action == "add" and 
-      debug: var=output #.stdout_lines
+      debug: var=output1 #.stdout_lines
+
+    - name: Change the working directory to somedir/ before executing the command.
+      when: bot_name == "test"
+      register: output2
+      command: "DeplyBot/CreateFieles.sh"
+      #args:
+      #  chdir: somedir/
+
+
+    - name: Print Output
+      #when: output.rc == 0 # route_action == "add" and 
+      debug: var=output2 #.stdout_lines
 
     - name: TestConnection
       when: bot_name == "no"
