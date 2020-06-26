@@ -25,9 +25,10 @@
     - name: This command will change the working directory to somedir/.
       when: bot_name == "test"
       register: output
-      shell:
-        cmd: ls
-        #chdir: /home/kai
+      command: "ls /home/kai"
+      #shell:
+      #  cmd: pwd 
+      #  #chdir: /home/kai
 
     - name: Print Output
       #when: output.rc == 0 # route_action == "add" and 
