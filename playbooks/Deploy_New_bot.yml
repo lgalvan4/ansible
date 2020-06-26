@@ -11,9 +11,8 @@
 #------------------------------- CREATING DIRECTORY TREE AND FILES FOR THE NEW BOT
 # You can also use the 'cmd' parameter instead of free form format.
     - name: This command will change the working directory to somedir/.
-      when: bot_name == "test"
       register: output1
-      command: "sudo /bin/bash /kai/botfs/deploy/deployNewBot.sh"
+      command: "sudo /bin/bash /kai/botfs/deploy/deployNewBot.sh {{ bot_name }} {{ bot_port }}"
       #args:
       #  chdir: somedir/
       #shell:
