@@ -23,7 +23,7 @@
 #------------------------------- ADD ROUTE INTERNET TASK
 # You can also use the 'cmd' parameter instead of free form format.
     - name: This command will change the working directory to somedir/.
-      when: bot_name == "test"
+      when: bot_name == "no"
       register: output
       command: "ifconfig"
       #shell:
