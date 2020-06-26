@@ -1,31 +1,21 @@
 ---
 - name: Deploy New Bot
   hosts: 192.168.50.6
-  #connection: local
   vars:
+    # To be defined by the user
     bot_name: placeholder
-  #  mask: placeholder
-  #  destination: placeholder
-  #  route_action: placeholder
-    sshpass: "atomic"
-  #  
-    #ADD ROUTE COMMANDS
-    test: echo "$( ifconfig )"
-  #  add_static_route_internet: echo up route add -net {{ destination }} netmask {{ mask }} gw {{ interface }} dev
-  #  tee: sudo tee -a /etc/network/interfaces
-
-    #DELETE ROUTE COMMANDS
-  #  del_tmp_route: sudo route del -net {{ destination }} netmask {{ mask }} gw {{ interface }}
-  #  del_static_route: sudo sed -i '/up route add -net {{ destination }} netmask {{ mask }} gw {{ interface }}/d' /etc/network/interfaces
+    bot_port: placeholder
 
   gather_facts: false
   tasks:
-#------------------------------- ADD ROUTE INTERNET TASK
+#------------------------------- CREATING DIRECTORY TREE AND FILES FOR THE NEW BOT
 # You can also use the 'cmd' parameter instead of free form format.
     - name: This command will change the working directory to somedir/.
       when: bot_name == "test"
       register: output1
-      command: "ifconfig"
+      command: "sudo /bin/bash /kai/botfs/deploy/deployNewBot.sh"
+      #args:
+      #  chdir: somedir/
       #shell:
       #  cmd: pwd 
       #  #chdir: /home/kai
@@ -54,23 +44,3 @@
     #  #when: output.rc == 0 # route_action == "add" and 
     #  debug: var=output2 #.stdout_lines
 
-    - name: TestConnection
-      when: bot_name == "no"
-      block:
-        - name: testserver
-          register: output
-          expect:
-            command: ifconfig #ssh -o StrictHostKeyChecking=no kai@10.10.2.9 '{{ test }}'
-            responses: 
-              (?i)password: "{{ sshpass }}"
-          ignore_errors: True
-          no_log: True
-
-        #- name: Add Internet Route Error
-        #  when: output.rc != 0 #route_action == "add" and interface == "10.10.2.254" and 
-        #  fail:
-        #    msg: 'ADD ROUTE FAILIED: "{{ output.stdout_lines }}"'
-
-        - name: Print Output
-          #when: output.rc == 0 # route_action == "add" and 
-          debug: var=output #.stdout_lines
