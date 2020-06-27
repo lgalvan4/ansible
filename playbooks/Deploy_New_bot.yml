@@ -19,7 +19,7 @@
 
     - name: Creating bot's basic files and directory tree
       vars: 
-        port: "{{ bot_port.stdout|int }}"
+        port: {{ bot_port.stdout|int }}
       when: 40100 < port
       register: output1
       command: "sudo /bin/bash /kai/botfs/deploy/deployNewBot.sh {{ bot_name }} {{ port }}"
