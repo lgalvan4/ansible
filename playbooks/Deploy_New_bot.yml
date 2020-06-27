@@ -4,13 +4,21 @@
   vars:
     # To be defined by the user
     bot_name: placeholder
-    bot_port: placeholder
 
   gather_facts: false
   tasks:
+#------------------------------- GETTING NEW BOT'S PORT FROM HAPROXI CONFIG FILE
+    - name: Get next 
+      register: bot_port
+      command: "port=$( sudo awk '{for(i=1;i<=NF;i++){ if($i ~ /(401[0-9][0-9])|(402[0][0])/){print $i} } }' /etc/haproxy/haproxy.cfg | sed 's/*://g' | sort | tail -1 ); echo $(( $port + 1 ))"
+
+    - name: Print Output
+      debug: var=bot_port
+
 #------------------------------- CREATING DIRECTORY TREE AND FILES FOR THE NEW BOT
-# You can also use the 'cmd' parameter instead of free form format.
-    - name: This command will change the working directory to somedir/.
+
+    - name: Creating bot's basic files and directory tree
+      when: bot_port > 40100
       register: output1
       command: "sudo /bin/bash /kai/botfs/deploy/deployNewBot.sh {{ bot_name }} {{ bot_port }}"
       #args:
