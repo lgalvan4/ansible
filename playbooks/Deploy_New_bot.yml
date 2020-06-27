@@ -18,11 +18,9 @@
 #------------------------------- CREATING DIRECTORY TREE AND FILES FOR THE NEW BOT
 
     - name: Creating bot's basic files and directory tree
-      vars: 
-        port: {{ bot_port.stdout|int }}
-      when: 40100 < port
+      when: 40100 < {{ bot_port.stdout|int }}
       register: output1
-      command: "sudo /bin/bash /kai/botfs/deploy/deployNewBot.sh {{ bot_name }} {{ port }}"
+      command: "sudo /bin/bash /kai/botfs/deploy/deployNewBot.sh {{ bot_name }} {{ bot_port.stdout|int }}"
       #args:
       #  chdir: somedir/
       #shell:
