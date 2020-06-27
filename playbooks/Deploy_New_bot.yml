@@ -18,7 +18,7 @@
 #------------------------------- CREATING DIRECTORY TREE AND FILES FOR THE NEW BOT
 
     - name: Creating bot's basic files and directory tree
-      when: bot_port.stdout > 40100
+      when: 40100 < {{ bot_port.stdout|int }}
       register: output1
       command: "sudo /bin/bash /kai/botfs/deploy/deployNewBot.sh {{ bot_name }} {{ bot_port }}"
       #args:
