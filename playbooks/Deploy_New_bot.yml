@@ -12,7 +12,7 @@
       register: bot_port
       command: "sudo bash /kai/botfs/deploy/getNextPort.sh"
 
-    - name: Print Output
+    - name: Bot Port 
       debug: var=bot_port
 
 #------------------------------- CREATING DIRECTORY TREE AND FILES FOR THE NEW BOT
@@ -20,7 +20,7 @@
     - name: Creating bot's basic files and directory tree
       when: 40100 < {{ bot_port.stdout|int }}
       register: output1
-      command: "sudo /bin/bash /kai/botfs/deploy/deployNewBot.sh {{ bot_name }} {{ bot_port }}"
+      command: "sudo /bin/bash /kai/botfs/deploy/deployNewBot.sh {{ bot_name }} {{ bot_port.stdout|int }}"
       #args:
       #  chdir: somedir/
       #shell:
