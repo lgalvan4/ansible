@@ -8,7 +8,7 @@
   gather_facts: false
   tasks:
 #------------------------------- GETTING NEW BOT'S PORT FROM HAPROXI CONFIG FILE
-    - name: Get next 
+    - name: Get bot port from haproxy
       register: bot_port
       command: "sudo bash /kai/botfs/deploy/getNextPort.sh"
 
@@ -18,9 +18,11 @@
 #------------------------------- CREATING DIRECTORY TREE AND FILES FOR THE NEW BOT
 
     - name: Creating bot's basic files and directory tree
-      when: 40100 < {{ bot_port.stdout|int }}
+      vars: 
+        port: "{{ bot_port.stdout|int }}"
+      when: 40100 < port
       register: output1
-      command: "sudo /bin/bash /kai/botfs/deploy/deployNewBot.sh {{ bot_name }} {{ bot_port.stdout|int }}"
+      command: "sudo /bin/bash /kai/botfs/deploy/deployNewBot.sh {{ bot_name }} {{ port }}"
       #args:
       #  chdir: somedir/
       #shell:
