@@ -1,0 +1,18 @@
+---
+- name: Deploy New Bot
+#  hosts: 192.168.50.6
+  vars:
+    # To be defined by the user
+    bot_name: placeholder
+
+  gather_facts: false
+
+#------------------------------- GETTING NEW BOT'S PORT FROM HAPROXI CONFIG FILE
+  tasks:
+    - name: Get bot port from haproxy
+      register: res
+      command: "echo 'contenido del mail'"
+
+    - import_tasks: plays/sendmail.yml
+      vars:
+        content: Resultado {{ res }}

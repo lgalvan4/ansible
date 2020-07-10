@@ -1,0 +1,15 @@
+---
+- name: Sending an e-mail using Gmail SMTP servers
+  vars:
+    # To be defined by the user
+    content: placeholder
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: kai.tmp.acnt@gmail.com
+    password: TmpUserPass
+    to: <ebenitez@kionetworks.com>
+    subject: Ansible-report
+    body: Contenido {{ content }}
+  delegate_to: localhost
