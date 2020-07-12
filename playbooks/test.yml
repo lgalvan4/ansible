@@ -9,7 +9,7 @@
 
 #------------------------------- GETTING NEW BOT'S PORT FROM HAPROXI CONFIG FILE
   tasks:
-    - name: Get bot port from haproxy
+    - name: Sending e-mail
       register: res
       command: "echo 'contenido del mail'"
 
