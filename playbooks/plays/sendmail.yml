@@ -11,5 +11,5 @@
     password: TmpUserPass
     to: <ebenitez@kionetworks.com>
     subject: Ansible-report
-    body: Contenido {{ bot_name }}
+    body: Contenido {{ res }}
   delegate_to: localhost
