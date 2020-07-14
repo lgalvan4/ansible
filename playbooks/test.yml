@@ -15,6 +15,10 @@
       register: res
       command: "echo 'contenido del mail'"
 
+    - name: Set msj variable
+      vars: 
+        msj: "{{ res }}"
+
     - import_tasks: plays/sendmail.yml
       vars:
         msj: "{{ res }}"
