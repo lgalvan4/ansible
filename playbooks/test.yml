@@ -6,6 +6,7 @@
     bot_name: Correo
     para: <ebenitez@kionetworks.com>
     asunto: Ansible-report
+    msj: vacio
 
   gather_facts: false
 
@@ -15,10 +16,9 @@
       register: res
       command: "echo 'contenido del mail'"
 
-    - name: Set msj variable
-      vars: 
-        msj: "{{ res }}"
+    - set_fact:
+      msj: "{{ res }}"
 
     - import_tasks: plays/sendmail.yml
       vars:
-        msj: "{{ res }}"
+        msj: "{{ msj }}"
