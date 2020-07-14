@@ -4,13 +4,15 @@
   vars:
     # To be defined by the user
     bot_name: Correo
+    para: <ebenitez@kionetworks.com>
+    asunto: Ansible-report
 
   gather_facts: false
 
 #------------------------------- GETTING NEW BOT'S PORT FROM HAPROXI CONFIG FILE
   tasks:
     - name: Sending e-mail
-      register: res
+      register: msj
       command: "echo 'contenido del mail'"
 
     - import_tasks: plays/sendmail.yml
