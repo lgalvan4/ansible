@@ -21,11 +21,11 @@
   mail:
     host: smtp.gmail.com
     port: 587
-    username: "{{ username }}"
+    username: "{{ user }}"
     password: "{{ pwd }}"
     to: <ebenitez@kionetworks.com>
     subject: Ansible-report
-    body: Contenido {{ res }}
+    body: "{{ res }}"
   delegate_to: localhost
 
 #username: !vault |
