@@ -12,9 +12,9 @@
 #------------------------------- GETTING NEW BOT'S PORT FROM HAPROXI CONFIG FILE
   tasks:
     - name: Sending e-mail
-      register: msj
+      register: res
       command: "echo 'contenido del mail'"
 
     - import_tasks: plays/sendmail.yml
       vars:
-        content: Resultado {{ res }}
+        msj: "{{ res }}"
