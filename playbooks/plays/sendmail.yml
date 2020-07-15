@@ -16,11 +16,7 @@
               62303436333037353632363434623931636235373533363238306331376664356436313137633166
               3539373065316439380a363166396436646132393030313864646666326430666232653630303932
               3134
-    para: "{{ default([]) }}"
-    conCopia: "{{ default([]) }}"
-    asunto: "{{ default([]) }}"
-    msj: "{{ default([]) }}"
-    adjuntos: "{{ default([]) }}"
+    vacio : "vacio"
 
 
   mail:
@@ -28,9 +24,9 @@
     port: 587
     username: "{{ user }}"
     password: "{{ pwd }}"
-    to: "{{ para }}"
-    cc: "{{ conCopia }}"
-    subject: "{{ asunto }}"
-    body: "{{ msj }}"
-    atach: "{{ adjuntos }}"
+    to: "{{ para | default([]) }}"
+    cc: "{{ conCopia | default([]) }}"
+    subject: "{{ asunto | vacio }}"
+    body: "{{ msj | vacio }}"
+    atach: "{{ adjuntos | default([]) }}"
   delegate_to: localhost
