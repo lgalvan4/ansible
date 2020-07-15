@@ -26,7 +26,7 @@
     password: "{{ pwd }}"
     to: "{{ para | default([]) }}"
     cc: "{{ conCopia | default([]) }}"
-    subject: "{{ asunto | vacio }}"
-    body: "{{ msj | vacio }}"
+    subject: "{{ asunto | default([]) }}"
+    body: "{{ msj | default([]) }}"
     atach: "{{ adjuntos | default([]) }}"
   delegate_to: localhost
