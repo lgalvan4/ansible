@@ -1,0 +1,7 @@
+---
+- name: Delete a user
+  hosts: all
+
+
+  gather_facts: false
+  tasks:
