@@ -12,6 +12,7 @@
       when: "{{'patches'}} in ansible_facts.packages"        
 
     - name: Print the rpm package facts
-      msg: "{{ ansible_facts.packages['patches'] | length }} not installed!"
+      debug:
+        msg: "{{ ansible_facts.packages['patches'] | length }} not installed!"
       when: "'foobar' in ansible_facts.packages" 
 ...
