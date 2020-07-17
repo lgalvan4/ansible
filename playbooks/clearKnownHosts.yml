@@ -1,7 +1,6 @@
   
 - name: Workaround remove ip {{ recycled_ip }} from known hosts
-  hosts: 127.0.0.1
-  connection: local
+  hosts: all
   gather_facts: false
   tasks:
     - name: Clear Known hosts for "{{ recycled_ip }}"
