@@ -21,7 +21,7 @@
       #local_action: copy content={{ ansible_facts.packages }} dest=/tmp/report.json
 
     - name: write jstack                                                                                
-      local_action: copy content={{ ansible_facts.packages }} dest=/tmp/report.json
+      local_action: copy content={{ res }} dest=/tmp/report.json
 
     - set_fact: mensaje="Contenido :D", attach="/tmp/report.json"
 
