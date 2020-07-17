@@ -1,6 +1,6 @@
 # Playbooks importables 
 
-Estos playbooks estan diseñados para ser utilizados dentro de otros playbooks
+Estos playbooks estan diseñados para ser utilizados dentro de otros playbooks.
 
 ## Como empezar
 
@@ -27,7 +27,7 @@ Importa la tarea o playbook que requieras dentro de tu archivo:
 
 >### sendmail.yml
 
-Este playboook te permite enviar correos desde Ansible-AWX desde la cuenta de kai@kionetworks.com sin necesidad de ingresar credenciales.
+Este playboook te permite enviar correos desde Ansible-AWX con la cuenta de kai@kionetworks.com sin necesidad de ingresar credenciales.
 
 Las variables que admite son las siguientes:
 

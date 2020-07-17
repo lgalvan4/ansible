@@ -18,12 +18,18 @@
         category_names: "{{ update_type }}"
         state: searched
         log_path: C:\ansible_wu.txt
+      #local_action: copy content={{ ansible_facts.packages }} dest=/tmp/report.json
 
-    - set_fact: mensaje="{{ res }}"
+    - name: write jstack                                                                                
+      copy:
+        content: "{{res}" 
+        dest: "/tmp/jstack.json"
+
+    - set_fact: mensaje="Contenido :D", attach="/tmp/report.json"
 
     - import_tasks: plays/sendmail.yml
-      vars:
-        mensaje: "{{ mensaje }}"
+#      vars:
+#        mensaje: "{{ mensaje }}"
 
 # CriticalUpdates
 # SecurityUpdates
