@@ -10,7 +10,6 @@
   gather_facts: false
 
 #------------------------------- GETTING NEW BOT'S PORT FROM HAPROXI CONFIG FILE
-
   tasks:
     - name: List Windows "{{ update_type }}"
       register: res
@@ -18,16 +17,19 @@
         category_names: "{{ update_type }}"
         state: searched
         log_path: C:\ansible_wu.txt
-      #local_action: copy content={{ ansible_facts.packages }} dest=/tmp/report.json
 
-    - name: write jstack                                                                                
+    - name: Write output to json
       local_action: copy content={{ res }} dest=/tmp/report.json
+
+#------------------------------- GETTING NEW BOT'S PORT FROM HAPROXI CONFIG FILE
+- name: Sending email
+  hosts: localhost
+  tasks:
 
     - set_fact: mensaje="Contenido :D", adjuntos="/tmp/report.json"
 
     - import_tasks: plays/sendmail.yml
-#      vars:
-#        mensaje: "{{ mensaje }}"
+
 
 # CriticalUpdates
 # SecurityUpdates

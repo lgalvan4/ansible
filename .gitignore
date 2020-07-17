@@ -1,2 +1,3 @@
 # ignore a single file
 /playbooks/plays/._README.md
+/playbooks/plays/bin/report.json
