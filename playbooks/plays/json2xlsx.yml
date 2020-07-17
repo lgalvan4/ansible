@@ -9,9 +9,9 @@
       command: ./plays/bin/checkPackage.py
 
     - pip: 
-      name: tablib
+        name: tablib
       when: pkg_check.stdout.find('ModuleNotFoundError') != -1 or pkg_check.stdout.find('No module named') != -1
-
+      
 #------------------------------- CONVIRTIENDO
 - name: Checking if json2xlsx libraries are installed
   hosts: localhost
