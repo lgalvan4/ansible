@@ -9,11 +9,11 @@
         manager: auto
 
     - name: Print the package existance 
-      local_action: copy content={{ ansible_facts.packages['patches'] | length }} dest=/tmp/report.json
-      when: "{{'patches'}} in ansible_facts.packages"        
+      local_action: copy content={{ ansible_facts.packages[patches] | length }} dest=/tmp/report.json
+      when: "{{ patches }} in ansible_facts.packages"        
 
     - name: Print the rpm package facts
       debug:
-        msg: "{{ ansible_facts.packages['patches'] | length }} not installed!"
+        msg: "{{ ansible_facts.packages[patches] | length }} not installed!"
       when: "'foobar' in ansible_facts.packages" 
 ...
