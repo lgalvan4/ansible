@@ -2,7 +2,9 @@
 #------------------------------- PREREQUISITOS
 - name: Checking if json2xlsx libraries are installed
   hosts: localhost
-  
+  vars:
+    pkg_check: ""
+
   tasks: 
     - name: Check if package tablib exists
       command: ./plays/bin/checkPackage.py
@@ -16,7 +18,9 @@
 #------------------------------- CONVIRTIENDO
 - name: Checking if json2xlsx libraries are installed
   hosts: localhost
-
+  vars:
+    pkg_check: ""
+    
   tasks: 
     - name: Check if package tablib exists
       command: ./plays/bin/json2xlsx.py {{ inputfile }} {{ outputfile }}
