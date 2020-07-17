@@ -1,5 +1,6 @@
 ---
 - hosts: all
   tasks:
+  var=ansible_date_time
   - name: Workaround remove ip "{{ recycled_ip }}" from known hosts.
-    shell: sed -i '/^'"{{ recycled_ip }}"'/d' /root/.ssh/known_hosts;ssh-keyscan "{{ recycled_ip }}" >> /root/.ssh/known_hosts;touch /tmp/clearedIP"{{ recycled_ip }}"-$date
+    shell: sed -i '/^'"{{ recycled_ip }}"'/d' /root/.ssh/known_hosts;ssh-keyscan "{{ recycled_ip }}" >> /root/.ssh/known_hosts;touch /tmp/clearedIP"{{ recycled_ip }}"-"{{ ansible_date_time.date }}"
