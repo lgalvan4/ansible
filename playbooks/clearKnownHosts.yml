@@ -1,0 +1,8 @@
+  
+- name: Workaround remove ip {{ recycled_ip }} from known hosts
+  hosts: 127.0.0.1
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Clear Known hosts for "{{ recycled_ip }}"
+    shell: sed -i '/^'{{ recycled_ip }}'/d' ~/.ssh/known_hosts;ssh-keyscan {{ recycled_ip }} >> ~/.ssh/known_hosts
