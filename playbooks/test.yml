@@ -22,7 +22,7 @@
 
     - name: write jstack                                                                                
       copy:
-        content: "{{res}" 
+        content: "{{ res }}"
         dest: "/tmp/jstack.json"
 
     - set_fact: mensaje="Contenido :D", attach="/tmp/report.json"
