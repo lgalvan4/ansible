@@ -23,7 +23,7 @@
     - name: write jstack                                                                                
       local_action: copy content={{ res }} dest=/tmp/report.json
 
-    - set_fact: mensaje="Contenido :D", attach="/tmp/report.json"
+    - set_fact: mensaje="Contenido :D", adjuntos="/tmp/report.json"
 
     - import_tasks: plays/sendmail.yml
 #      vars:
