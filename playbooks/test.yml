@@ -18,8 +18,15 @@
         state: searched
         log_path: C:\ansible_wu.txt
 
+    #- name: Write output to json
+    #  local_action: copy content={{ res }} dest=/tmp/report.json
+
     - name: Write output to json
-      local_action: copy content={{ res }} dest=/tmp/report.json
+      lineinfile:
+        line: "{{ res }}"
+        insertafter: EOF
+        dest: /tmp/report.json
+      delegate_to: 127.0.0.1
 
 #------------------------------- GETTING NEW BOT'S PORT FROM HAPROXI CONFIG FILE
 - name: Sending email
@@ -34,6 +41,7 @@
 
     - import_tasks: plays/sendmail.yml
 
+    - local_action: file path=/tmp/report.json state=absent
 
 # CriticalUpdates
 # SecurityUpdates
