@@ -1,0 +1,20 @@
+---
+#------------------------------- PREREQUISITOS
+- name: Checking if json2xlsx libraries are installed
+  hosts: localhost
+  tasks: 
+    - name: Check if package tablib exists
+      command: ./plays/bin/checkPackage.py
+      register: pkg_check
+
+    - name: Installing tablib module
+    - pip: 
+      name: tablib
+      when: pkg_check.stdout.find('ModuleNotFoundError') != -1 or pkg_check.stdout.find('No module named') != -1
+
+#------------------------------- CONVIRTIENDO
+- name: Checking if json2xlsx libraries are installed
+  hosts: localhost
+  tasks: 
+    - name: Check if package tablib exists
+      command: ./plays/bin/json2xlsx.py {{ inputfile }} {{ outputfile }}

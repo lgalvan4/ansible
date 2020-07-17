@@ -1,15 +1,24 @@
 ---
-- name: Search-only, return list of found updates (if any), log to C:\ansible_wu.txt
+#------------------------------- INICIALIZANDO ARCHIVO DE RESULTADOS
+- name: Inicialice file
+  hosts: localhost
+  vars:
+    start: "["
+
+  tasks:
+    - name: Create Json File                                                                               
+      copy:
+        content: "{{ start }}"
+        dest: "/tmp/jstack.json"
+      delegate_to: 127.0.0.1
+
+#------------------------------- GETTING UPDATES LIST
+- name: Search Windows updates by category
   hosts: all
   vars:
     update_type: Updates
-    para: <ebenitez@kionetworks.com>
-    asunto: Ansible-report
-    mensaje: vacio
-
   gather_facts: false
 
-#------------------------------- GETTING NEW BOT'S PORT FROM HAPROXI CONFIG FILE
   tasks:
     - name: List Windows "{{ update_type }}"
       register: res
@@ -18,30 +27,45 @@
         state: searched
         log_path: C:\ansible_wu.txt
 
-    #- name: Write output to json
-    #  local_action: copy content={{ res }} dest=/tmp/report.json
-
     - name: Write output to json
       lineinfile:
-        line: "{{ res }}"
+        line: " \"{{ ansible_hostname }}\": {{ res }} ,"
         insertafter: EOF
         dest: /tmp/report.json
       delegate_to: 127.0.0.1
 
-#------------------------------- GETTING NEW BOT'S PORT FROM HAPROXI CONFIG FILE
-- name: Sending email
+#------------------------------- CERRANDO ARCHIVO DE RESULTADOS
+- name: Close file
   hosts: localhost
   vars:
+    end: "]"
     para: <ebenitez@kionetworks.com>
     asunto: Ansible-report
     mensaje: vacio
+
   tasks:
+    - name: Close json file
+      lineinfile:
+        line: " \"{{ ansible_hostname }}\": {{ res }} ,"
+        insertafter: EOF
+        dest: /tmp/report.json
+      delegate_to: 127.0.0.1
 
-    - set_fact: mensaje="Contenido :D", adjuntos="/tmp/report.json"
+#------------------------------- TRANSOFRMANDO JSON TO XLSX
+    - name: json to xlsx transform
+    - set_fact: inputfile="/tmp/report.json", outputfile="/tmp/report.xlsx"
+    - import_tasks: plays/json2xlsx.yml
 
+#------------------------------- ENVIANDO CORREO  
+    - name: Sending mail
+    - set_fact: mensaje="Contenido :D", adjuntos="/tmp/report.xlsx"
     - import_tasks: plays/sendmail.yml
 
+#------------------------------- LIMPIANDO ARCHIVOS TEMPORALES
+
     - local_action: file path=/tmp/report.json state=absent
+
+    - local_action: file path=/tmp/report.xlsx state=absent
 
 # CriticalUpdates
 # SecurityUpdates

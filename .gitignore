@@ -1,3 +1,6 @@
 # ignore a single file
-/playbooks/plays/._README.md
 /playbooks/plays/bin/report.json
+/playbooks/plays/bin/report.xlsx
+
+#ignore ._<name> macos files
+._*

@@ -1,11 +1,14 @@
 import tablib
+import sys
+
+inputFile = str(sys.argv[1])
+outputFile = str(sys.argv[2])
 
 data = tablib.Dataset()
-import_filename = '/tmp/report.json'
-data.json = open(import_filename, 'r').read()
+imported_data = data.load(open(inputFile, 'r').read())
 
-data_export = data.export('xlsx')
+data_export = imported_data.export('xlsx')
 
-with open('/tmp/report.xlsx', 'wb') as f:  # open the xlsx file
-    f.write(data_export)  # write the dataset to the xlsx file
+with open(outputFile, 'wb') as f:
+    f.write(data_export)
 f.close()
