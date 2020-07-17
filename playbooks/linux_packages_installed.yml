@@ -1,11 +1,17 @@
+---
 - name: List linux packages installed.
-  hosts: all
   gather_facts: true
   tasks:
+
     - name: Gather the rpm package facts
       package_facts:
         manager: auto
 
+    - name: Print the package existance 
+      local_action: copy content={{ ansible_facts.packages['patches'] | length }} dest=/tmp/report.json
+      when: "{{'patches'}} in ansible_facts.packages"        
+
     - name: Print the rpm package facts
-      debug:
-        var: ansible_facts.packages
+      msg: "{{ ansible_facts.packages['patches'] | length }} not installed!"
+      when: "'foobar' in ansible_facts.packages" 
+...
