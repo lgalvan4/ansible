@@ -1,4 +1,4 @@
-  
+---
 - name: Workaround remove ip "{{ recycled_ip }}" from known hosts
   hosts: all
   gather_facts: false
