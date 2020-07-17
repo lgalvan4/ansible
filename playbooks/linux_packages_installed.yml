@@ -1,5 +1,6 @@
 ---
 - name: List linux packages installed.
+  hosts: all
   gather_facts: true
   tasks:
 
