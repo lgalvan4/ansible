@@ -24,6 +24,10 @@
 #------------------------------- GETTING NEW BOT'S PORT FROM HAPROXI CONFIG FILE
 - name: Sending email
   hosts: localhost
+  vars:
+    para: <ebenitez@kionetworks.com>
+    asunto: Ansible-report
+    mensaje: vacio
   tasks:
 
     - set_fact: mensaje="Contenido :D", adjuntos="/tmp/report.json"
