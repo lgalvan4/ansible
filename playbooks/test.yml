@@ -52,13 +52,15 @@
       delegate_to: 127.0.0.1
 
 #------------------------------- TRANSOFRMANDO JSON TO XLSX
-    - name: json to xlsx transform
+
     - set_fact: inputfile="/tmp/report.json", outputfile="/tmp/report.xlsx"
+
     - import_tasks: plays/json2xlsx.yml
 
 #------------------------------- ENVIANDO CORREO  
-    - name: Sending mail
+
     - set_fact: mensaje="Contenido :D", adjuntos="/tmp/report.xlsx"
+    
     - import_tasks: plays/sendmail.yml
 
 #------------------------------- LIMPIANDO ARCHIVOS TEMPORALES
