@@ -9,7 +9,7 @@
     - name: Create Json File                                                                               
       copy:
         content: "{{ start }}"
-        dest: "/tmp/jstack.json"
+        dest: "/tmp/report.json"
       delegate_to: 127.0.0.1
 
 #------------------------------- GETTING UPDATES LIST
