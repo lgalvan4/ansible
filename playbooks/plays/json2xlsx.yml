@@ -1,6 +1,5 @@
 ---
 - name: Checking if json2xlsx libraries are installed
-  hosts: localhost
 
   tasks: 
     - name: Check if package tablib exists
@@ -14,7 +13,6 @@
 
 #------------------------------- CONVIRTIENDO
 - name: Checking if json2xlsx libraries are installed
-  hosts: localhost
 
   tasks: 
     - name: Check if package tablib exists
