@@ -53,13 +53,13 @@
 
 #------------------------------- TRANSOFRMANDO JSON TO XLSX
 
-    - set_fact: inputfile="/tmp/report.json", outputfile="/tmp/report.xlsx"
+    #- set_fact: inputfile="/tmp/report.json", outputfile="/tmp/report.xlsx"
 
-    - import_tasks: plays/json2xlsx.yml
+    #- import_tasks: plays/json2xlsx.yml
 
 #------------------------------- ENVIANDO CORREO  
 
-    - set_fact: mensaje="Contenido :D", adjuntos="/tmp/report.xlsx"
+    - set_fact: mensaje="Contenido :D", adjuntos="/tmp/report.json"
     
     - import_tasks: plays/sendmail.yml
 
