@@ -9,7 +9,7 @@
 #------------------------------- INICIALIZANDO ARCHIVO DE RESULTADOS
 - name: Check if package tablib exists
   register: pkg_check
-  command: ./plays/bin/checkPackage.py
+  command: python plays/bin/checkPackage.py
 
 - name: Installing tablib module
   pip: 
@@ -18,4 +18,4 @@
 
 #------------------------------- CONVIRTIENDO
 - name: Check if package tablib exists
-  command: ./plays/bin/json2xlsx.py {{ inputfile }} {{ outputfile }}
+  command: python plays/bin/json2xlsx.py {{ inputfile }} {{ outputfile }}
