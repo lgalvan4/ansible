@@ -23,6 +23,5 @@
     - name: Create Work Order
       delegate_to: awx-host
       remote_user: ubuntu
-      shell: node /home/ubuntu/BMC/createWO.js --data '{"shortDescr":"Ticket creado automáticamente por AWX","detailedDescr":""{{ command.stdout_lines }}"
- "}'
+      shell: node /home/ubuntu/BMC/createWO.js --data '{"shortDescr":"Ticket creado automáticamente por AWX","detailedDescr":""{{ command.stdout_lines }}""}'
       
