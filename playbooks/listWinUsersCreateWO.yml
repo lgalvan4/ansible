@@ -21,7 +21,6 @@
       debug: msg="{{ command.stdout_lines }}"
  
     - name: Create Work Order
-      #hosts: localhost
-      #connection: local
-      shell: node /home/ubuntu/BMC/createWO.js
       delegate_to: 127.0.0.1
+      shell: node /home/ubuntu/BMC/createWO.js
+      
