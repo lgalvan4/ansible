@@ -1,19 +1,32 @@
 ---
-- name: Checking if json2xlsx libraries are installed
+#------------------------------- INICIALIZANDO ARCHIVO DE RESULTADOS
+- name: Inicialice file
+  hosts: localhost
+  vars:
+    start: "["
 
-  tasks: 
-  - name: Check if package tablib exists
-    register: pkg_check
-    command: ./plays/bin/checkPackage.py
+  tasks:
+    - name: Create Json File                                                                               
+      copy:
+        content: "{{ start }}"
+        dest: "/tmp/report2.json"
+      delegate_to: 127.0.0.1
 
-  - name: Installing tablib module
-    pip: 
-      name: tablib
-    when: pkg_check.stdout.find('ModuleNotFoundError') != -1 or pkg_check.stdout.find('No module named') != -1
+# - name: Checking if json2xlsx libraries are installed
 
-#------------------------------- CONVIRTIENDO
-- name: Checking if json2xlsx libraries are installed
+#   tasks: 
+#   - name: Check if package tablib exists
+#     register: pkg_check
+#     command: ./plays/bin/checkPackage.py
 
-  tasks: 
-  - name: Check if package tablib exists
-    command: ./plays/bin/json2xlsx.py {{ inputfile }} {{ outputfile }}
+#   - name: Installing tablib module
+#     pip: 
+#       name: tablib
+#     when: pkg_check.stdout.find('ModuleNotFoundError') != -1 or pkg_check.stdout.find('No module named') != -1
+
+# #------------------------------- CONVIRTIENDO
+# - name: Checking if json2xlsx libraries are installed
+
+#   tasks: 
+#   - name: Check if package tablib exists
+#     command: ./plays/bin/json2xlsx.py {{ inputfile }} {{ outputfile }}
