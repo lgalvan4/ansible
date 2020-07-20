@@ -59,7 +59,7 @@
 
 #------------------------------- ENVIANDO CORREO  
 
-    - set_fact: mensaje="Contenido :D", adjuntos="/tmp/report.json"
+    - set_fact: mensaje="Contenido :D", adjuntos="/tmp/report.json, /tmp/report.xlsx"
     
     - import_tasks: plays/sendmail.yml
 
