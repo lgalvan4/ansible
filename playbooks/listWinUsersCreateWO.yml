@@ -22,5 +22,6 @@
  
     - name: Create Work Order
       delegate_to: 172.19.0.1
+      remote_user: ubuntu
       shell: node /home/ubuntu/BMC/createWO.js
       
