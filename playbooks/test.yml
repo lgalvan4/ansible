@@ -46,7 +46,7 @@
   tasks:
     - name: Close json file
       lineinfile:
-        line: " \"{{ ansible_hostname }}\": {{ res }} ,"
+        line: "{{ end }}"
         insertafter: EOF
         dest: /tmp/report.json
       delegate_to: 127.0.0.1
