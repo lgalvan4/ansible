@@ -1,7 +1,7 @@
 ---
 #------------------------------- DANDO PERMISOS DE EJECUCION
 - name: Check if package tablib exists
-  command: pwd
+  command: chmod +x plays/bin/checkPackage.py & chmod +x plays/bin/json2xlsx.py  
 
 #------------------------------- INICIALIZANDO ARCHIVO DE RESULTADOS
 - name: Check if package tablib exists
