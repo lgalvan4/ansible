@@ -53,7 +53,7 @@
 
 #------------------------------- TRANSOFRMANDO JSON TO XLSX
 
-    - set_fact: inputfile="/tmp/report.json", outputfile="/tmp/report.xlsx"
+    - set_fact: inputfile="/tmp/report.json" outputfile="/tmp/report.xlsx"
 
     - import_tasks: plays/json2xlsx.yml
 

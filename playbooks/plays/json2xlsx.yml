@@ -17,6 +17,11 @@
     name: tablib
   when: pkg_check.stderr.find('ModuleNotFoundError') != -1 or pkg_check.stderr.find('No module named') != -1
 
+- name: Installing tablib module
+  pip: 
+    name: tablib[all]
+  when: pkg_check.stderr.find('ModuleNotFoundError') != -1 or pkg_check.stderr.find('No module named') != -1
+
 #------------------------------- INICIALIZANDO ARCHIVO DE RESULTADOS
 - name: Check if package tablib exists
   register: pkg_check
