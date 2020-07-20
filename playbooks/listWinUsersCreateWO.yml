@@ -1,4 +1,4 @@
-}---
+---
 # This playbook lists the users in Windows hosts and creates a Work Order on BMC ITSM
 
 - name: List users in MS Windows hosts
