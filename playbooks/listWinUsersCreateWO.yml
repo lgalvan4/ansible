@@ -24,4 +24,4 @@
       #hosts: localhost
       #connection: local
       shell: node /home/ubuntu/BMC/createWO.js
-      delegate_to: localhost
+      delegate_to: 127.0.0.1
