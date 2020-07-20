@@ -8,7 +8,6 @@
         names: "*"
         state: latest
         update_cache: yes 
-        force_apt_get: yes
       when: ansible_os_family == 'Debian'
     - name: Upgrade all installed packages for OpenSUSE family
       zypper:
