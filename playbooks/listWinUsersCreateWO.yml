@@ -1,0 +1,21 @@
+---
+# This playbook lists the users in Windows hosts and creates a Work Order on BMC ITSM
+
+- name: List users in MS Windows hosts
+  hosts: all 
+  gather_facts: false
+  tasks:
+    - name: Run powershell script
+      win_shell: |
+        #Get-WmiObject -Class Win32_UserAccount
+        $adsi = [ADSI]"WinNT://$env:COMPUTERNAME"
+        $adsi.Children | where {$_.SchemaClassName -eq 'user'} | Foreach-Object {
+        $groups = $_.Groups() | Foreach-Object {$_.GetType().InvokeMember("Name", 'GetProperty', $null, $_, $null)}
+        $_ | Select-Object @{n='UserName';e={$_.Name}},@{n='Groups';e={$groups -join ';'}}
+        }
+      register: command
+      args:
+        stdout: always
+        
+    - name: Print Output
+      debug: msg="{{ command.stdout_lines }}"
