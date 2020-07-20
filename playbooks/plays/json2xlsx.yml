@@ -1,4 +1,8 @@
 ---
+#------------------------------- DANDO PERMISOS DE EJECUCION
+- name: Check if package tablib exists
+  command: pwd
+
 #------------------------------- INICIALIZANDO ARCHIVO DE RESULTADOS
 - name: Check if package tablib exists
   register: pkg_check
