@@ -1,16 +1,14 @@
 ---
 #------------------------------- INICIALIZANDO ARCHIVO DE RESULTADOS
+
 - name: Inicialice file
-  hosts: localhost
   vars:
     start: "["
 
-  tasks:
-    - name: Create Json File                                                                               
-      copy:
-        content: "{{ start }}"
-        dest: "/tmp/report2.json"
-      delegate_to: 127.0.0.1
+    copy:
+      content: "{{ start }}"
+      dest: "/tmp/report2.json"
+
 
 # - name: Checking if json2xlsx libraries are installed
 
