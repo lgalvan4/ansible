@@ -10,13 +10,20 @@
 - name: Check if package tablib exists
   register: pkg_check
   command: python plays/bin/checkPackage.py
-
+  ignore_errors: True
+  
 - name: Installing tablib module
   pip: 
     name: tablib
   when: pkg_check.stdout.find('ModuleNotFoundError') != -1 or pkg_check.stdout.find('No module named') != -1
 
+#------------------------------- INICIALIZANDO ARCHIVO DE RESULTADOS
+- name: Check if package tablib exists
+  register: pkg_check
+  command: python -c "import tablib"
+  ignore_errors: True
+
 #------------------------------- CONVIRTIENDO
 - name: Check if package tablib exists
   command: python plays/bin/json2xlsx.py {{ inputfile }} {{ outputfile }}
-  
+
