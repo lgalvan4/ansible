@@ -21,9 +21,10 @@
     - name: Print Output
       debug: msg="{{ command.stdout_lines }}"
  
-- name: Create Work Order
-  hosts: localhost
-  #delegate_to: awx-host
-  #remote_user: ubuntu
-  shell: node /home/ubuntu/BMC/createWO.js --data '{"shortDescr":"Ticket creado automáticamente por AWX","detailedDescr":"Listado de usuarios del servidor"}'
+    - name: Create Work Order
+      #hosts: localhost
+      delegate_to: awx-host
+      connection: local
+      remote_user: ubuntu
+      shell: node /home/ubuntu/BMC/createWO.js --data '{"shortDescr":"Ticket creado automáticamente por AWX","detailedDescr":"Listado de usuarios del servidor"}'
       
