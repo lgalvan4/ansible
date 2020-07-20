@@ -20,6 +20,9 @@
     - name: Print Output
       debug: msg="{{ command.stdout_lines }}"
     
-    - name: Create Work Order
-      hosts: localhost
-      shell: node /home/ubuntu/BMC/createWO.js
+ - name: Create Work Order
+   hosts: localhost
+   connection: local
+   tasks:
+     - name: creates work order
+       shell: node /home/ubuntu/BMC/createWO.js
