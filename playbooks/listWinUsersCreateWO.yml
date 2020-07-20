@@ -16,6 +16,7 @@
       register: command
       args:
         stdout: always
+        stdout_add_newline: false
         
     - name: Print Output
       debug: msg="{{ command.stdout_lines }}"
