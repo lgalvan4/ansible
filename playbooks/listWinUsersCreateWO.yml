@@ -21,7 +21,7 @@
       debug: msg="{{ command.stdout_lines }}"
  
     - name: Create Work Order
-      delegate_to: 172.19.0.1
+      delegate_to: awx-host
       remote_user: ubuntu
       shell: node /home/ubuntu/BMC/createWO.js
       
