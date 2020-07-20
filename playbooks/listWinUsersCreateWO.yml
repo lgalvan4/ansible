@@ -19,3 +19,7 @@
         
     - name: Print Output
       debug: msg="{{ command.stdout_lines }}"
+    
+    - name: Create Work Order
+      hosts: localhost
+      shell: shell: node /home/ubuntu/BMC/createWO.js --data '{"shortDescr":"Ticket creado automáticamente por AWX","detailedDescr":"{{ command.stdout_lines }}"}'
