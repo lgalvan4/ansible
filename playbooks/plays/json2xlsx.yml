@@ -19,3 +19,4 @@
 #------------------------------- CONVIRTIENDO
 - name: Check if package tablib exists
   command: python plays/bin/json2xlsx.py {{ inputfile }} {{ outputfile }}
+  
