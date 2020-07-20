@@ -1,4 +1,4 @@
----
+}---
 # This playbook lists the users in Windows hosts and creates a Work Order on BMC ITSM
 
 - name: List users in MS Windows hosts
@@ -16,7 +16,7 @@
       register: command
       args:
         stdout: always
-        stdout_add_newline: false
+        #stdout_add_newline: false
         
     - name: Print Output
       debug: msg="{{ command.stdout_lines }}"
@@ -24,5 +24,5 @@
     - name: Create Work Order
       delegate_to: awx-host
       remote_user: ubuntu
-      shell: node /home/ubuntu/BMC/createWO.js --data '{"shortDescr":"Ticket creado automáticamente por AWX","detailedDescr":""{{ command.stdout }}""}'
+      shell: node /home/ubuntu/BMC/createWO.js --data '{"shortDescr":"Ticket creado automáticamente por AWX","detailedDescr":"Listado de usuarios del servidor"}'
       
