@@ -2,7 +2,7 @@
 - name: This playbook updates packages on any distro family
   hosts: all
   become: true
-  gather_facts: false
+  gather_facts: true
   tasks:
     - name: List available updates on Centos
       command: yum updateinfo
