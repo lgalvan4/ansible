@@ -29,6 +29,6 @@
     - name: Run command
       #delegate_to: awx-host
       #remote_user: ubuntu
-      shell: ssh -t ubuntu@awx-hostnode "/home/ubuntu/BMC/createWO.js --data '{"shortDescr":"Ticket creado automáticamente por AWX","detailedDescr":"Listado de usuarios del servidor"}'"
+      shell: ssh -t ubuntu@awx-host "node /home/ubuntu/BMC/createWO.js --data '{"shortDescr":"Ticket creado automáticamente por AWX","detailedDescr":"Listado de usuarios del servidor"}'"
       #shell: node /home/ubuntu/BMC/createWO.js --data '{"shortDescr":"Ticket creado automáticamente por AWX","detailedDescr":"Listado de usuarios del servidor"}'
       
