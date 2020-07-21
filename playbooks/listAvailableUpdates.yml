@@ -28,7 +28,7 @@
       register: suse
       when: ansible_distribution == "Suse"
 
-    - set_fact: mensaje="redhat ubuntu", para="enava@kionetworks.com"
+    - set_fact: mensaje="{{ubuntu}} {{redhat}}", para="enava@kionetworks.com"
 
     
     - import_tasks: plays/sendmail.yml
