@@ -3,11 +3,6 @@
   hosts: all
   become: true
   gather_facts: true
-  vars:
-    message:
-      - redhat
-      - suse
-      - ubuntu
 
   tasks:
     - name: List available updates on Centos
@@ -33,7 +28,7 @@
       register: suse
       when: ansible_distribution == "Suse"
 
-    - set_fact: mensaje= {{ message }}, para="enava@kionetworks.com"
+    - set_fact: mensaje="redhat ubuntu", para="enava@kionetworks.com"
 
     
     - import_tasks: plays/sendmail.yml
