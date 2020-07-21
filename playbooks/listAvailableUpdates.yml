@@ -1,9 +1,20 @@
 ---
 - name: This playbook updates packages on any distro family
   hosts: all
+  become: true
+  gather_facts: false
   tasks:
-    - name: return motd to registered var
-      become: true
+    - name: List available updates on Centos
       command: yum updateinfo
       register: updateinfo
       when: ansible_distribution == "CentOS"
+
+    - name: List available updates on Ubuntu
+      command: apt list --upgradable
+      register: --upgradable
+      when: ansible_distribution == "Ubuntu"
+
+    - name: return motd to registered var
+      command: zypper list-updates
+      register: list-updates
+      when: ansible_distribution == "Suse"
