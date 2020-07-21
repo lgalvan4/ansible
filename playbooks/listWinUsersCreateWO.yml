@@ -29,7 +29,7 @@
   #connection: local
   tasks:
     - name: Run command
-      #delegate_to: awx-host
-      #remote_user: ubuntu
+      delegate_to: awx-host
+      remote_user: ubuntu
       shell: node /home/ubuntu/BMC/createWO.js --data '{"shortDescr":"Ticket creado automáticamente por AWX","detailedDescr":"Listado de usuarios del servidor"}'
       
