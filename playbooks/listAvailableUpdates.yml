@@ -20,9 +20,15 @@
     - name: List available updates on Ubuntu
       command: apt list --upgradable
       register: ubuntu
+      when: ansible_distribution == "Ubuntu"
+
+    - name: print the mother fucker variable ubuntu
       debug:
         var: ubuntu
-      when: ansible_distribution == "Ubuntu"
+
+    - name: print the mother fucker variable redhat
+      debug:
+        var: redhat
 
     - name: List available updates on Suse
       command: zypper list-updates
