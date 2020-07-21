@@ -20,7 +20,8 @@
         
     - name: Print Output
       debug: msg="{{ command.stdout_lines }}"
- 
+
+#Creación de Work Order en BMC ITSM ambiente de desarrollo 
 - name: Create Work Order
   #user: ubuntu
   hosts: 127.0.0.1
@@ -29,7 +30,7 @@
     - name: Run command
       #delegate_to: awx-host
       #remote_user: ubuntu
-      shell: ssh -t ubuntu@awx-host "df -h"
-      #shell: ssh -t ubuntu@awx-host "node /home/ubuntu/BMC/createWO.js --data '{"shortDescr":"Ticket creado automáticamente por AWX","detailedDescr":"Listado de usuarios del servidor"}'"
+      #shell: ssh -t ubuntu@awx-host "df -h"
+      shell: ssh -t ubuntu@awx-host "node /home/ubuntu/BMC/createWO.js --data '{"shortDescr":"Ticket creado automáticamente por AWX","detailedDescr":"Listado de usuarios del servidor"}'"
       #shell: node /home/ubuntu/BMC/createWO.js --data '{"shortDescr":"Ticket creado automáticamente por AWX","detailedDescr":"Listado de usuarios del servidor"}'
       
