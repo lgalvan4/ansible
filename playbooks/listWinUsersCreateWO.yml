@@ -4,6 +4,7 @@
 - name: List users in MS Windows hosts
   #hosts: all
   #this is a line from vscode 
+  #also this one
   gather_facts: false
   tasks:
     - name: Run powershell script
