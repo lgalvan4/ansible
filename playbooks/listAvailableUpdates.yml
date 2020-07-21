@@ -3,18 +3,28 @@
   hosts: all
   become: true
   gather_facts: true
+  vars:
+    message:
+      - redhat
+      - suse
+      - ubuntu
+
   tasks:
     - name: List available updates on Centos
       command: yum updateinfo
-      register: updateinfo
+      register: redhat
       when: ansible_distribution == "CentOS"
 
     - name: List available updates on Ubuntu
       command: apt list --upgradable
-      register: list
+      register: ubuntu
       when: ansible_distribution == "Ubuntu"
 
     - name: List available updates on Suse
       command: zypper list-updates
-      register: list-updates
+      register: suse
       when: ansible_distribution == "Suse"
+
+    - set_fact: mensaje= {{ message }}, para="enava@kionetworks.com"
+    
+    - import_tasks: plays/sendmail.yml
