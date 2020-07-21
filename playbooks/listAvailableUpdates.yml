@@ -8,13 +8,11 @@
     - name: List available updates on Centos
       yum:
         list: updates
-        register: redhat
       when: ansible_os_family == "RedHat"
 
     - name: List available updates on Ubuntu
       apt: 
         list: updates
-        register: ubuntu
       when: ansible_os_family == "Debian"
 
     - name: print the mother fucker variable ubuntu
