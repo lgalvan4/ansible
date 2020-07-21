@@ -15,7 +15,7 @@
       warn: false
       when: ansible_distribution == "Ubuntu"
 
-    - name: return motd to registered var
+    - name: List available updates on Suse
       command: zypper list-updates
       register: list-updates
       when: ansible_distribution == "Suse"
