@@ -12,8 +12,7 @@
       when: ansible_os_family == "RedHat"
 
     - name: List available updates on Ubuntu
-      apt: 
-        list: updates
+      command: apt list --upgradable 
       register: ubuntu
       when: ansible_os_family == "Debian"
 
