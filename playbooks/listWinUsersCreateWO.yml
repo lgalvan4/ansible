@@ -22,8 +22,8 @@
       debug: msg="{{ command.stdout_lines }}"
  
 - name: Create Work Order
-  user: ubuntu
-  hosts: 172.19.0.1
+  #user: ubuntu
+  hosts: 127.0.0.1
   gather_facts: false
   tasks:
     - name: Run command
