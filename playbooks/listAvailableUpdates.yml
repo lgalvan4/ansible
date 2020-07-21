@@ -6,14 +6,16 @@
 
   tasks:
     - name: List available updates on Centos
-      command: yum updateinfo
-      register: redhat
-      when: ansible_distribution == "CentOS"
+      yum:
+        list: updates
+        register: redhat
+      when: ansible_os_family == "RedHat"
 
     - name: List available updates on Ubuntu
-      command: apt list --upgradable
-      register: ubuntu
-      when: ansible_distribution == "Ubuntu"
+      apt: 
+        list: updates
+        register: ubuntu
+      when: ansible_os_family == "Debian"
 
     - name: print the mother fucker variable ubuntu
       debug:
