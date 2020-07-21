@@ -26,5 +26,6 @@
       when: ansible_distribution == "Suse"
 
     - set_fact: mensaje= {{ message }}, para="enava@kionetworks.com"
+
     
     - import_tasks: plays/sendmail.yml
