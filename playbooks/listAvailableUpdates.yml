@@ -6,3 +6,4 @@
     - name: return motd to registered var
       command: sudo yum updateinfo
       register: updateinfo
+      when: ansible_distribution == "CentOS"
