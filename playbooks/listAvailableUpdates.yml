@@ -11,7 +11,7 @@
 
     - name: List available updates on Ubuntu
       command: apt list --upgradable
-      register: --upgradable
+      register: list
       when: ansible_distribution == "Ubuntu"
 
     - name: return motd to registered var
