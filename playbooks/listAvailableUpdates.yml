@@ -13,11 +13,15 @@
     - name: List available updates on Centos
       command: yum updateinfo
       register: redhat
+      debug:
+        var: redhat 
       when: ansible_distribution == "CentOS"
 
     - name: List available updates on Ubuntu
       command: apt list --upgradable
       register: ubuntu
+      debug:
+        var: ubuntu
       when: ansible_distribution == "Ubuntu"
 
     - name: List available updates on Suse
