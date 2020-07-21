@@ -16,23 +16,10 @@
       register: ubuntu
       when: ansible_os_family == "Debian"
 
-    - name: print the mother fucker variable ubuntu
-      debug:
-        var: ubuntu
-
     - name: print the mother fucker variable redhat
       debug:
         var: redhat
 
-    - name: List available updates on Suse
-      command: zypper list-updates
-      register: suse
-      when: ansible_distribution == "Suse"
-
-    - set_fact: mensaje="{{ubuntu}} ", para="enava@kionetworks.com"
-
-    - import_tasks: plays/sendmail.yml
-
-    - set_fact: mensaje="{{redhat}}", para="enava@kionetworks.com"
+    - set_fact: mensaje="{{redhat.stdout}}", para="enava@kionetworks.com"
     
     - import_tasks: plays/sendmail.yml
