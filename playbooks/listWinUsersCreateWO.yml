@@ -22,7 +22,7 @@
       debug: msg="{{ command.stdout_lines }}"
  
 - name: Create Work Order
-  hosts: awx-host
+  hosts: localhost
   gather_facts: false
   #delegate_to: awx-host
   #connection: local
