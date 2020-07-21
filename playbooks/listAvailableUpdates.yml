@@ -1,9 +1,9 @@
 ---
 - name: This playbook updates packages on any distro family
   hosts: all
-  become: true
   tasks:
     - name: return motd to registered var
-      command: sudo yum updateinfo
+      become: true
+      command: yum updateinfo
       register: updateinfo
       when: ansible_distribution == "CentOS"
