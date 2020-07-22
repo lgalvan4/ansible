@@ -57,8 +57,9 @@
     - set_fact:
         archivos: "{{ archivos + [ archname ] }}"
         archivos_todos: "{{ archivos_todos + [ archname_ext ] }}"
-    - debug:
-      var: hostvars
+
+    - name: Print Hostvars
+      debug: var=hostvars
 
 #------------------------------- CERRANDO ARCHIVO DE RESULTADOS
 - name: Close file
