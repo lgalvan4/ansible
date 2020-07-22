@@ -76,8 +76,8 @@
 ######
     #---Transformando Json to Xlsx
     #- set_fact: inputfile="/tmp/report_{{ inventory_hostname }}.json" outputfile="/tmp/report_{{ inventory_hostname }}.xlsx"
-
-    - inlcude_tasks: plays/json2xlsx.yml
+    - name: test loop
+      inlcude_tasks: plays/json2xlsx.yml
       with_items:
         - {inputfile: 'temp/report_WINANS-1.json', outputfile: '/temp/report_WINANS-1.xlsx'}
         - {inputfile: 'temp/report_WINANS-2.json', outputfile: '/temp/report_WINANS-2.xlsx'}
