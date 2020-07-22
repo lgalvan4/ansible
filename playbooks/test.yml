@@ -66,7 +66,7 @@
 
 ######
     #---Transformando Json to Xlsx
-    - set_fact: comando="ls /tmp/ | grep .json | while read -r line ; do out=$( echo $line | sed -e "s/json/xlsx/g" ); python3 plays/bin/json2xlsx.py /tmp/$line /tmp/$out ; done"
+    - set_fact: comando="ls /tmp/ | grep 'report_.*.json' | while read -r line ; do out=$( echo $line | sed -e "s/json/xlsx/g" ); python3 plays/bin/json2xlsx.py /tmp/$line /tmp/$out ; done"
     #------------------------------- CONVIRTIENDO
     - name: Transform json to xlsx
       command: bash -c "{{ comando }}"
@@ -83,15 +83,22 @@
     #- set_fact: archivos="{{ archivos }}/tmp/report_{{ inventory_hostname }}.xlsx,"
 ######
 
-#------------------------------- TRANSOFRMANDO JSON TO XLSX
+#------------------------------- TRANSOFRMANDO CONSOLIDADO.JSON TO XLSX
 
-    - set_fact: inputfile="/tmp/consolidado.json" outputfile="/tmp/consolidado.xlsx"
+    #- set_fact: inputfile="/tmp/consolidado.json" outputfile="/tmp/consolidado.xlsx"
 
-    - import_tasks: plays/json2xlsx.yml
+    #- import_tasks: plays/json2xlsx.yml
 
-#------------------------------- ENVIANDO CORREO  
+#------------------------------- ENVIANDO CORREO 
+    #---Listando archivos
+    - set_fact: comando="l=$( ls /tmp/ | grep 'report_.*.json\|report_.*.xlsx' | tr '\n' ',' ) | echo ${l::-1} | tr --delete '\n'"
 
-    - set_fact: mensaje="Contenido :D", adjuntos="{{ archivos }}/tmp/consolidado.xlsx"
+    - name: Transform json to xlsx
+      command: bash -c "{{ comando }}"
+      register: res
+
+    - name: Transform json to xlsx
+    - set_fact: mensaje="Contenido :D", adjuntos="{{ res.stdout }}"
     
     - import_tasks: plays/sendmail.yml
 
