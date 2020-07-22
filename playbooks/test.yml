@@ -77,13 +77,13 @@
     #---Transformando Json to Xlsx
     #- set_fact: inputfile="/tmp/report_{{ inventory_hostname }}.json" outputfile="/tmp/report_{{ inventory_hostname }}.xlsx"
 
-    - import_tasks: plays/json2xlsx.yml
+    - inlcude_tasks: plays/json2xlsx.yml
       with_items:
-      - {inputfile: 'temp/report_WINANS-1.json', outputfile: '/temp/report_WINANS-1.xlsx'}
-      - {inputfile: 'temp/report_WINANS-2.json', outputfile: '/temp/report_WINANS-2.xlsx'}
-      - {inputfile: 'temp/report_WINANS-3.json', outputfile: '/temp/report_WINANS-3.xlsx'}
-      - {inputfile: 'temp/report_WINANS-4.json', outputfile: '/temp/report_WINANS-4.xlsx'}
-      - {inputfile: 'temp/report_WINANS-5.json', outputfile: '/temp/report_WINANS-5.xlsx'}
+        - {inputfile: 'temp/report_WINANS-1.json', outputfile: '/temp/report_WINANS-1.xlsx'}
+        - {inputfile: 'temp/report_WINANS-2.json', outputfile: '/temp/report_WINANS-2.xlsx'}
+        - {inputfile: 'temp/report_WINANS-3.json', outputfile: '/temp/report_WINANS-3.xlsx'}
+        - {inputfile: 'temp/report_WINANS-4.json', outputfile: '/temp/report_WINANS-4.xlsx'}
+        - {inputfile: 'temp/report_WINANS-5.json', outputfile: '/temp/report_WINANS-5.xlsx'}
     
     #---Añadiendo info a reporte.docx
     #- set_fact: inputfile="plays/Plantilla_Vamos_Al_Futuro.docx" outputfile="/tmp/report.docx"
