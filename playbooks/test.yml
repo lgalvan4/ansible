@@ -22,6 +22,8 @@
   hosts: all
   vars:
     update_type: Updates
+    archivos: []
+    archivos_todos: []
   gather_facts: false
 
   tasks:
@@ -55,7 +57,8 @@
     - set_fact:
         archivos: "{{ archivos + [ archname ] }}"
         archivos_todos: "{{ archivos_todos + [ archname_ext ] }}"
-
+    - debug:
+      var: hostvars
 
 #------------------------------- CERRANDO ARCHIVO DE RESULTADOS
 - name: Close file
