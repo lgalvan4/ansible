@@ -4,22 +4,17 @@
   command: chmod +x plays/bin/json2xlsx.py  
 
 #------------------------------- INSTALANDO LIBRARIAS NECESARIAS DE PYTHON
-- name: Check if package tablib exists
+- name: Check if package pandas exists
   register: pkg_check
-  command: python -c "import tablib"
+  command: python -c "import pandas"
   ignore_errors: True
   
-- name: Installing tablib package
+- name: Installing pandas package
   pip: 
-    name: tablib
-  when: pkg_check.stderr.find('ModuleNotFoundError') != -1 or pkg_check.stderr.find('No module named') != -1
-
-- name: Installing tablib libraries
-  pip: 
-    name: tablib[all]
+    name: pandas
   when: pkg_check.stderr.find('ModuleNotFoundError') != -1 or pkg_check.stderr.find('No module named') != -1
 
 #------------------------------- CONVIRTIENDO
 - name: Transform json to xlsx
   command: python plays/bin/json2xlsx.py {{ inputfile }} {{ outputfile }}
-
+  

@@ -1,45 +1,93 @@
-from docx import Document
 import sys
+import datetime
+from os import path
+
+from docx import Document
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.shared import Pt
 
 inputFile = str(sys.argv[1])
 outputFile = str(sys.argv[2])
+host = str(sys.argv[3])
+os = str(sys.argv[4])
+sp = str(sys.argv[5])
+ip = str(sys.argv[6])
 
-document = Document(inputFile)
+#Verificando archivo a editar
+if ( not path.exists(outputFile) ):
+    #No existe outputfile, abriendo plantilla
+    document = Document(inputFile)
+else:
+    #Abriendo outputfile
+    document = Document(outputFile)
 
-document.add_heading('Reporte de parches Windows', 0)
+#Si el archivo de salida existe, no se agrega portada
+if ( not path.exists(outputFile) ):
 
-p = document.add_paragraph('A plain paragraph having some ')
-p.add_run('bold').bold = True
-p.add_run(' and some ')
-p.add_run('italic.').italic = True
+    #Creando Portada
+    parrafo = document.add_paragraph()
+    run = parrafo.add_run('Reporte de Actualizaciones Windows')
+    font = run.font
+    font.size = Pt(24)
+    font.bold = True
+    formato_parrafo = parrafo.paragraph_format
+    formato_parrafo.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
-document.add_heading('Heading, level 1', level=1)
-document.add_paragraph('Intense quote', style='Intense Quote')
+    document.add_paragraph()
 
-document.add_paragraph(
-    'first item in unordered list', style='List Bullet'
-)
-document.add_paragraph(
-    'first item in ordered list', style='List Number'
-)
+    parrafo = document.add_paragraph()
+    run = parrafo.add_run('Inventario: Prueba')
+    font = run.font
+    font.size = Pt(24)
+    font.bold = True
+    formato_parrafo = parrafo.paragraph_format
+    formato_parrafo.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+    document.add_paragraph()
+
+    parrafo = document.add_paragraph()
+    run = parrafo.add_run('Julio 2020')
+    font = run.font
+    font.size = Pt(24)
+    font.bold = True
+    formato_parrafo = parrafo.paragraph_format
+    formato_parrafo.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+#introduciendo informacion
+
+document.add_page_break() #Salto de Pagina
+
+document.add_paragraph() #Enter 
+
+parrafo = document.add_paragraph()
+run = parrafo.add_run('Servidor: ' +host)
+font = run.font
+font.size = Pt(14)
+font.bold = True
+formato_parrafo = parrafo.paragraph_format
+formato_parrafo.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+document.add_paragraph() #Enter
+
+parrafo = document.add_paragraph()
+run = parrafo.add_run('Detalles del servidor:')
+
+document.add_paragraph() #Enter
 
 records = (
-    (3, '101', 'Spam'),
-    (7, '422', 'Eggs'),
-    (4, '631', 'Spam, spam, eggs, and spam')
+    ('Operating System', os),
+    ('Service Pack', sp),
+    ('IP Address', ip),
+    ('Last Status Reported', datetime.datetime.now())
 )
 
-table = document.add_table(rows=1, cols=3)
+table = document.add_table(rows=1, cols=2)
 hdr_cells = table.rows[0].cells
-hdr_cells[0].text = 'Qty'
-hdr_cells[1].text = 'Id'
-hdr_cells[2].text = 'Desc'
-for qty, id, desc in records:
+hdr_cells[0].text = 'Id'
+hdr_cells[1].text = 'Valor'
+for id, val in records:
     row_cells = table.add_row().cells
-    row_cells[0].text = str(qty)
-    row_cells[1].text = id
-    row_cells[2].text = desc
-
-document.add_page_break()
+    row_cells[0].text = id
+    row_cells[1].text = val
 
 document.save(outputFile)

@@ -1,12 +1,12 @@
 ---
 #------------------------------- INICIALIZANDO ARCHIVO DE RESULTADOS
-- name: Inicialice file
+- name: Inicialice file 
   hosts: localhost
   vars:
-    start: "["
+    start: "{" 
 
   tasks:
-    - name: Create Json File                                                                               
+    - name: Create Json File
       copy:
         content: "{{ start }}"
         dest: "/tmp/report.json"
@@ -38,7 +38,7 @@
 - name: Close file
   hosts: localhost
   vars:
-    end: "]"
+    end: "}"
     para: <ebenitez@kionetworks.com>
     asunto: Ansible-report
     mensaje: vacio
