@@ -91,7 +91,7 @@
 
 #------------------------------- ENVIANDO CORREO 
     #---Listando archivos
-    - set_fact: comando="l=$( ls /tmp/ | grep 'report_.*.json' | tr '\n' ',' ) | echo ${l::-1} | tr --delete '\n'"
+    - set_fact: comando="l=$( ls /tmp/ | grep 'report_.*.json' | tr '\n' ',' ) | echo ${l::-1}
 
     - name: get file names
       command: bash -c "{{ comando }}"
