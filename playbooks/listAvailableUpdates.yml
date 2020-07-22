@@ -12,8 +12,8 @@
 
     - name: print the mother fucker variable redhat
       debug:
-        var: Ubuntu
+        var: ubuntu
 
-    - set_fact: mensaje="{{ubuntu}}", para="enava@kionetworks.com"
+    - set_fact: mensaje="{{"ubuntu"}}", para="enava@kionetworks.com"
     
     - import_tasks: plays/sendmail.yml
