@@ -53,8 +53,8 @@
 
     #---Adding files to lists 
     - set_fact:
-      archivos: "{{ archivos + [ archname ] }}"
-      archivos_todos: "{{ archivos_todos + [ archname_ext ] }}"
+        archivos: "{{ archivos + [ archname ] }}"
+        archivos_todos: "{{ archivos_todos + [ archname_ext ] }}"
 
 
 #------------------------------- CERRANDO ARCHIVO DE RESULTADOS
