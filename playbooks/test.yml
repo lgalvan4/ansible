@@ -14,8 +14,8 @@
     
     #---Inicializando, archivos -> archivos a convertir, archivos_todos -> archivos a eliminar
     - set_fact: 
-      archivos: []
-      archivos_todos: []
+        archivos: []
+        archivos_todos: []
 
 #------------------------------- GETTING UPDATES LIST
 - name: Search Windows updates by category
