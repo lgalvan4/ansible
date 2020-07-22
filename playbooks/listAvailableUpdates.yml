@@ -5,12 +5,6 @@
   gather_facts: true
 
   tasks:
-    - name: List available updates on Centos
-      yum:
-        list: updates
-      register: redhat
-      when: ansible_os_family == "RedHat"
-
     - name: List available updates on Ubuntu
       command: apt list --upgradable 
       register: ubuntu
@@ -18,8 +12,8 @@
 
     - name: print the mother fucker variable redhat
       debug:
-        var: redhat
+        var: Ubuntu
 
-    - set_fact: mensaje="{{redhat.stdout}}", para="enava@kionetworks.com"
+    - set_fact: mensaje="{{ubuntu.stdout}}", para="enava@kionetworks.com"
     
     - import_tasks: plays/sendmail.yml
