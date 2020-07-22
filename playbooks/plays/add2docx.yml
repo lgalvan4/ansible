@@ -1,0 +1,20 @@
+---
+#------------------------------- DANDO PERMISOS DE EJECUCION
+- name: Seting execution perms json2xlsx.py
+  command: chmod +x plays/bin/add2docx.py  
+
+#------------------------------- INSTALANDO LIBRARIAS NECESARIAS DE PYTHON
+- name: Check if package pandas exists
+  register: pkg_check
+  command: python -c "import docx"
+  ignore_errors: True
+  
+- name: Installing pandas package
+  pip: 
+    name: python-docx
+  when: pkg_check.stderr.find('ModuleNotFoundError') != -1 or pkg_check.stderr.find('No module named') != -1
+
+#------------------------------- CONVIRTIENDO
+- name: Transform json to xlsx
+  command: python plays/bin/add2docx.py Plantilla_Vamos_Al_Futuro.docx /tmp/report.docx {{ host }} Windows vacio vacio
+#  command: python plays/bin/add2docx.py {{ inputfile }} {{ outputfile }} {{ host }} {{ os }} {{ sp }} {{ ip }}

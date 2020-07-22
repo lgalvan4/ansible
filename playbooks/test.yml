@@ -9,8 +9,13 @@
     - name: Create Json File
       copy:
         content: "{{ start }}"
-        dest: "/tmp/report.json"
+        dest: "/tmp/consolidado.json"
       delegate_to: 127.0.0.1
+    
+    #---Inicializando, archivos -> archivos a convertir, archivos_todos -> archivos a eliminar
+    - set_fact: 
+      archivos: []
+      archivos_todos: []
 
 #------------------------------- GETTING UPDATES LIST
 - name: Search Windows updates by category
@@ -20,6 +25,7 @@
   gather_facts: false
 
   tasks:
+    #---Extrallendo lista de updates
     - name: List Windows "{{ update_type }}"
       register: res
       win_updates:
@@ -27,12 +33,29 @@
         state: searched
         log_path: C:\ansible_wu.txt
 
+    - set_fact: archname="report_{{ inventory_hostname }}"
+    - set_fact: archname_ext="/tmp/report_{{ inventory_hostname }}.json"
+
+    #---Escribiendo Json por servidor
+    - name: Create Json File for "{{ inventory_hostname }}"
+      copy:
+        content: "{{ res }}"
+        dest: "{{ archname_ext }}"
+      delegate_to: 127.0.0.1
+
+    #---Escribiendo al Json conolidado
     - name: Write output to json
       lineinfile:
         line: " \"{{ inventory_hostname }}\": {{ res }} ,"
         insertafter: EOF
-        dest: /tmp/report.json
+        dest: /tmp/consolidado.json
       delegate_to: 127.0.0.1
+
+    #---Adding files to lists 
+    - set_fact:
+      archivos: "{{ archivos + [ archname ] }}"
+      archivos_todos: "{{ archivos_todos + [ archname_ext ] }}"
+
 
 #------------------------------- CERRANDO ARCHIVO DE RESULTADOS
 - name: Close file
@@ -48,26 +71,41 @@
       lineinfile:
         line: "{{ end }}"
         insertafter: EOF
-        dest: /tmp/report.json
+        dest: /tmp/consolidado.json
       delegate_to: 127.0.0.1
+######
+    #---Transformando Json to Xlsx
+    #- set_fact: inputfile="/tmp/report_{{ inventory_hostname }}.json" outputfile="/tmp/report_{{ inventory_hostname }}.xlsx"
+
+    - import_tasks: plays/json2xlsx.yml inputfile="/temp/{{ item }}.json" outputfile="/temp/{{ item }}.xlsx"
+      with_items: "{{ archivos }}"
+    
+    #---Añadiendo info a reporte.docx
+    #- set_fact: inputfile="plays/Plantilla_Vamos_Al_Futuro.docx" outputfile="/tmp/report.docx"
+
+    #- import_tasks: plays/add2docx.yml
+
+    #---Estableciendo archivos a enviar
+    #- set_fact: archivos="{{ archivos }}/tmp/report_{{ inventory_hostname }}.xlsx,"
+######
 
 #------------------------------- TRANSOFRMANDO JSON TO XLSX
 
-    - set_fact: inputfile="/tmp/report.json" outputfile="/tmp/report.xlsx"
+    - set_fact: inputfile="/tmp/consolidado.json" outputfile="/tmp/consolidado.xlsx"
 
     - import_tasks: plays/json2xlsx.yml
 
 #------------------------------- ENVIANDO CORREO  
 
-    - set_fact: mensaje="Contenido :D", adjuntos="/tmp/report.xlsx"
+    - set_fact: mensaje="Contenido :D", adjuntos="{{ archivos }}/tmp/consolidado.xlsx"
     
     - import_tasks: plays/sendmail.yml
 
 #------------------------------- LIMPIANDO ARCHIVOS TEMPORALES
 
-    - local_action: file path=/tmp/report.json state=absent
+    - local_action: file path=/tmp/consolidado.json state=absent
 
-    - local_action: file path=/tmp/report.xlsx state=absent
+    - local_action: file path=/tmp/consolidado.xlsx state=absent
 
 # CriticalUpdates
 # SecurityUpdates
