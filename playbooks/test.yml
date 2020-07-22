@@ -11,19 +11,12 @@
         content: "{{ start }}"
         dest: "/tmp/consolidado.json"
       delegate_to: 127.0.0.1
-    
-    #---Inicializando, archivos -> archivos a convertir, archivos_todos -> archivos a eliminar
-    - set_fact: 
-        archivos: []
-        archivos_todos: []
 
 #------------------------------- GETTING UPDATES LIST
 - name: Search Windows updates by category
   hosts: all
   vars:
     update_type: Updates
-    archivos: []
-    archivos_todos: []
   gather_facts: false
 
   tasks:
@@ -53,14 +46,6 @@
         dest: /tmp/consolidado.json
       delegate_to: 127.0.0.1
 
-    #---Adding files to lists 
-    - set_fact:
-        archivos: "{{ archivos + [ archname ] }}"
-        archivos_todos: "{{ archivos_todos + [ archname_ext ] }}"
-
-    - name: Print Hostvars
-      debug: var=hostvars
-
 #------------------------------- CERRANDO ARCHIVO DE RESULTADOS
 - name: Close file
   hosts: localhost
@@ -77,12 +62,17 @@
         insertafter: EOF
         dest: /tmp/consolidado.json
       delegate_to: 127.0.0.1
+    
+
 ######
     #---Transformando Json to Xlsx
-    #- set_fact: inputfile="/tmp/report_{{ inventory_hostname }}.json" outputfile="/tmp/report_{{ inventory_hostname }}.xlsx"
+    - set_fact: comando="ls /tmp/ | grep .json | while read -r line ; do ; out=$( echo $line | sed -e "s/json/xlsx/g" ); python3 plays/bin/json2xlsx.py /tmp/$line /tmp/$out ; done"
+    #------------------------------- CONVIRTIENDO
+    - name: Transform json to xlsx
+      command: bash -c "{{ comando }}"
 
-    - include_tasks: plays/json2xlsx.yml
-      with_items: "{{ archivos }}"
+    #- include_tasks: plays/json2xlsx.yml
+    #  with_items: "{{ play_hosts }}"
 
     #---Añadiendo info a reporte.docx
     #- set_fact: inputfile="plays/Plantilla_Vamos_Al_Futuro.docx" outputfile="/tmp/report.docx"
