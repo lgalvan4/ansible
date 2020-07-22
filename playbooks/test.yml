@@ -93,11 +93,13 @@
     #---Listando archivos
     - set_fact: comando="l=$( ls /tmp/ | grep 'report_.*.json\|report_.*.xlsx' | tr '\n' ',' ) | echo ${l::-1} | tr --delete '\n'"
 
-    - name: Transform json to xlsx
+    - name: get file names
       command: bash -c "{{ comando }}"
       register: res
 
-    - name: Transform json to xlsx
+    - name: check result
+      debug: var=res
+    
     - set_fact: mensaje="Contenido :D", adjuntos="{{ res.stdout }}"
     
     - import_tasks: plays/sendmail.yml
