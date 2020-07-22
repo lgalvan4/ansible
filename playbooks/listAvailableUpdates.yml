@@ -6,7 +6,7 @@
   tasks:
     - name: List available updates on Ubuntu
       become: true
-      command: apt list --upgradable 
+      command: apt list --upgradeable 
       register: ubuntu
       when: ansible_os_family == "Debian"
 
