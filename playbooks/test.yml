@@ -98,6 +98,8 @@
     
     - name: cosa
       vars:
+        inputfile: "plays/Plantilla_Vamos_Al_Futuro.docx"
+        outputfile: "/tmp/report_actualizacionesWindows.docx"
         host: "{{ item }}"
       include_tasks: plays/add2docx.yml
       with_items: "{{ groups['all'] }}"
