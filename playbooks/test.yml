@@ -81,13 +81,7 @@
 # ------------------------------- CREANDO Y AÑADIENDO INFO AL DOCX
 
     - name: check result
-      debug: var=play_hosts
-
-    - name: Print Hostvars
-      debug: var=ansible_play_hosts
-
-    - name: Print Hostvars
-      debug: var=ansible_play_hosts_all
+      debug: var=ansible_play_batch
   
     - name: show all the hosts matching the pattern, i.e. all but the group www
       vars:
