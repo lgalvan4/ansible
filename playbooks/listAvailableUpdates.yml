@@ -7,11 +7,38 @@
     - name: List available updates on Ubuntu
       become: true
       command: apt list --upgradeable 
-      register: ubuntu
+      register: debian
       when: ansible_os_family == "Debian"
 
-    - set_fact: mensaje="{{ubuntu.stdout}}", para="enava@kionetworks.com", asunto="Reporte de actualizaciones disponibles {{inventory_hostname}}"
+    - set_fact: mensaje="{{debian.stdout}}", para="enava@kionetworks.com", asunto="Reporte de actualizaciones disponibles {{inventory_hostname}}"
       when: ansible_os_family == "Debian"
     
     - import_tasks: plays/sendmail.yml
       when: ansible_os_family == "Debian"
+
+#------------------ Centos / RedHat
+
+    - name: List available updates on Ubuntu
+      become: true
+      command: yum updateinfo
+      register: redhat
+      when: ansible_os_family == "RedHat"
+
+    - set_fact: mensaje="{{redhat.stdout}}", para="enava@kionetworks.com", asunto="Reporte de actualizaciones disponibles {{inventory_hostname}}"
+      when: ansible_os_family == "RedHat"
+    
+    - import_tasks: plays/sendmail.yml
+      when: ansible_os_family == "RedHat"
+
+#-------------------- Suse
+    - name: List available updates on Suse
+      become: true
+      command: zypper list-updates
+      register: suse
+      when: ansible_os_family == "Suse"
+
+    - set_fact: mensaje="{{suse.stdout}}", para="enava@kionetworks.com", asunto="Reporte de actualizaciones disponibles {{inventory_hostname}}"
+      when: ansible_os_family == "Suse"
+    
+    - import_tasks: plays/sendmail.yml
+      when: ansible_os_family == "Suse"
