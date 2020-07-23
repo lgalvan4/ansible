@@ -84,13 +84,16 @@
       debug: var=play_hosts
 
     - name: Print Hostvars
-      debug: var=hostvars
+      debug: var=ansible_play_hosts
+
+    - name: Print Hostvars
+      debug: var=ansible_play_hosts_all
   
     - name: show all the hosts matching the pattern, i.e. all but the group www
+      vars:
+        host: "{{ item }}"
       debug:
         msg: "{{ host }}"
-        vars:
-          host: "{{ item }}"
       with_inventory_hostnames:
         - all
 
