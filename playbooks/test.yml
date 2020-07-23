@@ -81,7 +81,7 @@
 # ------------------------------- CREANDO Y AÑADIENDO INFO AL DOCX
 
     - name: check result
-      debug: var=ansible_play_batch
+      debug: var=groups
   
     - name: show all the hosts matching the pattern, i.e. all but the group www
       vars:
@@ -91,6 +91,10 @@
       with_inventory_hostnames:
         - all
 
+    - name: "with_items - ordered"
+      debug: var=item
+      with_items:
+      - "{{ groups['all'] }}"
     # ---Añadiendo info a reporte.docx
     - set_fact: inputfile="plays/Plantilla_Vamos_Al_Futuro.docx" outputfile="/tmp/report.docx" host="{{ inventory_hostname }}"
     
