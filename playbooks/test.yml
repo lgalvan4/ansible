@@ -102,10 +102,10 @@
     - import_tasks: plays/sendmail.yml
 
 #------------------------------- LIMPIANDO ARCHIVOS TEMPORALES
-    - set_fact: comando="rm $( ls /tmp/ | grep 'report_.*.json\|report_.*.xlsx' | sed 's/report/\/tmp\/report/g' )"
+    #- set_fact: comando="rm $( ls /tmp/ | grep 'report_.*.json\|report_.*.xlsx' | sed 's/report/\/tmp\/report/g' )"
 
-    - name: Cleaning tmp files
-      command: bash -c "{{ comando }}"
+    #- name: Cleaning tmp files
+    #  command: bash -c "{{ comando }}"
 
 # CriticalUpdates
 # SecurityUpdates
