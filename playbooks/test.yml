@@ -1,50 +1,51 @@
 ---
-#------------------------------- INICIALIZANDO ARCHIVO DE RESULTADOS
-- name: Inicialice consolidated file 
-  hosts: localhost
-  vars:
-    start: "{" 
+# #------------------------------- INICIALIZANDO ARCHIVO DE RESULTADOS
+# - name: Inicialice consolidated file 
+#   hosts: localhost
+#   vars:
+#     start: "{" 
+#   gather_facts: false
 
-  tasks:
-    - name: Creation of Json File
-      copy:
-        content: "{{ start }}"
-        dest: "/tmp/report_consolidado.json"
-      delegate_to: 127.0.0.1
+#   tasks:
+#     - name: Creation of Json File
+#       copy:
+#         content: "{{ start }}"
+#         dest: "/tmp/report_consolidado.json"
+#       delegate_to: 127.0.0.1
 
-#------------------------------- GETTING UPDATES LIST
-- name: Search Windows updates by category
-  hosts: all
-  vars:
-    update_type: Updates
-  gather_facts: false
+# #------------------------------- GETTING UPDATES LIST
+# - name: Search Windows updates by category
+#   hosts: all
+#   vars:
+#     update_type: Updates
+#   gather_facts: false
 
-  tasks:
-    #---Extrallendo lista de updates
-    - name: List Windows "{{ update_type }}"
-      register: res
-      win_updates:
-        category_names: "{{ update_type }}"
-        state: searched
-        log_path: C:\ansible_wu.txt
+#   tasks:
+#     #---Extrallendo lista de updates
+#     - name: List Windows "{{ update_type }}"
+#       register: res
+#       win_updates:
+#         category_names: "{{ update_type }}"
+#         state: searched
+#         log_path: C:\ansible_wu.txt
 
-    - set_fact: archname="report_{{ inventory_hostname }}"
-    - set_fact: archname_ext="/tmp/report_{{ inventory_hostname }}.json"
+#     - set_fact: archname="report_{{ inventory_hostname }}"
+#     - set_fact: archname_ext="/tmp/report_{{ inventory_hostname }}.json"
 
-    #---Escribiendo Json por servidor
-    - name: Create Json File for "{{ inventory_hostname }}"
-      copy:
-        content: "{{ res }}"
-        dest: "{{ archname_ext }}"
-      delegate_to: 127.0.0.1
+#     #---Escribiendo Json por servidor
+#     - name: Create Json File for "{{ inventory_hostname }}"
+#       copy:
+#         content: "{{ res }}"
+#         dest: "{{ archname_ext }}"
+#       delegate_to: 127.0.0.1
 
-    #---Escribiendo al Json conolidado
-    - name: Write list to consolidated json
-      lineinfile:
-        line: " \"{{ inventory_hostname }}\": {{ res }} ,"
-        insertafter: EOF
-        dest: /tmp/report_consolidado.json
-      delegate_to: 127.0.0.1
+#     #---Escribiendo al Json conolidado
+#     - name: Write list to consolidated json
+#       lineinfile:
+#         line: " \"{{ inventory_hostname }}\": {{ res }} ,"
+#         insertafter: EOF
+#         dest: /tmp/report_consolidado.json
+#       delegate_to: 127.0.0.1
 
 #------------------------------- CERRANDO ARCHIVO DE RESULTADOS
 - name: Creation of report in docx, json transformation and sending of mail
@@ -54,21 +55,22 @@
     para: <ebenitez@kionetworks.com>
     asunto: Ansible-report
     mensaje: vacio
+  gather_facts: false
 
   tasks:
-    - name: Close json file
-      lineinfile:
-        line: "{{ end }}"
-        insertafter: EOF
-        dest: /tmp/report_consolidado.json
-      delegate_to: 127.0.0.1
+#     - name: Close json file
+#       lineinfile:
+#         line: "{{ end }}"
+#         insertafter: EOF
+#         dest: /tmp/report_consolidado.json
+#       delegate_to: 127.0.0.1
     
-#------------------------------- CONVIRTIENDO JSONs TO XLSX
+# #------------------------------- CONVIRTIENDO JSONs TO XLSX
 
-    - set_fact: comando="ls /tmp/ | grep 'report_.*.json' | while read -r line ; do out=$( echo $line | sed -e "s/json/xlsx/g" ); python3 plays/bin/json2xlsx.py /tmp/$line /tmp/$out ; done"
+#     - set_fact: comando="ls /tmp/ | grep 'report_.*.json' | while read -r line ; do out=$( echo $line | sed -e "s/json/xlsx/g" ); python3 plays/bin/json2xlsx.py /tmp/$line /tmp/$out ; done"
 
-    - name: Transform json files to xlsx
-      command: bash -c "{{ comando }}"
+#     - name: Transform json files to xlsx
+#       command: bash -c "{{ comando }}"
 
 #------------------------------- TRANSOFRMANDO CONSOLIDADO.JSON TO XLSX
 
@@ -76,18 +78,20 @@
 
     #- import_tasks: plays/json2xlsx.yml
 
-#------------------------------- CREANDO Y AÑADIENDO INFO AL DOCX
+# ------------------------------- CREANDO Y AÑADIENDO INFO AL DOCX
 
-    #---Añadiendo info a reporte.docx
-    #- set_fact: inputfile="plays/Plantilla_Vamos_Al_Futuro.docx" outputfile="/tmp/report.docx"
+    - name: check result
+      debug: var=play_hosts
 
-    #- include_tasks: plays/add2docx.yml
-    #  with_items: "{{ play_hosts }}"
+    # ---Añadiendo info a reporte.docx
+    - set_fact: inputfile="plays/Plantilla_Vamos_Al_Futuro.docx" outputfile="/tmp/report.docx"
 
+    - include_tasks: plays/add2docx.yml host={{ item }}
+      with_items: "{{ play_hosts }}"
 
 #------------------------------- ENVIANDO CORREO 
     #---Listando archivos
-    - set_fact: comando="list=$( ls /tmp/ | grep 'report_.*.json\|report_.*.xlsx' | tr '\n' ',' | sed 's/report/\/tmp\/report/g' ) ; echo ${list::-1}"
+    - set_fact: comando="list=$( ls /tmp/ | grep 'report_.*.json\|report_.*.xlsx\|report_.*.docx' | tr '\n' ',' | sed 's/report/\/tmp\/report/g' ) ; echo ${list::-1}"
     #- set_fact: comando="l=$( ls /tmp/ | grep 'report_.*.json\|report_.*.xlsx' | tr '\n' ',' ) | echo ${l::-1} | tr --delete '\n'"
 
     - name: Get files to send 
@@ -102,7 +106,7 @@
     - import_tasks: plays/sendmail.yml
 
 #------------------------------- LIMPIANDO ARCHIVOS TEMPORALES
-    #- set_fact: comando="rm $( ls /tmp/ | grep 'report_.*.json\|report_.*.xlsx' | sed 's/report/\/tmp\/report/g' )"
+    #- set_fact: comando="rm $( ls /tmp/ | grep 'report_.*.json\|report_.*.xlsx\|report_.*.docx' | sed 's/report/\/tmp\/report/g' )"
 
     #- name: Cleaning tmp files
     #  command: bash -c "{{ comando }}"
