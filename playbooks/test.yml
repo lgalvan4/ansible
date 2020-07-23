@@ -47,15 +47,15 @@
 #       delegate_to: 127.0.0.1
 
 # #------------------------------- CERRANDO ARCHIVO DE RESULTADOS
-# - name: Close file
-#   hosts: localhost
-#   vars:
-#     end: "}"
-#     para: <ebenitez@kionetworks.com>
-#     asunto: Ansible-report
-#     mensaje: vacio
+- name: Close file
+  hosts: localhost
+  vars:
+    end: "}"
+    para: <ebenitez@kionetworks.com>
+    asunto: Ansible-report
+    mensaje: vacio
 
-#   tasks:
+  tasks:
 #     - name: Close json file
 #       lineinfile:
 #         line: "{{ end }}"
