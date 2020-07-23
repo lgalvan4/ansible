@@ -1,53 +1,53 @@
 ---
 #------------------------------- INICIALIZANDO ARCHIVO DE RESULTADOS
-# - name: Inicialice file 
-#   hosts: localhost
-#   vars:
-#     start: "{" 
+- name: Inicialice consolidated file 
+  hosts: localhost
+  vars:
+    start: "{" 
 
-#   tasks:
-#     - name: Create Json File
-#       copy:
-#         content: "{{ start }}"
-#         dest: "/tmp/consolidado.json"
-#       delegate_to: 127.0.0.1
+  tasks:
+    - name: Creation of Json File
+      copy:
+        content: "{{ start }}"
+        dest: "/tmp/report_consolidado.json"
+      delegate_to: 127.0.0.1
 
-# #------------------------------- GETTING UPDATES LIST
-# - name: Search Windows updates by category
-#   hosts: all
-#   vars:
-#     update_type: Updates
-#   gather_facts: false
+#------------------------------- GETTING UPDATES LIST
+- name: Search Windows updates by category
+  hosts: all
+  vars:
+    update_type: Updates
+  gather_facts: false
 
-#   tasks:
-#     #---Extrallendo lista de updates
-#     - name: List Windows "{{ update_type }}"
-#       register: res
-#       win_updates:
-#         category_names: "{{ update_type }}"
-#         state: searched
-#         log_path: C:\ansible_wu.txt
+  tasks:
+    #---Extrallendo lista de updates
+    - name: List Windows "{{ update_type }}"
+      register: res
+      win_updates:
+        category_names: "{{ update_type }}"
+        state: searched
+        log_path: C:\ansible_wu.txt
 
-#     - set_fact: archname="report_{{ inventory_hostname }}"
-#     - set_fact: archname_ext="/tmp/report_{{ inventory_hostname }}.json"
+    - set_fact: archname="report_{{ inventory_hostname }}"
+    - set_fact: archname_ext="/tmp/report_{{ inventory_hostname }}.json"
 
-#     #---Escribiendo Json por servidor
-#     - name: Create Json File for "{{ inventory_hostname }}"
-#       copy:
-#         content: "{{ res }}"
-#         dest: "{{ archname_ext }}"
-#       delegate_to: 127.0.0.1
+    #---Escribiendo Json por servidor
+    - name: Create Json File for "{{ inventory_hostname }}"
+      copy:
+        content: "{{ res }}"
+        dest: "{{ archname_ext }}"
+      delegate_to: 127.0.0.1
 
-#     #---Escribiendo al Json conolidado
-#     - name: Write output to json
-#       lineinfile:
-#         line: " \"{{ inventory_hostname }}\": {{ res }} ,"
-#         insertafter: EOF
-#         dest: /tmp/consolidado.json
-#       delegate_to: 127.0.0.1
+    #---Escribiendo al Json conolidado
+    - name: Write list to consolidated json
+      lineinfile:
+        line: " \"{{ inventory_hostname }}\": {{ res }} ,"
+        insertafter: EOF
+        dest: /tmp/report_consolidado.json
+      delegate_to: 127.0.0.1
 
-# #------------------------------- CERRANDO ARCHIVO DE RESULTADOS
-- name: Close file
+#------------------------------- CERRANDO ARCHIVO DE RESULTADOS
+- name: Creation of report in docx, json transformation and sending of mail
   hosts: localhost
   vars:
     end: "}"
@@ -56,60 +56,56 @@
     mensaje: vacio
 
   tasks:
-#     - name: Close json file
-#       lineinfile:
-#         line: "{{ end }}"
-#         insertafter: EOF
-#         dest: /tmp/consolidado.json
-#       delegate_to: 127.0.0.1
+    - name: Close json file
+      lineinfile:
+        line: "{{ end }}"
+        insertafter: EOF
+        dest: /tmp/report_consolidado.json
+      delegate_to: 127.0.0.1
     
+#------------------------------- CONVIRTIENDO JSONs TO XLSX
 
-# ######
-#     #---Transformando Json to Xlsx
-#     - set_fact: comando="ls /tmp/ | grep 'report_.*.json' | while read -r line ; do out=$( echo $line | sed -e "s/json/xlsx/g" ); python3 plays/bin/json2xlsx.py /tmp/$line /tmp/$out ; done"
-#     #------------------------------- CONVIRTIENDO
-#     - name: Transform json to xlsx
-#       command: bash -c "{{ comando }}"
+    - set_fact: comando="ls /tmp/ | grep 'report_.*.json' | while read -r line ; do out=$( echo $line | sed -e "s/json/xlsx/g" ); python3 plays/bin/json2xlsx.py /tmp/$line /tmp/$out ; done"
 
-    #- include_tasks: plays/json2xlsx.yml
-    #  with_items: "{{ play_hosts }}"
+    - name: Transform json files to xlsx
+      command: bash -c "{{ comando }}"
+
+#------------------------------- TRANSOFRMANDO CONSOLIDADO.JSON TO XLSX
+
+    #- set_fact: inputfile="/tmp/report_consolidado.json" outputfile="/tmp/report_consolidado.xlsx"
+
+    #- import_tasks: plays/json2xlsx.yml
+
+#------------------------------- CREANDO Y AÑADIENDO INFO AL DOCX
 
     #---Añadiendo info a reporte.docx
     #- set_fact: inputfile="plays/Plantilla_Vamos_Al_Futuro.docx" outputfile="/tmp/report.docx"
 
-    #- import_tasks: plays/add2docx.yml
+    #- include_tasks: plays/add2docx.yml
+    #  with_items: "{{ play_hosts }}"
 
-    #---Estableciendo archivos a enviar
-    #- set_fact: archivos="{{ archivos }}/tmp/report_{{ inventory_hostname }}.xlsx,"
-######
-
-#------------------------------- TRANSOFRMANDO CONSOLIDADO.JSON TO XLSX
-
-    #- set_fact: inputfile="/tmp/consolidado.json" outputfile="/tmp/consolidado.xlsx"
-
-    #- import_tasks: plays/json2xlsx.yml
 
 #------------------------------- ENVIANDO CORREO 
     #---Listando archivos
     - set_fact: comando="list=$( ls /tmp/ | grep 'report_.*.json\|report_.*.xlsx' | tr '\n' ',' | sed 's/report/\/tmp\/report/g' ) ; echo ${list::-1}"
     #- set_fact: comando="l=$( ls /tmp/ | grep 'report_.*.json\|report_.*.xlsx' | tr '\n' ',' ) | echo ${l::-1} | tr --delete '\n'"
 
-    - name: get file names
+    - name: Get files to send 
       command: bash -c "{{ comando }}"
       register: res
 
-    - name: check result
-      debug: var=res
+    #- name: check result
+    #  debug: var=res
     
-    - set_fact: mensaje="Contenido :D", adjuntos="{{ res.stdout }}"
+    - set_fact: mensaje="Reporte de actualizaciones Windows", adjuntos="{{ res.stdout }}"
     
     - import_tasks: plays/sendmail.yml
 
 #------------------------------- LIMPIANDO ARCHIVOS TEMPORALES
+    - set_fact: comando="rm $( ls /tmp/ | grep 'report_.*.json\|report_.*.xlsx' | sed 's/report/\/tmp\/report/g' )"
 
-    - local_action: file path=/tmp/consolidado.json state=absent
-
-    - local_action: file path=/tmp/consolidado.xlsx state=absent
+    - name: Cleaning tmp files
+      command: bash -c "{{ comando }}"
 
 # CriticalUpdates
 # SecurityUpdates
