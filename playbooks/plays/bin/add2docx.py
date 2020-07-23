@@ -78,7 +78,7 @@ records = (
     ('Operating System', os),
     ('Service Pack', sp),
     ('IP Address', ip),
-    ('Last Status Reported', datetime.datetime.now())
+    ('Last Status Reported', str(datetime.datetime.now()))
 )
 
 table = document.add_table(rows=1, cols=2)
