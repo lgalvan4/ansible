@@ -92,6 +92,7 @@
     - name: cosa
       include_tasks: plays/add2docx.yml
       with_items: "{{ play_hosts }}"
+      delegate_to: 127.0.0.1
 
 #------------------------------- ENVIANDO CORREO 
     #---Listando archivos
