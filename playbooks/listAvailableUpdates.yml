@@ -10,10 +10,8 @@
       register: ubuntu
       when: ansible_os_family == "Debian"
 
-    - name: print the mother fucker variable redhat
-      debug:
-        var: ubuntu
-
     - set_fact: mensaje="{{ubuntu.stdout}}", para="enava@kionetworks.com", asunto="Reporte de actualizaciones disponibles {{inventory_hostname}}"
+      when: ansible_os_family == "Debian"
     
     - import_tasks: plays/sendmail.yml
+      when: ansible_os_family == "Debian"
