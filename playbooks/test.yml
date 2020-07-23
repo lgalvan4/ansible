@@ -83,10 +83,14 @@
     - name: check result
       debug: var=play_hosts
 
+    - name: Print Hostvars
+      debug: var=hostvars
+
     # ---Añadiendo info a reporte.docx
     - set_fact: inputfile="plays/Plantilla_Vamos_Al_Futuro.docx" outputfile="/tmp/report.docx"
-
-    - include_tasks: plays/add2docx.yml
+    
+    - name: cosa
+      include_tasks: plays/add2docx.yml
       with_items: "{{ play_hosts }}"
 
 #------------------------------- ENVIANDO CORREO 
