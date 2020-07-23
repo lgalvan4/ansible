@@ -88,7 +88,9 @@
   
     - name: show all the hosts matching the pattern, i.e. all but the group www
       debug:
-        msg: "{{ item }}"
+        msg: "{{ host }}"
+        vars:
+          host: "{{ item }}"
       with_inventory_hostnames:
         - all
 
