@@ -86,7 +86,7 @@
     # ---Añadiendo info a reporte.docx
     - set_fact: inputfile="plays/Plantilla_Vamos_Al_Futuro.docx" outputfile="/tmp/report.docx"
 
-    - include_tasks: plays/add2docx.yml host={{ item }}
+    - include_tasks: plays/add2docx.yml host="{{ item }}"
       with_items: "{{ play_hosts }}"
 
 #------------------------------- ENVIANDO CORREO 
