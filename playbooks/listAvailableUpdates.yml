@@ -14,6 +14,6 @@
       debug:
         var: ubuntu
 
-    - set_fact: mensaje="{{ubuntu.stdout}}", para="enava@kionetworks.com", asunto="Reporte de actualizaciones disponibles linux"
+    - set_fact: mensaje="{{ubuntu.stdout}}", para="enava@kionetworks.com", asunto="Reporte de actualizaciones disponibles {{ansible_host}}"
     
     - import_tasks: plays/sendmail.yml
