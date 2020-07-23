@@ -79,28 +79,28 @@
     #- import_tasks: plays/json2xlsx.yml
 
 # ------------------------------- CREANDO Y AÑADIENDO INFO AL DOCX
-
-    - name: check result
-      debug: var=groups
   
-    - name: show all the hosts matching the pattern, i.e. all but the group www
-      vars:
-        host: "{{ item }}"
-      debug:
-        msg: "{{ host }}"
-      with_inventory_hostnames:
-        - all
+    # - name: show all the hosts matching the pattern, i.e. all but the group www
+    #   vars:
+    #     host: "{{ item }}"
+    #   debug:
+    #     msg: "{{ host }}"
+    #   with_inventory_hostnames:
+    #     - all
 
-    - name: "with_items - ordered"
-      debug: var=item
-      with_items:
-      - "{{ groups['all'] }}"
+    # - name: "with_items - ordered"
+    #   debug: var=item
+    #   with_items:
+    #   - "{{ groups['all'] }}"
+
     # ---Añadiendo info a reporte.docx
-    - set_fact: inputfile="plays/Plantilla_Vamos_Al_Futuro.docx" outputfile="/tmp/report.docx" host="{{ inventory_hostname }}"
+    - set_fact: inputfile="plays/Plantilla_Vamos_Al_Futuro.docx" outputfile="/tmp/report.docx"
     
     - name: cosa
+      vars:
+        host: "{{ item }}"
       include_tasks: plays/add2docx.yml
-      with_items: "{{ play_hosts }}"
+      with_items: "{{ groups['all'] }}"
 
 
 #------------------------------- ENVIANDO CORREO 
