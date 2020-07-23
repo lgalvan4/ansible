@@ -85,14 +85,20 @@
 
     - name: Print Hostvars
       debug: var=hostvars
+  
+    - name: show all the hosts matching the pattern, i.e. all but the group www
+      debug:
+        msg: "{{ item }}"
+      with_inventory_hostnames:
+        - all
 
     # ---Añadiendo info a reporte.docx
-    - set_fact: inputfile="plays/Plantilla_Vamos_Al_Futuro.docx" outputfile="/tmp/report.docx"
+    - set_fact: inputfile="plays/Plantilla_Vamos_Al_Futuro.docx" outputfile="/tmp/report.docx" host="{{ inventory_hostname }}"
     
     - name: cosa
       include_tasks: plays/add2docx.yml
       with_items: "{{ play_hosts }}"
-      delegate_to: 127.0.0.1
+
 
 #------------------------------- ENVIANDO CORREO 
     #---Listando archivos
