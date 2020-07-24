@@ -20,7 +20,7 @@
 
     - name: List available updates on Ubuntu
       become: true
-      command: yum updateinfo
+      command: yum check-update
       register: redhat
       when: ansible_os_family == "RedHat"
 
