@@ -25,7 +25,15 @@
     - name: List Windows "{{ update_type }}"
       register: res
       win_updates:
-        category_names: 
+        category_names:
+          - Application
+          - Connectors
+          - DefinitionUpdates
+          - DeveloperKits
+          - FeaturePacks
+          - Guidance
+          - ServicePacks
+          - Tools
           - CriticalUpdates
           - SecurityUpdates
           - UpdateRollups
