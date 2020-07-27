@@ -1,4 +1,20 @@
+.gitignore
+
+#Single files
+Plantilla
+PlantillaV1
+EstilosTablas.docx
+Plantilla_Vamos_Al_FuturoV1.docx
+Plantilla_Vamos_Al_FuturoV2.docx
+playbooks/plays/2020-07-24.png
+playbooks/plays/salida.docx
+
+test.py
+test2.py
+
+#Paterns
 #ignore ._<name> macos files
 ._*
+.~*
 *.json
 *.xlsx
