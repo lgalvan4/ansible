@@ -64,7 +64,7 @@ for w in pies[0]:
     ax.add_patch(s)
 from io import BytesIO
 f = BytesIO()
-fig.savefig('/tmp/'+host+'.png')
+fig.savefig('/tmp/report_'+host+'.png')
 
 #os = 'Windows Server 2008 R2'
 
@@ -157,7 +157,7 @@ table_graph = document.add_table(rows=1, cols=2)
 pic_cells = table_graph.rows[0].cells
 pic_cell = pic_cells[0]
 run = pic_cell.add_paragraph().add_run()
-picture_path='/tmp/'+host+'.png'
+picture_path='/tmp/report_'+host+'.png'
 run.add_picture(picture_path, width=Inches(3))
 
 #Celda de texto 
