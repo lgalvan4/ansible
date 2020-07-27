@@ -3,11 +3,16 @@ import datetime
 from os import path
 import json
 
+#python-docx
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.shared import Pt
 from docx.shared import Inches
 from docx.enum.style import WD_STYLE_TYPE
+
+#Matplotlib
+import matplotlib.pyplot as plt
+from matplotlib.patches import Shadow
 
 #Leyendo parametros
 inputFile = str(sys.argv[1])
@@ -36,6 +41,30 @@ for ftitle in duckingUpdates.values():
 iterator = iter(duckingUpdates.values())
 first_value = next(iterator)
 os = first_value['categories'][1]
+
+#Graph
+fig = plt.figure(figsize=(6, 6))
+ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
+labels = 'found_update_count', 'installed_update_count'
+
+foundupdate_count=da['found_update_count']
+installed_update_count=da['installed_update_count']
+
+fracs = [foundupdate_count, installed_update_count]
+
+explode = (0, 0.05)
+pies = ax.pie(fracs, explode=explode, labels=labels, autopct='%1.1f%%')
+for w in pies[0]:
+    w.set_gid(w.get_label())
+    w.set_edgecolor("none")
+for w in pies[0]:
+    s = Shadow(w, -0.01, -0.01)
+    s.set_gid(w.get_gid() + "_shadow")
+    s.set_zorder(w.get_zorder() - 0.1)
+    ax.add_patch(s)
+from io import BytesIO
+f = BytesIO()
+fig.savefig('/tmp/'+host+'.png')
 
 #os = 'Windows Server 2008 R2'
 
@@ -128,7 +157,7 @@ table_graph = document.add_table(rows=1, cols=2)
 pic_cells = table_graph.rows[0].cells
 pic_cell = pic_cells[0]
 run = pic_cell.add_paragraph().add_run()
-picture_path='plays/2020-07-24.png'
+picture_path='/tmp/'+host+'.png'
 run.add_picture(picture_path, width=Inches(3))
 
 #Celda de texto 

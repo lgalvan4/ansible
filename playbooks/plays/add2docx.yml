@@ -14,6 +14,16 @@
     name: python-docx
   when: pkg_check.stderr.find('ModuleNotFoundError') != -1 or pkg_check.stderr.find('No module named') != -1
 
+- name: Check if package matplotlib exists
+  register: pkg_check
+  command: python -c "import matplotlib"
+  ignore_errors: True
+  
+- name: Installing matplotlib package
+  pip: 
+    name: matplotlib
+  when: pkg_check.stderr.find('ModuleNotFoundError') != -1 or pkg_check.stderr.find('No module named') != -1
+
 #------------------------------- AÑADIENDO INFO AL DOCX
 - name: Adding info to Plantilla_Vamos_Al_Futuro.docx
   command: python plays/bin/add2docx.py {{ inputfile }} {{ outputfile }} {{ host }} {{ jsonfile }}

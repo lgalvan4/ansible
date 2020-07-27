@@ -17,3 +17,9 @@ test2.py
 .~*
 *.json
 *.xlsx
+playbooks/plays/bin/svg_filter_pie.svg
+playbooks/plays/bin/test.png
+playbooks/plays/bin/test2.png
+playbooks/plays/bin/makegraphics_02.py
+playbooks/plays/bin/pie.py
+playbooks/plays/test.png
