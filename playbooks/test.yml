@@ -70,7 +70,7 @@
   hosts: localhost
   vars:
     end: "}"
-    para: {{ destinatario }}
+    para: "{{ destinatario }}"
     #para: <ebenitez@kionetworks.com>
     asunto: Ansible-report
     mensaje: vacio
