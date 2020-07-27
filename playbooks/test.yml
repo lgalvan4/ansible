@@ -70,7 +70,8 @@
   hosts: localhost
   vars:
     end: "}"
-    para: <ebenitez@kionetworks.com>
+    para: {{ destinatario }}
+    #para: <ebenitez@kionetworks.com>
     asunto: Ansible-report
     mensaje: vacio
   gather_facts: false
