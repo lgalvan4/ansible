@@ -7,6 +7,12 @@
   gather_facts: false
 
   tasks:
+  #------------------------------- LIMPIANDO ARCHIVOS TEMPORALES
+    - set_fact: comando="if [ -f '/tmp/report_consolidado.json' ]; then rm $( ls /tmp/ | grep 'report_.*.json\|report_.*.xlsx\|report_.*.docx' | sed 's/report/\/tmp\/report/g' ) ; fi"
+
+    - name: Cleaning previous tmp files
+      command: bash -c "{{ comando }}"
+
     - name: Creation of Json File
       copy:
         content: "{{ start }}"
@@ -91,23 +97,7 @@
     #- import_tasks: plays/json2xlsx.yml
 
 # ------------------------------- CREANDO Y AÑADIENDO INFO AL DOCX
-  
-    # - name: show all the hosts matching the pattern, i.e. all but the group www
-    #   vars:
-    #     host: "{{ item }}"
-    #   debug:
-    #     msg: "{{ host }}"
-    #   with_inventory_hostnames:
-    #     - all
-
-    # - name: "with_items - ordered"
-    #   debug: var=item
-    #   with_items:
-    #   - "{{ groups['all'] }}"
-
-    # ---Añadiendo info a reporte.docx
-    #- set_fact: inputfile="plays/Plantilla_Vamos_Al_Futuro.docx" outputfile="/tmp/report.docx"
-    
+      
     - name: cosa
       vars:
         inputfile: "plays/Plantilla_Vamos_Al_Futuro.docx"
@@ -126,21 +116,13 @@
     - name: Get files to send 
       command: bash -c "{{ comando }}"
       register: res
-
-    #- name: check result
-    #  debug: var=res
     
     - set_fact: mensaje="Reporte de actualizaciones Windows", adjuntos="{{ res.stdout }}"
     
     - import_tasks: plays/sendmail.yml
 
 #------------------------------- LIMPIANDO ARCHIVOS TEMPORALES
-    #- set_fact: comando="rm $( ls /tmp/ | grep 'report_.*.json\|report_.*.xlsx\|report_.*.docx' | sed 's/report/\/tmp\/report/g' )"
+    - set_fact: comando="rm $( ls /tmp/ | grep 'report_.*.json\|report_.*.xlsx\|report_.*.docx' | sed 's/report/\/tmp\/report/g' )"
 
-    #- name: Cleaning tmp files
-    #  command: bash -c "{{ comando }}"
-
-# CriticalUpdates
-# SecurityUpdates
-# UpdateRollups
-# Updates
+    - name: Cleaning tmp files
+      command: bash -c "{{ comando }}"
