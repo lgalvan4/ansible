@@ -128,7 +128,8 @@ table_graph = document.add_table(rows=1, cols=2)
 pic_cells = table_graph.rows[0].cells
 pic_cell = pic_cells[0]
 run = pic_cell.add_paragraph().add_run()
-run.add_picture('2020-07-24.png', width=Inches(3))
+picture_path='plays/2020-07-24.png'
+run.add_picture(picture_path, width=Inches(3))
 
 #Celda de texto 
 tx_cells = table_graph.rows[0].cells
