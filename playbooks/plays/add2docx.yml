@@ -16,5 +16,5 @@
 
 #------------------------------- AÑADIENDO INFO AL DOCX
 - name: Adding info to Plantilla_Vamos_Al_Futuro.docx
-  command: python plays/bin/add2docx.py {{ inputfile }} {{ outputfile }} {{ host }} Windows_Server_R2 vacio vacio
+  command: python plays/bin/add2docx.py {{ inputfile }} {{ outputfile }} {{ host }} {{ jsonfile }}
 #  command: python plays/bin/add2docx.py {{ inputfile }} {{ outputfile }} {{ host }} {{ os }} {{ sp }} {{ ip }}

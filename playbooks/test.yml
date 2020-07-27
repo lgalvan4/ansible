@@ -106,13 +106,14 @@
     #   - "{{ groups['all'] }}"
 
     # ---Añadiendo info a reporte.docx
-    - set_fact: inputfile="plays/Plantilla_Vamos_Al_Futuro.docx" outputfile="/tmp/report.docx"
+    #- set_fact: inputfile="plays/Plantilla_Vamos_Al_Futuro.docx" outputfile="/tmp/report.docx"
     
     - name: cosa
       vars:
         inputfile: "plays/Plantilla_Vamos_Al_Futuro.docx"
         outputfile: "/tmp/report_actualizacionesWindows.docx"
         host: "{{ item }}"
+        jsonfile: "/tmp/report_{{ item }}.json"
       include_tasks: plays/add2docx.yml
       with_items: "{{ groups['all'] }}"
 
