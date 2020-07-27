@@ -4,23 +4,30 @@ from docx.shared import Inches
 import os
 import json
 
+#--Loading json file, cleaning useless columns to have an easier json file to work with
+
 with open('report.json') as data_file:
     da = json.load(data_file)
     data = json.dumps(da['updates'])
     duckingUpdates = json.loads(data)
+
+#--Taking KB Information out of the title to avoid displaying duplicated info
 
 for ftitle in duckingUpdates.values():
     borrarKB = ftitle['title']
     kbBorrado = borrarKB.rsplit(' ', 1)[0]
     ftitle['title'] = kbBorrado
 
+#--Creating document
+
 doc = docx.Document()
 
+#--Creating table - Autofit didn't work - setting up columns width manually
 reportTable = doc.add_table(rows=1, cols=4)
 reportTable.autofit = True
 reportTable.style = 'Colorful Shading Accent 6'
 hdr_Cells = reportTable.rows[0].cells
-hdr_Cells[0].width = Inches(0.48)
+hdr_Cells[0].width = Inches(0.48) 
 hdr_Cells[0].text = 'KB'
 hdr_Cells[1].width = Inches(4.45)
 hdr_Cells[1].text = 'Title'
@@ -28,6 +35,8 @@ hdr_Cells[2].width = Inches(0.77)
 hdr_Cells[2].text = 'Category'
 hdr_Cells[3].width = Inches(0.45)
 hdr_Cells[3].text = 'Installed'
+
+#--Filling up table
 
 for fvalue in duckingUpdates.values():
     row_Cells = reportTable.add_row().cells
@@ -40,6 +49,7 @@ for fvalue in duckingUpdates.values():
     row_Cells[3].width = Inches(0.45)
     row_Cells[3].text = str(fvalue['installed'])
 
+#-- Setting font size for the whole table.
 
 for row in reportTable.rows:
     for cell in row.cells:
