@@ -90,13 +90,13 @@ if ( not path.exists(outputFile) ):
 
     document.add_paragraph()
 
-    parrafo = document.add_paragraph()
-    run = parrafo.add_run('Inventario: Prueba')
-    font = run.font
-    font.size = Pt(24)
-    font.bold = True
-    formato_parrafo = parrafo.paragraph_format
-    formato_parrafo.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    # parrafo = document.add_paragraph()
+    # run = parrafo.add_run('Inventario: Prueba')
+    # font = run.font
+    # font.size = Pt(24)
+    # font.bold = True
+    # formato_parrafo = parrafo.paragraph_format
+    # formato_parrafo.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
     document.add_paragraph()
 
@@ -139,9 +139,9 @@ records = (
 table = document.add_table(rows=1, cols=2)
 table.style = document.styles['Light List Accent 6']
 #table.style = "Table Grid"
-hdr_cells = table.rows[0].cells
-hdr_cells[0].text = 'Id'
-hdr_cells[1].text = 'Valor'
+#hdr_cells = table.rows[0].cells
+#hdr_cells[0].text = 'Id'
+#hdr_cells[1].text = 'Valor'
 for id, val in records:
     row_cells = table.add_row().cells
     row_cells[0].text = id
@@ -193,7 +193,7 @@ for fvalue in duckingUpdates.values():
     row_Cells[1].width = Inches(4.45)
     row_Cells[1].text = fvalue['title']
     row_Cells[2].width = Inches(0.77)
-    row_Cells[2].text = fvalue['categories'][0]
+    row_Cells[2].text = fvalue['categories'][0] #count sobre esta linea
     row_Cells[3].width = Inches(0.45)
     row_Cells[3].text = str(fvalue['installed'])
 
@@ -207,56 +207,5 @@ for row in reportTable.rows:
         run = run_obj[0]
         font = run.font
         font.size = Pt(5.5)
-
-#adding Detail
-# records = (
-#     ('2018-10 Update for Windows Server 2008 R2 for x64-based Systems (KB3177467)', 'Security Updates', 'Install', 'Not Installed'),
-#     ('2018-12 Security and Quality Rollup for .NET Framework 3.5.1, 4.5.2, 4.6, 4.6.1, 4.6.2, 4.7, 4.7.1, 4.7.2 for Windows 7 and Server 2008 R2 for x64 (KB4471987)', 'Security Updates', 'Install',	'Not Installed'),
-#     ('2019-01 Security and Quality Rollup for .NET Framework 3.5.1, 4.5.2, 4.6, 4.6.1, 4.6.2, 4.7, 4.7.1, 4.7.2 for Windows 7 and Server 2008 R2 for x64 (KB4481480)', 'Update Rollups', 'Install', 'Not Installed'),
-#     ('2019-01 Security Only Update for .NET Framework 3.5.1, 4.5.2, 4.6, 4.6.1, 4.6.2, 4.7, 4.7.1, 4.7.2 for Windows 7 and Server 2008 R2 for x64 (KB4481481)', 'Feature Packs', 'Install', 'Not Installed'),
-#     ('2019-02 Security and Quality Rollup for .NET Framework 3.5.1, 4.5.2, 4.6, 4.6.1, 4.6.2, 4.7, 4.7.1, 4.7.2 for Windows 7 and Server 2008 R2 for x64 (KB4487078)', 'Critical Updates', 'Install', 'Not Installed')
-# )
-# #Creando Tabla
-# table = document.add_table(rows=1, cols=4)
-# #Dando Formato
-# table.style = document.styles['Medium Shading 1 Accent 6']
-# table.allow_autofit = True
-# #Ingresando titulos
-# hdr_cells = table.rows[0].cells
-# hdr_cells[0].text = 'Title'
-# hdr_cells[1].text = 'Classification'
-# hdr_cells[2].text = 'Aproval'
-# hdr_cells[3].text = 'Status'
-# #Poblando Tabla
-# # for title, clas, aprov, status in records:
-# #     row_cells = table.add_row().cells
-# #     row_cells[0].text = title
-# #     row_cells[1].text = clas
-# #     row_cells[2].text = aprov
-# #     row_cells[3].text = status
-
-# for title, clas, aprov, status in records:
-#     row_cells = table.add_row().cells
-
-#     #row_cells[0].text = title
-#     tb_cell_run0 = row_cells[0].add_paragraph().add_run()
-#     tb_cell_run0.add_text(title)
-#     tb_cell_run0.font.size =  Pt(8)
-
-#     #row_cells[1].text = clas
-#     tb_cell_run1 = row_cells[1].add_paragraph().add_run()
-#     tb_cell_run1.add_text(clas)
-#     tb_cell_run1.font.size =  Pt(8)
-
-#     #row_cells[2].text = aprov
-#     tb_cell_run2 = row_cells[2].add_paragraph().add_run()
-#     tb_cell_run2.add_text(aprov)
-#     tb_cell_run2.font.size =  Pt(8)
-
-#     #row_cells[3].text = status
-#     tb_cell_run3 = row_cells[3].add_paragraph().add_run()
-#     tb_cell_run3.add_text(status)
-#     tb_cell_run3.font.size =  Pt(8)
-
 
 document.save(outputFile)
