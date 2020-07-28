@@ -18,6 +18,12 @@
         content: "{{ start }}"
         dest: "/tmp/report_consolidado.json"
       delegate_to: 127.0.0.1
+      
+  #------------------------------- Creación de Work Order en BMC ITSM ambiente de desarrollo 
+    - name: Create Work Order
+      delegate_to: awx-host
+      remote_user: ubuntu
+      shell: node /home/ubuntu/BMC/createWO.js --data '{"shortDescr":"Ticket creado automáticamente por AWX","detailedDescr":"Reporte de Actualizaciones Windows"}'
 
 #------------------------------- GETTING UPDATES LIST
 - name: Search Windows updates by category
