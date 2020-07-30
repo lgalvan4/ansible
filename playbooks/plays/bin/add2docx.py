@@ -10,9 +10,14 @@ from docx.shared import Pt
 from docx.shared import Inches
 from docx.enum.style import WD_STYLE_TYPE
 
+#Random elem
+import random
+
 #Matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.patches import Shadow
+g_Aspect_for_G="equal"
+g_Font_for_G={'fontsize': "x-large",'fontweight': 7,}
 nitemfield=0
 g_ctu=0
 g_ltu=[]
@@ -21,9 +26,6 @@ g_stu={}
 inputFile = str(sys.argv[1])
 outputFile = str(sys.argv[2])
 host = str(sys.argv[3])
-#os = str(sys.argv[4])
-#sp = str(sys.argv[5])
-#ip = str(sys.argv[6])
 jsonFile = str(sys.argv[4])
 with open(jsonFile) as f:
 	g_dataG = json.load(f)
@@ -67,7 +69,9 @@ for w in pies[0]:
 from io import BytesIO
 f = BytesIO()
 fig.savefig('report_'+host+'.png')
+
 #os = 'Windows Server 2008 R2'
+
 #Verificando archivo a editar
 if ( not path.exists(outputFile) ):
     #No existe outputfile, abriendo plantilla
@@ -127,7 +131,6 @@ document.add_paragraph() #Enter
 parrafo = document.add_paragraph()
 run = parrafo.add_run('Detalles del servidor:')
 
-document.add_paragraph() #Enter
 
 records = (
     ('Operating System', os),
@@ -147,9 +150,7 @@ for id, val in records:
     row_cells[0].text = id
     row_cells[1].text = val
 
-document.add_paragraph() #Enter
-document.add_paragraph() #Enter
-
+"""
 #Adding Graph iside a table
 table_graph = document.add_table(rows=2, cols=2)
 
@@ -159,9 +160,27 @@ pic_cell = pic_cells[0]
 run = pic_cell.add_paragraph().add_run()
 picture_path='report_'+host+'.png'
 run.add_picture(picture_path, width=Inches(2.5))
+"""
 
+#Celda de texto 
+#tx_cells = table_graph.rows[0].cells
+
+#tb_cell_run = tx_cells[1].add_paragraph().add_run()
+#tb_cell_run.add_text('10 Updates encontradas \n 50 Criticas \n 3 Fixes')
+
+#tb_cell_run.font.size =  Pt(8)
+
+#document.add_paragraph() #Enter
+#document.add_paragraph() #Enter
+
+"""
+Grafica JC
+"""
+#Lista que se usa para registrar los valores de updates que vengan en duckingUpdates
 _categorias_existentes=[]
+#Cada nueva categoria encontrada se guardara con un valor inicial de1 e ira aumentando
 _repeticiones_categorias={}
+#Por cada valor en duckingUpdates.values()
 for fvalue in duckingUpdates.values():
     _valor_categoria= str(fvalue['categories'][0])
     if _valor_categoria not in _categorias_existentes:
@@ -170,26 +189,39 @@ for fvalue in duckingUpdates.values():
     else:
         _repeticiones_categorias[_valor_categoria] = _repeticiones_categorias[_valor_categoria]+1
 
-fig, ax = plt.subplots(figsize=(9, 5), subplot_kw=dict(aspect=g_Aspect_for_G))
+fig, ax = plt.subplots(figsize=(9, 5), subplot_kw=dict(aspect="equal"))
+g_colores_genericos=["#ffc738","#7dc0df","#AD566F","#8fbc3f","#9484A3","#3EAD98"]
 g_albls=[]
 g_asizes=[]
 g_explode= []
+g_colores=[]
 for g_k in _repeticiones_categorias:
     g_albls.append(str(g_k))
     g_asizes.append(_repeticiones_categorias[str(g_k)])
-    g_explode.append(0)
+    g_explode.append(0.06)
+    if str(g_k) == 'Critical Updates': g_colores.append("#EC1E1E")
+    elif str(g_k) == 'Security Updates': g_colores.append("#F3951C")
+    elif str(g_k) == 'Update Rollups': g_colores.append("#2672BF")
+    elif str(g_k) == 'Updates': g_colores.append("#48B14B")
+    elif str(g_k) == 'ServicePacks': g_colores.append("#F6F167")
+    else: g_colores.append(random.choice(g_colores_genericos))
 g_labels = g_albls
 g_fracs = g_asizes
 
-g_colores=["#3EAD98","#4CA7BD","#C4B616","#873CC9","#AD566F"]
-fig = plt.figure(figsize=(8, 6))
+fig = plt.figure(figsize=(7, 6))
 ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
 g_explode = tuple(g_explode)
 g_pies = ax.pie(g_fracs, 
     labels=g_labels, 
     explode=g_explode, 
     autopct='%.2f',
-    colors=g_colores)
+    colors=g_colores,
+    radius=1,center=(0.5,0),shadow=True, startangle=-20)
+"""
+shadow=True, startangle=90, radius=0.4,
+        center=(0.5,0.5),
+        frame=True, pctdistance=1.125
+"""
 for w in g_pies[0]:
     w.set_gid(w.get_label())
     w.set_edgecolor("none")
@@ -198,19 +230,16 @@ for w in g_pies[0]:
     s.set_gid(w.get_gid() + "_shadow")
     s.set_zorder(w.get_zorder() - 0.1)
     ax.add_patch(s)
-ax.set_title(g_Title_for_G,fontdict=g_Font_for_G)
+ax.set_title("Updates",fontdict=g_Font_for_G)
 from io import BytesIO
 f = BytesIO()
 fig.savefig('report_categories_'+host+'.png')
-
+table_graph = document.add_table(rows=1, cols=1)
 _celdas_grafica_jc = table_graph.rows[0].cells
-_celda_jc = _celdas_grafica_jc[1]
+_celda_jc = _celdas_grafica_jc[0]
 run = _celda_jc.add_paragraph().add_run()
 picture_path='report_categories_'+host+'.png'
-run.add_picture(picture_path, width=Inches(3.5))
-
-document.add_paragraph() #Enter
-document.add_paragraph() #Enter
+run.add_picture(picture_path, width=Inches(6))
 
 
 #--Creating table - Autofit didn't work - setting up columns width manually
@@ -238,6 +267,9 @@ for fvalue in duckingUpdates.values():
     row_Cells[2].text = fvalue['categories'][0] #count sobre esta linea
     row_Cells[3].width = Inches(0.45)
     row_Cells[3].text = str(fvalue['installed'])
+
+
+
 
 for row in reportTable.rows:
     for cell in row.cells:
