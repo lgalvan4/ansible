@@ -68,7 +68,7 @@ for w in pies[0]:
     ax.add_patch(s)
 from io import BytesIO
 f = BytesIO()
-fig.savefig('report_'+host+'.png')
+fig.savefig('/tmp/report_'+host+'.png')
 
 #os = 'Windows Server 2008 R2'
 
@@ -233,12 +233,12 @@ for w in g_pies[0]:
 ax.set_title("Updates",fontdict=g_Font_for_G)
 from io import BytesIO
 f = BytesIO()
-fig.savefig('report_categories_'+host+'.png')
+fig.savefig('/tmp/report_categories_'+host+'.png')
 table_graph = document.add_table(rows=1, cols=1)
 _celdas_grafica_jc = table_graph.rows[0].cells
 _celda_jc = _celdas_grafica_jc[0]
 run = _celda_jc.add_paragraph().add_run()
-picture_path='report_categories_'+host+'.png'
+picture_path='/tmp/report_categories_'+host+'.png'
 run.add_picture(picture_path, width=Inches(6))
 
 
