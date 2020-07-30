@@ -229,17 +229,17 @@ for t, c in catgories_dict.items():
 
 for t in catgories_dict.items():
     if t == 'Critical Updates':
-        colors.append("#EC1E1E")
+        fcolors.append("#EC1E1E")
     elif t == 'Security Updates':
-        colors.append("#F3951C")
+        fcolors.append("#F3951C")
     elif t == 'Update Rollups':
-        colors.append("#2672BF")
+        fcolors.append("#2672BF")
     elif t == 'Updates':
-        colors.append("#48B14B")
+        fcolors.append("#48B14B")
     elif t == 'Service Packs':
-        colors.append("#F6F167")
+        fcolors.append("#F6F167")
     else:
-        colors.append(fcolor)
+        fcolors.append(fcolor)
 
 #print(titulos)
 #print(contadores)
@@ -247,7 +247,11 @@ for t in catgories_dict.items():
 fig1, ax1 = plt.subplots()
 patches, texts = ax1.pie(contadores, explode=tuple(explod), colors=tuple(fcolors), shadow=True, startangle=90)
 #ax1.pie(contadores, explode=tuple(explod), labels=tuple(titulos), colors=tuple(fcolors) autopct='%1.1f%%', shadow=True, startangle=90)
-plt.legend(patches, labels, loc="best")
+ax1.legend(patches, labels, 
+           loc="center left",
+           bbox_to_anchor=(1, 0, 0.5, 1))
+
+
 #plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
 plt.tight_layout()
 ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
