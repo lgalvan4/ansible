@@ -2,18 +2,12 @@ import sys
 import datetime
 from os import path
 import json
-
-#python-docx
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.shared import Pt
 from docx.shared import Inches
 from docx.enum.style import WD_STYLE_TYPE
-
-#Random elem
 import random
-
-#Matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.patches import Shadow
 g_Aspect_for_G="equal"
@@ -30,26 +24,20 @@ jsonFile = str(sys.argv[4])
 with open(jsonFile) as f:
 	g_dataG = json.load(f)
 #--Loading json file, cleaning useless columns to have an easier json file to work with
-
 with open(jsonFile) as data_file:
     da = json.load(data_file)
     data = json.dumps(da['updates'])
     duckingUpdates = json.loads(data)
-
 #--Taking KB Information out of the title to avoid displaying duplicated info
-
 for ftitle in duckingUpdates.values():
     borrarKB = ftitle['title']
     kbBorrado = borrarKB.rsplit(' ', 1)[0]
     ftitle['title'] = kbBorrado
-
 #--Getting Os Name
 iterator = iter(duckingUpdates.values())
 first_value = next(iterator)
 os = first_value['categories'][1]
-
 #Graph
-
 fig = plt.figure(figsize=(6, 6))
 ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
 labels = 'found_update_count', 'installed_update_count'
@@ -68,10 +56,8 @@ for w in pies[0]:
     ax.add_patch(s)
 from io import BytesIO
 f = BytesIO()
-fig.savefig('/tmp/report_'+host+'.png')
-
+fig.savefig('report_'+host+'.png')
 #os = 'Windows Server 2008 R2'
-
 #Verificando archivo a editar
 if ( not path.exists(outputFile) ):
     #No existe outputfile, abriendo plantilla
@@ -79,10 +65,8 @@ if ( not path.exists(outputFile) ):
 else:
     #Abriendo outputfile
     document = Document(outputFile)
-
 #Si el archivo de salida existe, no se agrega portada
 if ( not path.exists(outputFile) ):
-
     #Creando Portada
     parrafo = document.add_paragraph()
     run = parrafo.add_run('Reporte de Actualizaciones Windows')
@@ -91,19 +75,8 @@ if ( not path.exists(outputFile) ):
     font.bold = True
     formato_parrafo = parrafo.paragraph_format
     formato_parrafo.alignment = WD_ALIGN_PARAGRAPH.CENTER
-
     document.add_paragraph()
-
-    # parrafo = document.add_paragraph()
-    # run = parrafo.add_run('Inventario: Prueba')
-    # font = run.font
-    # font.size = Pt(24)
-    # font.bold = True
-    # formato_parrafo = parrafo.paragraph_format
-    # formato_parrafo.alignment = WD_ALIGN_PARAGRAPH.CENTER
-
     document.add_paragraph()
-
     parrafo = document.add_paragraph()
     run = parrafo.add_run('Julio 2020')
     font = run.font
@@ -113,11 +86,8 @@ if ( not path.exists(outputFile) ):
     formato_parrafo.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
 #introduciendo informacion
-
 document.add_page_break() #Salto de Pagina
-
 document.add_paragraph() #Enter 
-
 parrafo = document.add_paragraph()
 run = parrafo.add_run('Servidor: ' +host)
 font = run.font
@@ -125,20 +95,15 @@ font.size = Pt(14)
 font.bold = True
 formato_parrafo = parrafo.paragraph_format
 formato_parrafo.alignment = WD_ALIGN_PARAGRAPH.CENTER
-
 document.add_paragraph() #Enter
-
 parrafo = document.add_paragraph()
 run = parrafo.add_run('Detalles del servidor:')
-
-
 records = (
     ('Operating System', os),
     ('Service Pack', 'None'),
     ('Host Name', host),
     ('Last Status Reported', str(datetime.datetime.now()))
 )
-
 table = document.add_table(rows=1, cols=2)
 table.style = document.styles['Light List Accent 6']
 #table.style = "Table Grid"
@@ -150,28 +115,6 @@ for id, val in records:
     row_cells[0].text = id
     row_cells[1].text = val
 
-"""
-#Adding Graph iside a table
-table_graph = document.add_table(rows=2, cols=2)
-
-#Celda de imagen
-pic_cells = table_graph.rows[0].cells
-pic_cell = pic_cells[0]
-run = pic_cell.add_paragraph().add_run()
-picture_path='report_'+host+'.png'
-run.add_picture(picture_path, width=Inches(2.5))
-"""
-
-#Celda de texto 
-#tx_cells = table_graph.rows[0].cells
-
-#tb_cell_run = tx_cells[1].add_paragraph().add_run()
-#tb_cell_run.add_text('10 Updates encontradas \n 50 Criticas \n 3 Fixes')
-
-#tb_cell_run.font.size =  Pt(8)
-
-#document.add_paragraph() #Enter
-#document.add_paragraph() #Enter
 
 """
 Grafica JC
@@ -217,11 +160,7 @@ g_pies = ax.pie(g_fracs,
     autopct='%.2f',
     colors=g_colores,
     radius=1,center=(0.5,0),shadow=True, startangle=-20)
-"""
-shadow=True, startangle=90, radius=0.4,
-        center=(0.5,0.5),
-        frame=True, pctdistance=1.125
-"""
+
 for w in g_pies[0]:
     w.set_gid(w.get_label())
     w.set_edgecolor("none")
@@ -233,12 +172,12 @@ for w in g_pies[0]:
 ax.set_title("Updates",fontdict=g_Font_for_G)
 from io import BytesIO
 f = BytesIO()
-fig.savefig('/tmp/report_categories_'+host+'.png')
+fig.savefig('report_categories_'+host+'.png')
 table_graph = document.add_table(rows=1, cols=1)
 _celdas_grafica_jc = table_graph.rows[0].cells
 _celda_jc = _celdas_grafica_jc[0]
 run = _celda_jc.add_paragraph().add_run()
-picture_path='/tmp/report_categories_'+host+'.png'
+picture_path='report_categories_'+host+'.png'
 run.add_picture(picture_path, width=Inches(6))
 
 
