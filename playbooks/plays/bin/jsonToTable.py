@@ -4,7 +4,6 @@ import datetime
 from os import path
 import json
 
-
 #python-docx
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -222,39 +221,31 @@ fcolors = []
 for t, c in catgories_dict.items():
     titulos.append(t)
     contadores.append(c)
-    if t == 'Critical Updates':
-        explod.append(0.1)
-    else:
-        explod.append(0)
+    explod.append(0.05)
 
-for t in catgories_dict.items():
     if t == 'Critical Updates':
-        fcolors.append("#EC1E1E")
+        fcolors.append("#C70039")
     elif t == 'Security Updates':
-        fcolors.append("#F3951C")
+        fcolors.append("#FF5733")
     elif t == 'Update Rollups':
-        fcolors.append("#2672BF")
+        fcolors.append("#FFC300")
     elif t == 'Updates':
-        fcolors.append("#48B14B")
-    elif t == 'Service Packs':
-        fcolors.append("#F6F167")
+        fcolors.append("#F0E68C")
     else:
         fcolors.append(fcolor)
 
 #print(titulos)
 #print(contadores)
 #print(explode)
+
 fig1, ax1 = plt.subplots()
-patches, texts = ax1.pie(contadores, explode=tuple(explod), colors=tuple(fcolors), shadow=True, startangle=90)
+patches = ax1.pie(contadores, explode=tuple(explod), labels=tuple(
+    titulos), colors=tuple(fcolors), shadow=True, startangle=90)
 #ax1.pie(contadores, explode=tuple(explod), labels=tuple(titulos), colors=tuple(fcolors) autopct='%1.1f%%', shadow=True, startangle=90)
-ax1.legend(patches, labels, 
-           loc="center left",
-           bbox_to_anchor=(1, 0, 0.5, 1))
-
-
+plt.legend(pie[0], patches, tuple(titulos), loc="best")
 #plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
 plt.tight_layout()
-ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+ax1.axis('equal')   # Equal aspect ratio ensures that pie is drawn as a circle.
 
 #plt.show()
 fig1.savefig('/tmp/report_'+host+'2.png')
