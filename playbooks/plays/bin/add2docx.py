@@ -186,6 +186,21 @@ hdr_Cells[3].text = 'Installed'
 
 #--Filling up table
 
+#counts
+
+Application = 0
+Connectors = 0
+DefinitionUpdates = 0
+DeveloperKits = 0
+FeaturePacks = 0
+Guidance = 0
+ServicePacks = 0
+Tools = 0
+CriticalUpdates = 0
+SecurityUpdates = 0
+UpdateRollups = 0
+Updates = 0
+
 for fvalue in duckingUpdates.values():
     row_Cells = reportTable.add_row().cells
     row_Cells[0].width = Inches(0.48)
@@ -196,6 +211,40 @@ for fvalue in duckingUpdates.values():
     row_Cells[2].text = fvalue['categories'][0] #count sobre esta linea
     row_Cells[3].width = Inches(0.45)
     row_Cells[3].text = str(fvalue['installed'])
+
+    switch (fvalue['categories'][0]) {
+        case 'Application':  
+            Application += 1;
+            break;
+        case 'Connectors':  
+            Connectors += 1;
+            break;
+        case 'Definition Updates':  
+            DefinitionUpdates += 1;
+            break;
+        case 'Developer Kits':  
+            DeveloperKits += 1;
+            break;
+        case 'Feature Packs':  
+            FeaturePacks += 1;
+            break;
+        case 6:  monthString = "June";
+                    break;
+        case 7:  monthString = "July";
+                    break;
+        case 8:  monthString = "August";
+                    break;
+        case 9:  monthString = "September";
+                    break;
+        case 10: monthString = "October";
+                    break;
+        case 11: monthString = "November";
+                    break;
+        case 12: monthString = "December";
+                    break;
+        default: monthString = "Invalid month";
+                    break;
+    }
 
 #-- Setting font size for the whole table.
 
