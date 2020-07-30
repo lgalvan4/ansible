@@ -6,6 +6,7 @@ import json
 #python-docx
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.shared import Pt
 from docx.shared import Inches
 from docx.enum.style import WD_STYLE_TYPE
@@ -67,7 +68,7 @@ for w in pies[0]:
     s.set_zorder(w.get_zorder() - 0.1)
     ax.add_patch(s)
 from io import BytesIO
-f = BytesIO()
+
 fig.savefig('/tmp/report_'+host+'.png')
 
 #os = 'Windows Server 2008 R2'
@@ -155,18 +156,20 @@ document.add_paragraph() #Enter
 document.add_paragraph() #Enter
 
 #Adding Graph iside a table
-table_graph = document.add_table(rows=1, cols=2)
+table_graph = document.add_table(rows=1, cols=1)
 
 #Celda de imagen
-pic_cells = table_graph.rows[0].cells
-pic_cell = pic_cells[0]
-run = pic_cell.add_paragraph().add_run()
-picture_path='/tmp/report_'+host+'.png'
-run.add_picture(picture_path, width=Inches(3))
+# pic_cells = table_graph.rows[0].cells
+# pic_cell = pic_cells[0]
+# run = pic_cell.add_paragraph().add_run()
+# picture_path='/tmp/report_'+host+'.png'
+# run.add_picture(picture_path, width=Inches(3))
 
 #Celda de texto
 pic_cells2 = table_graph.rows[0].cells
-pic_cells2_run = pic_cells2[1].add_paragraph().add_run()
+pic_cells2_pag = pic_cells2[0].add_paragraph()
+pic_cells2_pag.alignment=WD_ALIGN_PARAGRAPH.CENTER
+pic_cells2_run=pic_cells2_pag.add_run()
 #pic_cells2_run.add_picture(picture_path, width=Inches(3))
 
 #tb_cell_run.font.size =  Pt(8)
@@ -218,19 +221,20 @@ contadores = []
 explod = []
 fcolors = []
 for t, c in catgories_dict.items():
-    titulos.append(t)
+    titulos.append(t+' '+str(c))
     contadores.append(c)
     explod.append(0.05)
 
-
     if t == 'Critical Updates':
-        fcolors.append("#C70039")
+        fcolors.append("#EC1E1E")
     elif t == 'Security Updates':
-        fcolors.append("#FF5733")
+        fcolors.append("#F3951C")
     elif t == 'Update Rollups':
-        fcolors.append("#FFC300")
+        fcolors.append("#2672BF")
     elif t == 'Updates':
-        fcolors.append("#F0E68C")
+        fcolors.append("#48B14B")
+    elif t == 'Service Packs':
+        fcolors.append("#F6F167")
     else:
         fcolors.append(fcolor)
 
@@ -238,19 +242,21 @@ for t, c in catgories_dict.items():
 #print(contadores)
 #print(explode)
 
-fig1, ax1 = plt.subplots()
-patches = ax1.pie(contadores, explode=tuple(explod), labels=tuple(titulos), colors=tuple(fcolors), shadow=True, startangle=90)
+labels2=tuple(titulos)
+fig1 = plt.figure(frameon=False )
+ax1 = fig1.add_axes([0, 0.2, 0.6, 0.6])
+patches, texts = ax1.pie(contadores, explode=tuple(explod), colors=tuple(fcolors), shadow=True, startangle=90)
 #ax1.pie(contadores, explode=tuple(explod), labels=tuple(titulos), colors=tuple(fcolors) autopct='%1.1f%%', shadow=True, startangle=90)
-plt.legend(patches, tuple(titulos), loc="best")
-#plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
-plt.tight_layout()
-ax1.axis('equal')   # Equal aspect ratio ensures that pie is drawn as a circle.
+ax1.legend(patches, labels2, 
+           loc="center left",
+           prop={'size': 15},
+           bbox_to_anchor=(1, 0, 0.5, 1))  # Equal aspect ratio ensures that pie is drawn as a circle.
 
 #plt.show()
-fig1.savefig('/tmp/report_'+host+'2.png')
+fig1.savefig('/tmp/report_'+host+'2.png', bbox_inches='tight', pad_inches=0)
 
 picture_path='/tmp/report_'+host+'2.png'
-pic_cells2_run.add_picture(picture_path, width=Inches(3))
+pic_cells2_run.add_picture(picture_path, width=Inches(4))
 
 #-- Setting font size for the whole table.
 for row in reportTable.rows:

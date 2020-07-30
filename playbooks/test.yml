@@ -32,6 +32,13 @@
       command: bash -c "{{ comando }}"
       register: wo_out
 
+    - name: Creation of Json File
+      copy:
+        src: "/tmp/report_consolidado.json"
+        dest: "/tmp/report_consolidado_out.json"
+      delegate_to: 127.0.0.1
+
+
 #------------------------------- GETTING UPDATES LIST
 - name: Search Windows updates by category
   hosts: all
@@ -139,7 +146,7 @@
     - import_tasks: plays/sendmail.yml
 
 #------------------------------- LIMPIANDO ARCHIVOS TEMPORALES
-    - set_fact: comando="rm $( ls /tmp/ | grep 'report_.*.json\|report_.*.xlsx\|report_.*.docx\|report_.*.png' | sed 's/report/\/tmp\/report/g' )"
+    # - set_fact: comando="rm $( ls /tmp/ | grep 'report_.*.json\|report_.*.xlsx\|report_.*.docx\|report_.*.png' | sed 's/report/\/tmp\/report/g' )"
 
-    - name: Cleaning tmp files
-      command: bash -c "{{ comando }}"
+    # - name: Cleaning tmp files
+    #   command: bash -c "{{ comando }}"
