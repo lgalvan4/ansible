@@ -136,7 +136,7 @@ records = (
     ('Last Status Reported', str(datetime.datetime.now()))
 )
 
-table = document.add_table(rows=1, cols=2)
+table = document.add_table(rows=0, cols=2)
 table.style = document.styles['Light List Accent 6']
 #table.style = "Table Grid"
 #hdr_cells = table.rows[0].cells
@@ -160,10 +160,10 @@ run = pic_cell.add_paragraph().add_run()
 picture_path='/tmp/report_'+host+'.png'
 run.add_picture(picture_path, width=Inches(3))
 
-#Celda de texto 
-tx_cells = table_graph.rows[0].cells
-tb_cell_run = tx_cells[1].add_paragraph().add_run()
-tb_cell_run.add_text('170 Updates encontradas \n 50 Criticas \n 3 Fixes')
+#Celda de texto
+pic_cells2 = table_graph.rows[0].cells
+pic_cells2_run = pic_cells2[1].add_paragraph().add_run()
+#pic_cells2_run.add_picture(picture_path, width=Inches(3))
 
 #tb_cell_run.font.size =  Pt(8)
 
@@ -185,21 +185,7 @@ hdr_Cells[3].width = Inches(0.45)
 hdr_Cells[3].text = 'Installed'
 
 #--Filling up table
-
-#counts
-
-Application = 0
-Connectors = 0
-DefinitionUpdates = 0
-DeveloperKits = 0
-FeaturePacks = 0
-Guidance = 0
-ServicePacks = 0
-Tools = 0
-CriticalUpdates = 0
-SecurityUpdates = 0
-UpdateRollups = 0
-Updates = 0
+catgories_dict = {}
 
 for fvalue in duckingUpdates.values():
     row_Cells = reportTable.add_row().cells
@@ -212,42 +198,42 @@ for fvalue in duckingUpdates.values():
     row_Cells[3].width = Inches(0.45)
     row_Cells[3].text = str(fvalue['installed'])
 
-    switch (fvalue['categories'][0]) {
-        case 'Application':  
-            Application += 1;
-            break;
-        case 'Connectors':  
-            Connectors += 1;
-            break;
-        case 'Definition Updates':  
-            DefinitionUpdates += 1;
-            break;
-        case 'Developer Kits':  
-            DeveloperKits += 1;
-            break;
-        case 'Feature Packs':  
-            FeaturePacks += 1;
-            break;
-        case 6:  monthString = "June";
-                    break;
-        case 7:  monthString = "July";
-                    break;
-        case 8:  monthString = "August";
-                    break;
-        case 9:  monthString = "September";
-                    break;
-        case 10: monthString = "October";
-                    break;
-        case 11: monthString = "November";
-                    break;
-        case 12: monthString = "December";
-                    break;
-        default: monthString = "Invalid month";
-                    break;
-    }
+    if fvalue['categories'][0] in catgories_dict:
+        catgories_dict[fvalue['categories'][0]] = catgories_dict.get(fvalue['categories'][0])+1
+    else:
+        catgories_dict[fvalue['categories'][0]] = 1
+
+#print(catgories_dict)
+
+#Creando vectores
+titulos=[]
+contadores=[]
+explod=[]
+for t, c in catgories_dict.items():
+    titulos.append(t)
+    contadores.append(c)
+    if t == 'Critical Updates':
+        explod.append(0.1)
+    else:
+        explod.append(0)
+
+#print(titulos)
+#print(contadores)
+#print(explode)
+
+fig1, ax1 = plt.subplots()
+ax1.pie(contadores, explode=tuple(explod), labels=tuple(titulos), autopct='%1.1f%%', shadow=True, startangle=90)
+plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
+plt.tight_layout()
+ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+
+#plt.show()
+fig1.savefig('/tmp/report_'+host+'2.png')
+
+picture_path='/tmp/report_'+host+'2.png'
+pic_cells2_run.add_picture(picture_path, width=Inches(3))
 
 #-- Setting font size for the whole table.
-
 for row in reportTable.rows:
     for cell in row.cells:
         paragraphs = cell.paragraphs
