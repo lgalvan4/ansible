@@ -26,7 +26,7 @@
       register: wo
       shell: node /home/ubuntu/BMC/createWO.js --data '{"shortDescr":"Ticket creado automáticamente por AWX","detailedDescr":"Reporte de Actualizaciones Windows"}'
 
-    - set_fact: comando="echo {{ wo.stdout }}"
+    - set_fact: comando="echo {{ wo.stdout }} | awk '{ print $3 }' | sed 's/id://g'"
 
     - name: Get files to send 
       command: bash -c "{{ comando }}"
@@ -37,6 +37,7 @@
         content: "{{ wo_out }}"
         dest: "/tmp/report_wo.txt"
       delegate_to: 127.0.0.1
+
 #------------------------------- GETTING UPDATES LIST
 - name: Search Windows updates by category
   hosts: all
@@ -102,6 +103,9 @@
         dest: /tmp/report_consolidado.json
       delegate_to: 127.0.0.1
     
+    - name: debug WO
+      debug: var=wo_out
+
 #------------------------------- CONVIRTIENDO JSONs TO XLSX
 
     - set_fact: comando="ls /tmp/ | grep 'report_.*.json' | while read -r line ; do out=$( echo $line | sed -e "s/json/xlsx/g" ); python3 plays/bin/json2xlsx.py /tmp/$line /tmp/$out ; done"

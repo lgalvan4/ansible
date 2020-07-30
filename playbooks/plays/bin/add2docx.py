@@ -14,6 +14,10 @@ from docx.enum.style import WD_STYLE_TYPE
 import matplotlib.pyplot as plt
 from matplotlib.patches import Shadow
 
+#Color Generator
+from faker import Faker
+fake = Faker()
+
 #Leyendo parametros
 inputFile = str(sys.argv[1])
 outputFile = str(sys.argv[2])
@@ -205,27 +209,42 @@ for fvalue in duckingUpdates.values():
 
 #print(catgories_dict)
 
+# colores random
+fcolor = fake.hex_color()
+
 #Creando vectores
-titulos=[]
-contadores=[]
-explod=[]
+titulos = []
+contadores = []
+explod = []
+fcolors = []
 for t, c in catgories_dict.items():
     titulos.append(t)
     contadores.append(c)
+    explod.append(0.05)
+
+
     if t == 'Critical Updates':
-        explod.append(0.1)
+        fcolors.append("#C70039")
+    elif t == 'Security Updates':
+        fcolors.append("#FF5733")
+    elif t == 'Update Rollups':
+        fcolors.append("#FFC300")
+    elif t == 'Updates':
+        fcolors.append("#F0E68C")
     else:
-        explod.append(0)
+        fcolors.append(fcolor)
 
 #print(titulos)
 #print(contadores)
 #print(explode)
 
 fig1, ax1 = plt.subplots()
-ax1.pie(contadores, explode=tuple(explod), labels=tuple(titulos), autopct='%1.1f%%', shadow=True, startangle=90)
-plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
+patches = ax1.pie(contadores, explode=tuple(explod), labels=tuple(titulos), colors=tuple(fcolors), shadow=True, startangle=90)
+#ax1.pie(contadores, explode=tuple(explod), labels=tuple(titulos), colors=tuple(fcolors) autopct='%1.1f%%', shadow=True, startangle=90)
+plt.legend(patches, tuple(titulos), loc="best")
+#plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
 plt.tight_layout()
-ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+ax1.axis('equal')   # Equal aspect ratio ensures that pie is drawn as a circle.
 
 #plt.show()
 fig1.savefig('/tmp/report_'+host+'2.png')
