@@ -131,11 +131,22 @@
       include_tasks: plays/add2docx.yml
       with_items: "{{ groups['all'] }}"
 
+# ------------------------------- CONVIRTIENDO WORD TO PDF
+
+    - set_fact: comando="scp /tmp/report_actualizacionesWindows.docx ubuntu@192.10.20.50:/tmp/report_actualizacionesWindows.docx"
+
+    - name: Copy report_actualizacionesWindows.docx to awxhost
+      command: bash -c "{{ comando }}"
+
+    - set_fact: comando="ssh ubuntu@192.10.20.50 'soffice --headless --convert-to pdf /tmp/report_actualizacionesWindows.docx && docker cp /home/ubuntu/report_actualizacionesWindows.pdf  awx_task:/tmp/report_actualizacionesWindows.pdf'"
+
+    - name: Converting to pdf and copy to localhost
+      command: bash -c "{{ comando }}"
 
 #------------------------------- ENVIANDO CORREO 
     #---Listando archivos
     #- set_fact: comando="list=$( ls /tmp/ | grep 'report_.*.json\|report_.*.xlsx\|report_.*.docx' | tr '\n' ',' | sed 's/report/\/tmp\/report/g' ) ; echo ${list::-1}"
-    - set_fact: comando="list=$( ls /tmp/ | grep 'report_.*.docx' | tr '\n' ',' | sed 's/report/\/tmp\/report/g' ) ; echo ${list::-1}"
+    - set_fact: comando="list=$( ls /tmp/ | grep 'report_.*.docx\|report_.*.pdf' | tr '\n' ',' | sed 's/report/\/tmp\/report/g' ) ; echo ${list::-1}"
 
     - name: Get files to send 
       command: bash -c "{{ comando }}"
