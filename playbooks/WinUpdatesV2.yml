@@ -18,12 +18,12 @@
         content: "{{ start }}"
         dest: "/tmp/report_consolidado.json"
       delegate_to: 127.0.0.1
-
+      
   #------------------------------- Creación de Work Order en BMC ITSM ambiente de desarrollo 
-    # - name: Create Work Order
-    #   delegate_to: awx-host
-    #   remote_user: ubuntu
-    #   shell: node /home/ubuntu/BMC/createWO.js --data '{"shortDescr":"Ticket creado automáticamente por AWX","detailedDescr":"Reporte de Actualizaciones Windows"}'
+    - name: Create Work Order
+      delegate_to: awx-host
+      remote_user: ubuntu
+      shell: node /home/ubuntu/BMC/createWO.js --data '{"shortDescr":"Ticket creado automáticamente por AWX","detailedDescr":"Reporte de Actualizaciones Windows"}'
 
 #------------------------------- GETTING UPDATES LIST
 - name: Search Windows updates by category
@@ -50,7 +50,7 @@
           - SecurityUpdates
           - UpdateRollups
           - Updates
-        state: searched
+        state: downloaded
         log_path: C:\ansible_wu.txt
 
     - set_fact: archname="report_{{ inventory_hostname }}"
@@ -117,8 +117,8 @@
 
 #------------------------------- ENVIANDO CORREO 
     #---Listando archivos
-    #- set_fact: comando="list=$( ls /tmp/ | grep 'report_.*.json\|report_.*.xlsx\|report_.*.docx' | tr '\n' ',' | sed 's/report/\/tmp\/report/g' ) ; echo ${list::-1}"
-    - set_fact: comando="list=$( ls /tmp/ | grep 'report_.*.docx' | tr '\n' ',' | sed 's/report/\/tmp\/report/g' ) ; echo ${list::-1}"
+    - set_fact: comando="list=$( ls /tmp/ | grep 'report_.*.json\|report_.*.xlsx\|report_.*.docx' | tr '\n' ',' | sed 's/report/\/tmp\/report/g' ) ; echo ${list::-1}"
+    #- set_fact: comando="list=$( ls /tmp/ | grep 'report_.*.docx' | tr '\n' ',' | sed 's/report/\/tmp\/report/g' ) ; echo ${list::-1}"
 
     - name: Get files to send 
       command: bash -c "{{ comando }}"
