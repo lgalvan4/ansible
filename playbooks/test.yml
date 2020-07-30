@@ -28,15 +28,9 @@
 
     - set_fact: comando="echo {{ wo.stdout }} | awk '{ print $3 }' | sed 's/id://g'"
 
-    - name: Get files to send 
+    - name: Cleaning wo out 
       command: bash -c "{{ comando }}"
       register: wo_out
-    
-    - name: Creation of Json File
-      copy:
-        content: "{{ wo_out }}"
-        dest: "/tmp/report_wo.txt"
-      delegate_to: 127.0.0.1
 
 #------------------------------- GETTING UPDATES LIST
 - name: Search Windows updates by category
@@ -91,7 +85,7 @@
     end: "}"
     para: "{{ destinatario }}"
     #para: <ebenitez@kionetworks.com>
-    asunto: Ansible-report
+    asunto: Reporte de Actualizaciones Windows {{ wo_out.stdout }}
     mensaje: vacio
   gather_facts: false
 
@@ -104,7 +98,7 @@
       delegate_to: 127.0.0.1
     
     - name: debug WO
-      debug: var=wo_out
+      debug: var=wo_out.stdout
 
 #------------------------------- CONVIRTIENDO JSONs TO XLSX
 
