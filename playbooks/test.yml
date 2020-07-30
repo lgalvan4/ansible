@@ -32,7 +32,7 @@
         dest: "/tmp/report_wo.json"
       delegate_to: 127.0.0.1
 
-    - set_fact: comando="echo {{ wo }}"
+    - set_fact: comando="echo {{ wo.stdout }}"
 
     - name: Get files to send 
       command: bash -c "{{ comando }}"
