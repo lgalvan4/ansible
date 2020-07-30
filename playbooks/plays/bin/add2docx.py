@@ -13,12 +13,6 @@ from docx.enum.style import WD_STYLE_TYPE
 #Matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.patches import Shadow
-g_fufield='filtered_updates'
-g_ctgfield='categories'
-g_notWinfield="Windows"
-g_Title_for_G="Updates"
-g_Aspect_for_G="equal"
-g_Font_for_G={'fontsize': "x-large",'fontweight': 7,}
 nitemfield=0
 g_ctu=0
 g_ltu=[]
@@ -39,8 +33,7 @@ with open(jsonFile) as data_file:
     da = json.load(data_file)
     data = json.dumps(da['updates'])
     duckingUpdates = json.loads(data)
-with open(jsonFile) as f:
-	g_dataG = json.load(f)
+
 #--Taking KB Information out of the title to avoid displaying duplicated info
 
 for ftitle in duckingUpdates.values():
@@ -54,6 +47,7 @@ first_value = next(iterator)
 os = first_value['categories'][1]
 
 #Graph
+
 fig = plt.figure(figsize=(6, 6))
 ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
 labels = 'found_update_count', 'installed_update_count'
@@ -72,44 +66,8 @@ for w in pies[0]:
     ax.add_patch(s)
 from io import BytesIO
 f = BytesIO()
-fig.savefig('/tmp/report_'+host+'.png')
-
-for elem in g_dataG[g_fufield]:
-	for g_st in g_dataG[g_fufield][str(elem)][g_ctgfield]: 
-		if g_st in g_ltu:
-			g_stu[str(g_st)]=1+g_stu[str(g_st)]
-			g_ctu=g_ctu+1
-		if ((g_notWinfield not in g_st) and (g_st not in g_ltu)):
-			g_ltu.append(str(g_st))
-			g_stu[str(g_st)]=1
-			g_ctu=g_ctu+1
-fig, ax = plt.subplots(figsize=(9, 5), subplot_kw=dict(aspect=g_Aspect_for_G))
-g_albls=[]
-g_asizes=[]
-for g_k in g_stu:
-    g_albls.append(str(g_k))
-    g_asizes.append(g_stu[str(g_k)])
-g_labels = g_albls
-g_fracs = g_asizes
-fig = plt.figure(figsize=(8, 6))
-ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
-g_explode = (0, 0,0,0)
-g_pies = ax.pie(g_fracs, labels=g_labels, explode=g_explode, autopct='%.2f')
-for w in g_pies[0]:
-    w.set_gid(w.get_label())
-    w.set_edgecolor("none")
-for w in g_pies[0]:
-    s = Shadow(w, -0.01, -0.01)
-    s.set_gid(w.get_gid() + "_shadow")
-    s.set_zorder(w.get_zorder() - 0.1)
-    ax.add_patch(s)
-ax.set_title(g_Title_for_G,fontdict=g_Font_for_G)
-from io import BytesIO
-f = BytesIO()
-fig.savefig('/tmp/report_categories_'+host+'.png')
-
+fig.savefig('report_'+host+'.png')
 #os = 'Windows Server 2008 R2'
-
 #Verificando archivo a editar
 if ( not path.exists(outputFile) ):
     #No existe outputfile, abriendo plantilla
@@ -193,24 +151,67 @@ document.add_paragraph() #Enter
 document.add_paragraph() #Enter
 
 #Adding Graph iside a table
-table_graph = document.add_table(rows=1, cols=2)
+table_graph = document.add_table(rows=2, cols=2)
 
 #Celda de imagen
 pic_cells = table_graph.rows[0].cells
 pic_cell = pic_cells[0]
 run = pic_cell.add_paragraph().add_run()
-picture_path='/tmp/report_'+host+'.png'
-run.add_picture(picture_path, width=Inches(3))
+picture_path='report_'+host+'.png'
+run.add_picture(picture_path, width=Inches(2.5))
 
-#Celda de texto 
-tx_cells = table_graph.rows[0].cells
-tb_cell_run = tx_cells[1].add_paragraph().add_run()
-tb_cell_run.add_text('170 Updates encontradas \n 50 Criticas \n 3 Fixes')
+_categorias_existentes=[]
+_repeticiones_categorias={}
+for fvalue in duckingUpdates.values():
+    _valor_categoria= str(fvalue['categories'][0])
+    if _valor_categoria not in _categorias_existentes:
+        _categorias_existentes.append(_valor_categoria)
+        _repeticiones_categorias[_valor_categoria] = 1
+    else:
+        _repeticiones_categorias[_valor_categoria] = _repeticiones_categorias[_valor_categoria]+1
 
-#tb_cell_run.font.size =  Pt(8)
+fig, ax = plt.subplots(figsize=(9, 5), subplot_kw=dict(aspect=g_Aspect_for_G))
+g_albls=[]
+g_asizes=[]
+g_explode= []
+for g_k in _repeticiones_categorias:
+    g_albls.append(str(g_k))
+    g_asizes.append(_repeticiones_categorias[str(g_k)])
+    g_explode.append(0)
+g_labels = g_albls
+g_fracs = g_asizes
+
+g_colores=["#3EAD98","#4CA7BD","#C4B616","#873CC9","#AD566F"]
+fig = plt.figure(figsize=(8, 6))
+ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
+g_explode = tuple(g_explode)
+g_pies = ax.pie(g_fracs, 
+    labels=g_labels, 
+    explode=g_explode, 
+    autopct='%.2f',
+    colors=g_colores)
+for w in g_pies[0]:
+    w.set_gid(w.get_label())
+    w.set_edgecolor("none")
+for w in g_pies[0]:
+    s = Shadow(w, -0.01, -0.01)
+    s.set_gid(w.get_gid() + "_shadow")
+    s.set_zorder(w.get_zorder() - 0.1)
+    ax.add_patch(s)
+ax.set_title(g_Title_for_G,fontdict=g_Font_for_G)
+from io import BytesIO
+f = BytesIO()
+fig.savefig('report_categories_'+host+'.png')
+
+_celdas_grafica_jc = table_graph.rows[0].cells
+_celda_jc = _celdas_grafica_jc[1]
+run = _celda_jc.add_paragraph().add_run()
+picture_path='report_categories_'+host+'.png'
+run.add_picture(picture_path, width=Inches(3.5))
 
 document.add_paragraph() #Enter
 document.add_paragraph() #Enter
+
 
 #--Creating table - Autofit didn't work - setting up columns width manually
 reportTable = document.add_table(rows=1, cols=4)
@@ -227,7 +228,6 @@ hdr_Cells[3].width = Inches(0.45)
 hdr_Cells[3].text = 'Installed'
 
 #--Filling up table
-
 for fvalue in duckingUpdates.values():
     row_Cells = reportTable.add_row().cells
     row_Cells[0].width = Inches(0.48)
@@ -238,8 +238,6 @@ for fvalue in duckingUpdates.values():
     row_Cells[2].text = fvalue['categories'][0] #count sobre esta linea
     row_Cells[3].width = Inches(0.45)
     row_Cells[3].text = str(fvalue['installed'])
-
-#-- Setting font size for the whole table.
 
 for row in reportTable.rows:
     for cell in row.cells:
