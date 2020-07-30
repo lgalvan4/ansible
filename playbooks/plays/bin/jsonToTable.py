@@ -229,22 +229,23 @@ for t, c in catgories_dict.items():
 
 for t in catgories_dict.items():
     if t == 'Critical Updates':
-        colors.append("#C70039")
+        colors.append("#EC1E1E")
     elif t == 'Security Updates':
-        colors.append("#FF5733")
+        colors.append("#F3951C")
     elif t == 'Update Rollups':
-        colors.append("#FFC300")
+        colors.append("#2672BF")
     elif t == 'Updates':
-        colors.append("#F0E68C")
+        colors.append("#48B14B")
+    elif t == 'Service Packs':
+        colors.append("#F6F167")
     else:
         colors.append(fcolor)
 
 #print(titulos)
 #print(contadores)
 #print(explode)
-
 fig1, ax1 = plt.subplots()
-patches, texts = ax1.pie(contadores, explode=tuple(explod), labels=tuple(titulos), colors=tuple(fcolors) autopct='%1.1f%%', shadow=True, startangle=90)
+patches, texts = ax1.pie(contadores, explode=tuple(explod), colors=tuple(fcolors), shadow=True, startangle=90)
 #ax1.pie(contadores, explode=tuple(explod), labels=tuple(titulos), colors=tuple(fcolors) autopct='%1.1f%%', shadow=True, startangle=90)
 plt.legend(patches, labels, loc="best")
 #plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
