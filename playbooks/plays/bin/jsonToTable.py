@@ -179,13 +179,13 @@ reportTable = document.add_table(rows=1, cols=4)
 reportTable.autofit = True
 reportTable.style = 'Colorful Shading Accent 6'
 hdr_Cells = reportTable.rows[0].cells
-hdr_Cells[0].width = Inches(0.48)
+#hdr_Cells[0].width = Inches(0.48)
 hdr_Cells[0].text = 'KB'
-hdr_Cells[1].width = Inches(4.45)
+#hdr_Cells[1].width = Inches(4.45)
 hdr_Cells[1].text = 'Title'
-hdr_Cells[2].width = Inches(0.77)
+#hdr_Cells[2].width = Inches(0.77)
 hdr_Cells[2].text = 'Category'
-hdr_Cells[3].width = Inches(0.45)
+#hdr_Cells[3].width = Inches(0.45)
 hdr_Cells[3].text = 'Installed'
 
 #--Filling up table
@@ -193,13 +193,13 @@ catgories_dict = {}
 
 for fvalue in duckingUpdates.values():
     row_Cells = reportTable.add_row().cells
-    row_Cells[0].width = Inches(0.48)
+    #row_Cells[0].width = Inches(0.48)
     row_Cells[0].text = fvalue['kb']
-    row_Cells[1].width = Inches(4.45)
+    #row_Cells[1].width = Inches(4.45)
     row_Cells[1].text = fvalue['title']
-    row_Cells[2].width = Inches(0.77)
+    #row_Cells[2].width = Inches(0.77)
     row_Cells[2].text = fvalue['categories'][0]  # count sobre esta linea
-    row_Cells[3].width = Inches(0.45)
+    #row_Cells[3].width = Inches(0.45)
     row_Cells[3].text = str(fvalue['installed'])
 
     if fvalue['categories'][0] in catgories_dict:
