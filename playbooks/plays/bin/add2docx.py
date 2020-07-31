@@ -283,13 +283,13 @@ for t, c in catgories_dict.items():
 
 labels2=tuple(titulos)
 fig1 = plt.figure(frameon=False )
-ax1 = fig1.add_axes([0, 0.2, 0.6, 0.6])
+ax1 = fig1.add_axes([0, 0, 0.6, 0.6])
 patches, texts = ax1.pie(contadores, explode=tuple(explod), colors=tuple(fcolors), startangle=90)
 #ax1.pie(contadores, explode=tuple(explod), labels=tuple(titulos), colors=tuple(fcolors) autopct='%1.1f%%', shadow=True, startangle=90)
 ax1.legend(patches, labels2, 
-           loc="center left",
+           loc="best",
            prop={'size': 10},
-           bbox_to_anchor=(1, 0, 0.5, 1))  # Equal aspect ratio ensures that pie is drawn as a circle.
+           bbox_to_anchor=(-0.5, 0, 0.5, 1))  # Equal aspect ratio ensures that pie is drawn as a circle.
 
 #plt.show()
 fig1.savefig('/tmp/report_'+host+'2.png', bbox_inches='tight', pad_inches=0)
