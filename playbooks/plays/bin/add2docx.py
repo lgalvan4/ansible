@@ -179,7 +179,7 @@ document.add_paragraph() #Enter
 
 #--Creating table - Autofit didn't work - setting up columns width manually
 reportTable = document.add_table(rows=1, cols=4)
-reportTable.autofit = True
+reportTable.autofit = False
 #reportTable.style = 'Colorful Shading Accent 6'
 reportTable.style = 'Light List Accent 6'
 hdr_Cells = reportTable.rows[0].cells
