@@ -179,7 +179,7 @@ document.add_paragraph() #Enter
 
 #--Creating table - Autofit didn't work - setting up columns width manually
 reportTable = document.add_table(rows=1, cols=4)
-reportTable.autofit = False
+#reportTable.autofit = False
 #reportTable.style = 'Colorful Shading Accent 6'
 reportTable.style = 'Light List Accent 6'
 hdr_Cells = reportTable.rows[0].cells
@@ -258,8 +258,8 @@ fig1.savefig('/tmp/report_'+host+'2.png', bbox_inches='tight', pad_inches=0)
 
 picture_path='/tmp/report_'+host+'2.png'
 pic_cells2_run.add_picture(picture_path, width=Inches(4))
-
 #-- Setting font size for the whole table.
+
 for row in reportTable.rows:
     for cell in row.cells:
         paragraphs = cell.paragraphs
