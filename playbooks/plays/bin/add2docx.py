@@ -2,6 +2,7 @@ import sys
 import datetime
 from os import path
 import json
+from pandas.io.json import json_normalize
 
 #python-docx
 from docx import Document
@@ -32,20 +33,57 @@ jsonFile = str(sys.argv[4])
 
 with open(jsonFile) as data_file:
     da = json.load(data_file)
-    data = json.dumps(da['updates'])
-    duckingUpdates = json.loads(data)
 
-#--Taking KB Information out of the title to avoid displaying duplicated info
+for key in da['updates']:
 
-for ftitle in duckingUpdates.values():
-    borrarKB = ftitle['title']
+    da['updates'][str(key)]['categories'] = da['updates'][str(key)]['categories'][0]
+
+    if da['updates'][str(key)]['categories'] == "Critical Updates":
+        da['updates'][str(key)]['fsorting'] = 1
+    elif da['updates'][str(key)] ['categories'] == "Security Updates":
+        da['updates'][str(key)]['fsorting'] = 2
+    elif da['updates'][str(key)] ['categories'] == "Update Rollups":   
+        da['updates'][str(key)]['fsorting'] = 3
+    elif da['updates'][str(key)] ['categories'] == "Updates":
+        da['updates'][str(key)]['fsorting'] = 4
+    elif da['updates'][str(key)] ['categories'] == "Feature Packs":   
+        da['updates'][str(key)]['fsorting'] = 5
+    elif da['updates'][str(key)] ['categories'] == "Tools":
+        da['updates'][str(key)]['fsorting'] = 6
+    elif da['updates'][str(key)] ['categories'] == "Application":
+        da['updates'][str(key)]['fsorting'] = 7   
+    elif da['updates'][str(key)] ['categories'] == "Connectors":
+        da['updates'][str(key)]['fsorting'] = 8   
+    elif da['updates'][str(key)] ['categories'] == "Definition Updates":
+        da['updates'][str(key)]['fsorting'] = 9   
+    elif da['updates'][str(key)] ['categories'] == "Developer Kits":
+        da['updates'][str(key)]['fsorting'] = 10   
+    elif da['updates'][str(key)] ['categories'] == "Guidance":
+        da['updates'][str(key)]['fsorting'] = 11
+
+data = json.dumps(da['updates'])
+fuckingUpdates = json.loads(data)
+
+for fckupdates in fuckingUpdates.values():
+    borrarKB = fckupdates['title']
     kbBorrado = borrarKB.rsplit(' ', 1)[0]
-    ftitle['title'] = kbBorrado
+    fckupdates['title'] = kbBorrado
+
+#print(fuckingUpdates) 
+lista=[]
+for value in fuckingUpdates.values():
+    lista.append(value)
+
+#print(lista)
+
+duckingUpdates=sorted(lista, key = lambda i: i['fsorting'])
 
 #--Getting Os Name
-iterator = iter(duckingUpdates.values())
-first_value = next(iterator)
-os = first_value['categories'][1]
+# iterator = iter(duckingUpdates.values())
+# first_value = next(iterator)
+# os = first_value['categories'][1]
+
+os="Windows Server 2008 R2"
 
 #Graph
 fig = plt.figure(figsize=(6, 6))
@@ -195,21 +233,21 @@ hdr_Cells[3].text = 'Installed'
 #--Filling up table
 catgories_dict = {}
 
-for fvalue in duckingUpdates.values():
+for fvalue in duckingUpdates:
     row_Cells = reportTable.add_row().cells
     #row_Cells[0].width = Inches(0.48)
     row_Cells[0].text = fvalue['kb']
     #row_Cells[1].width = Inches(4.45)
     row_Cells[1].text = fvalue['title']
     #row_Cells[2].width = Inches(0.77)
-    row_Cells[2].text = fvalue['categories'][0] #count sobre esta linea
+    row_Cells[2].text = fvalue['categories'] #count sobre esta linea
     #row_Cells[3].width = Inches(0.45)
     row_Cells[3].text = str(fvalue['installed'])
 
-    if fvalue['categories'][0] in catgories_dict:
-        catgories_dict[fvalue['categories'][0]] = catgories_dict.get(fvalue['categories'][0])+1
+    if fvalue['categories'] in catgories_dict:
+        catgories_dict[fvalue['categories']] = catgories_dict.get(fvalue['categories'])+1
     else:
-        catgories_dict[fvalue['categories'][0]] = 1
+        catgories_dict[fvalue['categories']] = 1
 
 #print(catgories_dict)
 
