@@ -5,5 +5,5 @@
     - name: List Windows "{{ update_type }}"
       win_updates:
         category_names: "{{ update_type }}"
-        state: installed
+        state: searched
         log_path: C:\ansible_wu.txt

@@ -1,0 +1,9 @@
+- name: Install Security Updates on Windows
+  hosts: all 
+  gather_facts: false
+  tasks:
+
+    - name: Install all security updates without a scheduled task
+      win_updates:
+        category_names:
+        - SecurityUpdates
