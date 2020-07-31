@@ -1,5 +1,6 @@
 import sys
-import datetime
+from datetime import datetime
+import pytz
 from os import path
 import json
 from pandas.io.json import json_normalize
@@ -172,11 +173,15 @@ run = parrafo.add_run('Detalles del servidor:')
 
 document.add_paragraph() #Enter
 
+utcmoment_naive = datetime.utcnow()
+utcmoment = utcmoment_naive.replace(tzinfo=pytz.utc)
+localDatetime = utcmoment.astimezone(pytz.timezone('America/Mexico_City'))
+
 records = (
     ('Operating System', os),
     ('Service Pack', 'None'),
     ('Host Name', host),
-    ('Last Status Reported', str(datetime.datetime.now()))
+    ('Last Status Reported', str(localDatetime.strftime("%d-%m-%Y %H:%M:%S")))
 )
 
 table = document.add_table(rows=0, cols=2)
@@ -221,13 +226,13 @@ reportTable = document.add_table(rows=1, cols=4)
 #reportTable.style = 'Colorful Shading Accent 6'
 reportTable.style = 'Medium Grid 1 Accent 1'
 hdr_Cells = reportTable.rows[0].cells
-#hdr_Cells[0].width = Inches(0.48) 
+hdr_Cells[0].width = Inches(0.48) 
 hdr_Cells[0].text = 'KB'
-#hdr_Cells[1].width = Inches(4.45)
+hdr_Cells[1].width = Inches(4.40)
 hdr_Cells[1].text = 'Title'
-#hdr_Cells[2].width = Inches(0.77)
+hdr_Cells[2].width = Inches(0.77)
 hdr_Cells[2].text = 'Category'
-#hdr_Cells[3].width = Inches(0.45)
+hdr_Cells[3].width = Inches(0.45)
 hdr_Cells[3].text = 'Installed'
 
 #--Filling up table
@@ -235,13 +240,13 @@ catgories_dict = {}
 
 for fvalue in duckingUpdates:
     row_Cells = reportTable.add_row().cells
-    #row_Cells[0].width = Inches(0.48)
+    row_Cells[0].width = Inches(0.48)
     row_Cells[0].text = fvalue['kb']
-    #row_Cells[1].width = Inches(4.45)
+    row_Cells[1].width = Inches(4.40)
     row_Cells[1].text = fvalue['title']
-    #row_Cells[2].width = Inches(0.77)
+    row_Cells[2].width = Inches(0.77)
     row_Cells[2].text = fvalue['categories'] #count sobre esta linea
-    #row_Cells[3].width = Inches(0.45)
+    row_Cells[3].width = Inches(0.45)
     row_Cells[3].text = str(fvalue['installed'])
 
     if fvalue['categories'] in catgories_dict:
@@ -262,7 +267,7 @@ fcolors = []
 for t, c in catgories_dict.items():
     titulos.append(t+' '+str(c))
     contadores.append(c)
-    explod.append(0.05)
+    explod.append(0.03)
 
     if t == 'Critical Updates':
         fcolors.append("#EC1E1E")
