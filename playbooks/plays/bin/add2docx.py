@@ -142,7 +142,7 @@ records = (
 )
 
 table = document.add_table(rows=0, cols=2)
-table.style = document.styles['Light List Accent 6']
+table.style = document.styles['Medium Grid 1 Accent 1']
 #table.style = "Table Grid"
 #hdr_cells = table.rows[0].cells
 #hdr_cells[0].text = 'Id'
