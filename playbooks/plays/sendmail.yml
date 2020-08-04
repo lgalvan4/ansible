@@ -1,4 +1,28 @@
 ---
+#------------------------------- HOW TO USE
+# Este play esta diseñado para enviar correos a nombre de kai@kionetworks.com
+# sin necesidad de introducir credeciales
+#
+#------------------------------- REQUERIMIENTOS
+# Tener configurada la variable vault_password_file dentro de 
+# /etc/ansible/ansible.cfg con la contraseña otorgada por los administradores
+# 
+#------------------------------- ENTRADAS
+# Varibales: 
+# - para      -> Lista de correos separados por comas
+# - conCopia  -> Lista de correos separados por comas
+# - asunto    -> Asunto del correo 
+# - mensaje   -> Contenido del correo 
+# - adjuntos  -> Lista de paths absolutos de los archivos a enviar, separados por comas SIN ESPACIOS
+#
+#------------------------------- EJEMPLO DE USO
+# Ejemplo de uso en otro playbook:
+#
+#     - set_fact: para=prueba@prueba.com asunto="correo de prueba" mensaje="Reporte de actualizaciones Windows" adjuntos="noExisto.docx"
+#
+#     - import_tasks: plays/sendmail.yml
+
+#------------------------------- MAIN
 - name: Sending an e-mail from kai@kionetworks.com
   vars:
     # Credenciales

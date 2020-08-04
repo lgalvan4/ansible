@@ -3,18 +3,27 @@
 # Este play esta diseñado para probar si ya esta instalado un modulo de python
 # si no lo esta lo instala, de lo contrario no hace nada
 #
+#------------------------------- REQUERIMIENTOS
+# N/A
+#
+#------------------------------- ENTRADAS
+# Varibales: 
+# - testCommand -> comando con el que se probara el estado (Instalado - No instalado) del modulo
+# - module -> Nombre del modulo como lo requiere el comando pip de python
+#
+#------------------------------- EJEMPLO DE USO
 # Ejemplo de uso en otro playbook:
 #
-# - name: install python modules
-#   vars:
-#     testCommand: "{{ item.command }}"       # Comando para probar la existencia del modulo -> <command>
-#     module: "{{ item.module }}"             # Nombre del modulo para correr -> pip install <modulo>
-#   include_tasks: plays/pythonModules.yml
-#   loop:
-#     - { command: 'import docx', module: 'python-docx' } #En este caso es distinto como se instala (python-docx) el modulo de como se importa (import docx)
-#     - { command: 'import matplotlib', module: 'matplotlib' }
-
-      #with_items: "{{ groups['all'] }}"
+#     - name: check and install python modules
+#       vars:
+#         testCommand: "{{ item.command }}"   # Comando para probar la existencia del modulo -> <command>
+#         module: "{{ item.module }}"         # Nombre del modulo para correr -> pip install <modulo>
+#       include_tasks: plays/pythonModules.yml
+#       with_items: 
+#         - { command: 'import docx', module: 'python-docx' } #En este caso es distinto como se instala (python-docx) el modulo de como se importa (import docx)
+#         - { command: 'import matplotlib', module: 'matplotlib' }
+#         - { command: 'import faker', module: 'faker' }
+#         - { command: 'import pandas', module: 'pandas' }
 
 #------------------------------- INSTALANDO LIBRARIAS NECESARIAS DE PYTHON
 - name: Check if package {{ module }} exists

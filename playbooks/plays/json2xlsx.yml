@@ -1,18 +1,29 @@
 ---
+#------------------------------- HOW TO USE
+# Este play esta diseñado para recibir un archivo json
+# y convertirlo a excel (xlsx)
+#
+#------------------------------- REQUERIMIENTOS
+# Modulos de python instalados en el server donde correra el play:
+# - pandas
+# 
+# Para instalar este modulo se recomienda el uso del play pythonModules.yml
+#
+#------------------------------- ENTRADAS
+# Varibales: 
+# - inputfile   -> Path absoluto del archivo en formato .json a procesar 
+# - outputfile  -> Path absoluto donde se guardara el archivo final .xlsx
+#
+#------------------------------- EJEMPLO DE USO
+# Ejemplo de uso en otro playbook:
+#
+#     #- set_fact: inputfile="/tmp/report_consolidado.json" outputfile="/tmp/report_consolidado.xlsx"
+#
+#     #- import_tasks: plays/json2xlsx.yml
+
 #------------------------------- DANDO PERMISOS DE EJECUCION
 - name: Seting execution perms json2xlsx.py
   command: chmod +x plays/bin/json2xlsx.py  
-
-#------------------------------- INSTALANDO LIBRARIAS NECESARIAS DE PYTHON
-- name: Check if package pandas exists
-  register: pkg_check
-  command: python -c "import pandas"
-  ignore_errors: True
-  
-- name: Installing pandas package
-  pip: 
-    name: pandas
-  when: pkg_check.stderr.find('ModuleNotFoundError') != -1 or pkg_check.stderr.find('No module named') != -1
 
 #------------------------------- CONVIRTIENDO
 - name: Transform json to xlsx

@@ -1,38 +1,38 @@
 ---
+#------------------------------- HOW TO USE
+# Este play esta diseñado a la medida para crear un reporte de parches para 
+# servidores Windows
+#
+#------------------------------- REQUERIMIENTOS
+# Modulos de python instalados en el server donde correra el play:
+# - python-docx
+# - matplotlib
+# - faker
+# 
+# Para instalar estos modulos se recomienda el uso del play pythonModules.yml
+#
+#------------------------------- ENTRADAS
+# Varibales: 
+# - inputfile   -> Path relativo(git) de la plantilla a llenar en formado .docx
+# - outputfile  -> Path absoluto donde se guardara el archivo final 
+# - host        -> Nombre del Server
+# - jsonfile    -> Path absoluto del archivo en formato .json de donde se tomara la lista de updates
+#
+#------------------------------- EJEMPLO DE USO
+# Ejemplo de uso en otro playbook:
+#
+#     - name: Añadiendo ifo al docx
+#       vars:
+#         inputfile: "plays/Plantilla_Vamos_Al_Futuro.docx"
+#         outputfile: "/tmp/report_actualizacionesWindows.docx"
+#         host: "{{ item }}"
+#         jsonfile: "/tmp/report_{{ item }}.json"
+#       include_tasks: plays/add2docx.yml
+#       with_items: "{{ groups['all'] }}"
+
 #------------------------------- DANDO PERMISOS DE EJECUCION
 - name: Seting execution perms json2xlsx.py
   command: chmod +x plays/bin/add2docx.py  
-
-#------------------------------- INSTALANDO LIBRARIAS NECESARIAS DE PYTHON
-- name: Check if package python-docx exists
-  register: pkg_check
-  command: python -c "import docx"
-  ignore_errors: True
-  
-- name: Installing python-docx package
-  pip: 
-    name: python-docx
-  when: pkg_check.stderr.find('ModuleNotFoundError') != -1 or pkg_check.stderr.find('No module named') != -1
-
-- name: Check if package matplotlib exists
-  register: pkg_check
-  command: python -c "import matplotlib"
-  ignore_errors: True
-  
-- name: Installing matplotlib package
-  pip: 
-    name: matplotlib
-  when: pkg_check.stderr.find('ModuleNotFoundError') != -1 or pkg_check.stderr.find('No module named') != -1
-
-- name: Check if package faker exists
-  register: pkg_check
-  command: python -c "from faker import Faker"
-  ignore_errors: True
-  
-- name: Installing faker package
-  pip: 
-    name: faker
-  when: pkg_check.stderr.find('ModuleNotFoundError') != -1 or pkg_check.stderr.find('No module named') != -1
 
 #------------------------------- AÑADIENDO INFO AL DOCX
 - name: Adding info to Plantilla_Vamos_Al_Futuro.docx
