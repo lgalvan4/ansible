@@ -1,0 +1,6 @@
+---
+- hosts: all
+  tasks:
+  - debug: var=ansible_date_time
+  - name: Create new Work Order (default template).
+    shell: node /home/ubuntu/BMC/createWO.js

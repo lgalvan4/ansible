@@ -1,0 +1,32 @@
+---
+# This playbook lists the users in Windows hosts and creates a Work Order on BMC ITSM
+
+- name: List users in MS Windows hosts
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Run powershell script
+      win_shell: |
+        #Get-WmiObject -Class Win32_UserAccount
+        $adsi = [ADSI]"WinNT://$env:COMPUTERNAME"
+        $adsi.Children | where {$_.SchemaClassName -eq 'user'} | Foreach-Object {
+        $groups = $_.Groups() | Foreach-Object {$_.GetType().InvokeMember("Name", 'GetProperty', $null, $_, $null)}
+        $_ | Select-Object @{n='UserName';e={$_.Name}},@{n='Groups';e={$groups -join ';'}}
+        }
+      register: command
+      args:
+        stdout: always
+        
+    - name: Print Output
+      debug: msg="{{ command.stdout_lines }}"
+
+#Creación de Work Order en BMC ITSM ambiente de desarrollo 
+- name: Create Work Order
+  hosts: 127.0.0.1
+  gather_facts: false
+  tasks:
+    - name: Run command
+      delegate_to: awx-host
+      remote_user: ubuntu
+      shell: node /home/ubuntu/BMC/createWO.js --data '{"shortDescr":"Ticket creado automáticamente por AWX","detailedDescr":"Listado de usuarios del servidor"}'
+      
