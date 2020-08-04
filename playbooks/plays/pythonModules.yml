@@ -1,0 +1,28 @@
+---
+#------------------------------- HOW TO USE
+# Este play esta diseñado para probar si ya esta instalado un modulo de python
+# si no lo esta lo instala, de lo contrario no hace nada
+#
+# Ejemplo de uso en otro playbook:
+#
+# - name: install python modules
+#   vars:
+#     testCommand: "{{ item.command }}"       # Comando para probar la existencia del modulo -> <command>
+#     module: "{{ item.module }}"             # Nombre del modulo para correr -> pip install <modulo>
+#   include_tasks: plays/pythonModules.yml
+#   loop:
+#     - { command: 'import docx', module: 'python-docx' } #En este caso es distinto como se instala (python-docx) el modulo de como se importa (import docx)
+#     - { command: 'import matplotlib', module: 'matplotlib' }
+
+      #with_items: "{{ groups['all'] }}"
+
+#------------------------------- INSTALANDO LIBRARIAS NECESARIAS DE PYTHON
+- name: Check if package {{ module }} exists
+  register: pkg_check
+  command: python -c "{{ testCommand }}"
+  ignore_errors: True
+
+- name: Installing {{ module }} package
+  pip: 
+    name: "{{ module }}"
+  when: pkg_check.stderr.find('ModuleNotFoundError') != -1 or pkg_check.stderr.find('No module named') != -1
