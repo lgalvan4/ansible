@@ -1,6 +1,6 @@
 ---
 #------------------------------- INICIALIZANDO ARCHIVO DE RESULTADOS
-- name: Inicialice consolidated file 
+- name: StartUp for windows updates report
   hosts: localhost
   vars:
     start: "{" 
@@ -21,7 +21,8 @@
 
   #------------------------------- Creación de Work Order en BMC ITSM ambiente de desarrollo 
     - name: Create Work Order
-      delegate_to: awx-host
+      #delegate_to: awx-host
+      delegate_to: 192.10.20.50
       remote_user: ubuntu
       register: wo
       shell: node /home/ubuntu/BMC/createWO.js --data '{"shortDescr":"Ticket creado automáticamente por AWX","detailedDescr":"Reporte de Actualizaciones Windows"}'
@@ -32,12 +33,8 @@
       command: bash -c "{{ comando }}"
       register: wo_out
 
-    - name: Creation of Json File
-      copy:
-        src: "/tmp/report_consolidado.json"
-        dest: "/tmp/report_consolidado_out.json"
-      delegate_to: 127.0.0.1
-
+    - name: debug WO
+      debug: var=wo_out.stdout
 
 #------------------------------- GETTING UPDATES LIST
 - name: Search Windows updates by category
@@ -97,22 +94,32 @@
   gather_facts: false
 
   tasks:
-    - name: Close json file
-      lineinfile:
-        line: "{{ end }}"
-        insertafter: EOF
-        dest: /tmp/report_consolidado.json
-      delegate_to: 127.0.0.1
+    # - name: Close json file
+    #   lineinfile:
+    #     line: "{{ end }}"
+    #     insertafter: EOF
+    #     dest: /tmp/report_consolidado.json
+    #   delegate_to: 127.0.0.1
     
-    - name: debug WO
-      debug: var=wo_out.stdout
+#------------------------------- REVISANDO MODULOS DE PYTHON A USAR
+    - name: check and install python modules
+      vars:
+        testCommand: "{{ item.command }}"
+        module: "{{ item.module }}"
+      include_tasks: plays/pythonModules.yml
+      with_items: 
+        - { command: 'import docx', module: 'python-docx' }
+        - { command: 'import matplotlib', module: 'matplotlib' }
+        - { command: 'import faker', module: 'faker' }
+        - { command: 'import pandas', module: 'pandas' }
+        - { command: 'import plotly', module: 'plotly' }
 
 #------------------------------- CONVIRTIENDO JSONs TO XLSX
 
-    - set_fact: comando="ls /tmp/ | grep 'report_.*.json' | while read -r line ; do out=$( echo $line | sed -e "s/json/xlsx/g" ); python3 plays/bin/json2xlsx.py /tmp/$line /tmp/$out ; done"
+    # - set_fact: comando="ls /tmp/ | grep 'report_.*.json' | while read -r line ; do out=$( echo $line | sed -e "s/json/xlsx/g" ); python3 plays/bin/json2xlsx.py /tmp/$line /tmp/$out ; done"
 
-    - name: Transform json files to xlsx
-      command: bash -c "{{ comando }}"
+    # - name: Transform json files to xlsx
+    #   command: bash -c "{{ comando }}"
 
 #------------------------------- TRANSOFRMANDO CONSOLIDADO.JSON TO XLSX
 
@@ -121,7 +128,7 @@
     #- import_tasks: plays/json2xlsx.yml
 
 # ------------------------------- CREANDO Y AÑADIENDO INFO AL DOCX
-      
+
     - name: Añadiendo ifo al docx
       vars:
         inputfile: "plays/Plantilla_Vamos_Al_Futuro.docx"
@@ -135,7 +142,7 @@
 
     - set_fact: comando="scp /tmp/report_actualizacionesWindows.docx ubuntu@192.10.20.50:/tmp/report_actualizacionesWindows.docx"
 
-    - name: Copy report_actualizacionesWindows.docx to awxhost
+    - name: Copy report_actualizacionesWindows.docx to libreoffice Host
       command: bash -c "{{ comando }}"
 
     - set_fact: comando="ssh ubuntu@192.10.20.50 'soffice --headless --convert-to pdf /tmp/report_actualizacionesWindows.docx && docker cp /home/ubuntu/report_actualizacionesWindows.pdf  awx_task:/tmp/report_actualizacionesWindows.pdf'"

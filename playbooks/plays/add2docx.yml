@@ -31,7 +31,7 @@
 #       with_items: "{{ groups['all'] }}"
 
 #------------------------------- DANDO PERMISOS DE EJECUCION
-- name: Seting execution perms json2xlsx.py
+- name: Seting execution perms add2docx.py
   command: chmod +x plays/bin/add2docx.py  
 
 #------------------------------- AÑADIENDO INFO AL DOCX
