@@ -1,25 +1,10 @@
 .gitignore
 
 #Single files
-Plantilla
-PlantillaV1
-EstilosTablas.docx
-Plantilla_Vamos_Al_FuturoV1.docx
-Plantilla_Vamos_Al_FuturoV2.docx
-playbooks/plays/salida.docx
-
-test.py
-test2.py
 
 #Paterns
-#ignore ._<name> macos files
 ._*
 .~*
 *.json
 *.xlsx
-playbooks/plays/bin/svg_filter_pie.svg
-playbooks/plays/bin/test.png
-playbooks/plays/bin/test2.png
-playbooks/plays/bin/makegraphics_02.py
-playbooks/plays/bin/pie.py
-playbooks/plays/test.png
+
