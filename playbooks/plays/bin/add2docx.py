@@ -4,6 +4,10 @@ import pytz
 from os import path
 import json
 from pandas.io.json import json_normalize
+import numpy as np
+
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
 #python-docx
 from docx import Document
@@ -25,9 +29,6 @@ fake = Faker()
 inputFile = str(sys.argv[1])
 outputFile = str(sys.argv[2])
 host = str(sys.argv[3])
-#os = str(sys.argv[4])
-#sp = str(sys.argv[5])
-#ip = str(sys.argv[6])
 jsonFile = str(sys.argv[4])
 
 #--Loading json file, cleaning useless columns to have an easier json file to work with
@@ -79,38 +80,12 @@ for value in fuckingUpdates.values():
 
 duckingUpdates=sorted(lista, key = lambda i: i['fsorting'])
 
+#TODO Obneter nombre del SO desde AWX
 #--Getting Os Name
 # iterator = iter(duckingUpdates.values())
 # first_value = next(iterator)
 # os = first_value['categories'][1]
-
-os="Windows Server 2008 R2"
-
-#Graph
-fig = plt.figure(figsize=(6, 6))
-ax = fig.add_axes([0.1, 0.1, 0.8, 0.8])
-labels = 'found_update_count', 'installed_update_count'
-
-foundupdate_count=da['found_update_count']
-installed_update_count=da['installed_update_count']
-
-fracs = [foundupdate_count, installed_update_count]
-
-explode = (0, 0.05)
-pies = ax.pie(fracs, explode=explode, labels=labels, autopct='%1.1f%%')
-for w in pies[0]:
-    w.set_gid(w.get_label())
-    w.set_edgecolor("none")
-for w in pies[0]:
-    s = Shadow(w, -0.01, -0.01)
-    s.set_gid(w.get_gid() + "_shadow")
-    s.set_zorder(w.get_zorder() - 0.1)
-    ax.add_patch(s)
-from io import BytesIO
-
-fig.savefig('/tmp/report_'+host+'.png')
-
-#os = 'Windows Server 2008 R2'
+os = 'Windows Server 2008 R2'
 
 #Verificando archivo a editar
 if ( not path.exists(outputFile) ):
@@ -134,6 +109,7 @@ if ( not path.exists(outputFile) ):
 
     document.add_paragraph()
 
+    #TODO Obtener de AWX/Ansible el nombre del inventario y colocarlo en la portada
     # parrafo = document.add_paragraph()
     # run = parrafo.add_run('Inventario: Prueba')
     # font = run.font
@@ -186,10 +162,7 @@ records = (
 
 table = document.add_table(rows=0, cols=2)
 table.style = document.styles['Medium Grid 1 Accent 1']
-#table.style = "Table Grid"
-#hdr_cells = table.rows[0].cells
-#hdr_cells[0].text = 'Id'
-#hdr_cells[1].text = 'Valor'
+
 for id, val in records:
     row_cells = table.add_row().cells
     row_cells[0].text = id
@@ -201,21 +174,11 @@ document.add_paragraph() #Enter
 #Adding Graph iside a table
 table_graph = document.add_table(rows=1, cols=1)
 
-#Celda de imagen
-# pic_cells = table_graph.rows[0].cells
-# pic_cell = pic_cells[0]
-# run = pic_cell.add_paragraph().add_run()
-# picture_path='/tmp/report_'+host+'.png'
-# run.add_picture(picture_path, width=Inches(3))
-
 #Celda de texto
 pic_cells2 = table_graph.rows[0].cells
 pic_cells2_pag = pic_cells2[0].add_paragraph()
 pic_cells2_pag.alignment=WD_ALIGN_PARAGRAPH.CENTER
 pic_cells2_run=pic_cells2_pag.add_run()
-#pic_cells2_run.add_picture(picture_path, width=Inches(3))
-
-#tb_cell_run.font.size =  Pt(8)
 
 document.add_paragraph() #Enter
 document.add_paragraph() #Enter
@@ -254,12 +217,12 @@ for fvalue in duckingUpdates:
     else:
         catgories_dict[fvalue['categories']] = 1
 
-#print(catgories_dict)
+#Path donde se guardara la grafica como imagen png
+picture_path='/tmp/report_'+host+'2.png'
 
 # colores random
 fcolor = fake.hex_color()
-
-#Creando vectores
+#Creando vectores para Grafica
 titulos = []
 contadores = []
 explod = []
@@ -282,10 +245,8 @@ for t, c in catgories_dict.items():
     else:
         fcolors.append(fcolor)
 
-#print(titulos)
-#print(contadores)
-#print(explode)
-
+#TODO Modificar grafica con libreria plotly https://plotly.com/python/pie-charts/
+#------------------------------- INICIO DELCODIGO DE LA GRAFICA CON MATPLOTLIB
 labels2=tuple(titulos)
 fig1 = plt.figure(frameon=False )
 ax1 = fig1.add_axes([0, 0, 0.6, 0.6])
@@ -294,15 +255,14 @@ patches, texts = ax1.pie(contadores, explode=tuple(explod), colors=tuple(fcolors
 ax1.legend(patches, labels2, 
            loc="best",
            prop={'size': 10},
-           bbox_to_anchor=(-0.5, 0, 0.5, 1))  # Equal aspect ratio ensures that pie is drawn as a circle.
+           bbox_to_anchor=(-0.5, 0, 0.5, 1))
 
-#plt.show()
-fig1.savefig('/tmp/report_'+host+'2.png', bbox_inches='tight', pad_inches=0)
+fig1.savefig(picture_path, bbox_inches='tight', pad_inches=0)
+#------------------------------- FIN DEL CODIGO DE LA GRAFICA CON MATPLOTLIB
 
-picture_path='/tmp/report_'+host+'2.png'
 pic_cells2_run.add_picture(picture_path, width=Inches(4))
-#-- Setting font size for the whole table.
 
+#-- Setting font size for the whole table.
 for row in reportTable.rows:
     for cell in row.cells:
         paragraphs = cell.paragraphs
