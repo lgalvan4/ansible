@@ -21,7 +21,8 @@
 
   #------------------------------- Creación de Work Order en BMC ITSM ambiente de desarrollo 
     - name: Create Work Order
-      delegate_to: awx-host
+      #delegate_to: awx-host
+      delegate_to: 192.10.20.50
       remote_user: ubuntu
       register: wo
       shell: node /home/ubuntu/BMC/createWO.js --data '{"shortDescr":"Ticket creado automáticamente por AWX","detailedDescr":"Reporte de Actualizaciones Windows"}'
