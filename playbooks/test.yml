@@ -112,6 +112,7 @@
         - { command: 'import matplotlib', module: 'matplotlib' }
         - { command: 'import faker', module: 'faker' }
         - { command: 'import pandas', module: 'pandas' }
+        - { command: 'import plotly', module: 'plotly' }
 
 #------------------------------- CONVIRTIENDO JSONs TO XLSX
 
