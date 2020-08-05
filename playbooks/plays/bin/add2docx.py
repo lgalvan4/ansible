@@ -218,8 +218,8 @@ for fvalue in duckingUpdates:
         catgories_dict[fvalue['categories']] = 1
 
 #Path donde se guardara la grafica como imagen png
-#picture_path='/tmp/report_'+host+'2.png'
-picture_path='report_'+host+'2.png'
+picture_path='/tmp/report_'+host+'2.png'
+
 
 # colores random
 fcolor = fake.hex_color()
