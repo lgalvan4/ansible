@@ -231,7 +231,7 @@ fcolors = []
 for t, c in catgories_dict.items():
     titulos.append(t+' '+str(c))
     contadores.append(c)
-    explod.append(0.03)
+    explod.append(0)
 
     if t == 'Critical Updates':
         fcolors.append("#EC1E1E")
