@@ -113,6 +113,7 @@
         - { command: 'import faker', module: 'faker' }
         - { command: 'import pandas', module: 'pandas' }
         - { command: 'import plotly', module: 'plotly' }
+        - { command: 'import kaleido', module: 'kaleido' }
 
 #------------------------------- CONVIRTIENDO JSONs TO XLSX
 
