@@ -248,16 +248,37 @@ for t, c in catgories_dict.items():
 #TODO Modificar grafica con libreria plotly https://plotly.com/python/pie-charts/
 #------------------------------- INICIO DELCODIGO DE LA GRAFICA CON MATPLOTLIB
 labels2=tuple(titulos)
-fig1 = plt.figure(frameon=False )
-ax1 = fig1.add_axes([0, 0, 0.6, 0.6])
-patches, texts = ax1.pie(contadores, explode=tuple(explod), colors=tuple(fcolors), startangle=90)
-#ax1.pie(contadores, explode=tuple(explod), labels=tuple(titulos), colors=tuple(fcolors) autopct='%1.1f%%', shadow=True, startangle=90)
-ax1.legend(patches, labels2, 
-           loc="best",
-           prop={'size': 10},
-           bbox_to_anchor=(-0.5, 0, 0.5, 1))
+_grafica_ploty = go.Figure(data=[go.Pie(
+                             labels=labels2, 
+							 values=contadores, 
+							 textinfo='percent',
+                             insidetextorientation='radial', 
+							 pull=explod,
+							 marker={"colors":fcolors},
+							 textfont={"size":18,"family":"Arial"},
+							 direction="counterclockwise",
+							 hole=.4,
+							 title={
+							     "text":"Updates",
+							     "font":{"size":24,"family":"Arial"},
+							 	 "position":"top center"
+							 },
+							 outsidetextfont={
+							     "size":18,
+								 "family":"Arial"
+							 },
+							 insidetextfont={
+							     "size":20,
+								 "family":"Arial"
+							 },
+							 domain={"x":(0,1),"y":(0,1)}
+                            )])
 
-fig1.savefig(picture_path, bbox_inches='tight', pad_inches=0)
+_grafica_ploty.update_layout(
+    margin=dict(l=0, r=0, t=0, b=0)
+)
+
+_grafica_ploty.write_image(picture_path)
 #------------------------------- FIN DEL CODIGO DE LA GRAFICA CON MATPLOTLIB
 
 pic_cells2_run.add_picture(picture_path, width=Inches(4))
