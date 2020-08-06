@@ -253,16 +253,16 @@ _grafica_ploty = go.Figure(data=[go.Pie(
 							 values=contadores, 
 							 textinfo='percent',
                              insidetextorientation='radial', 
-							 pull=explod,
+							#  pull=explod,
 							 marker={"colors":fcolors},
 							 textfont={"size":18,"family":"Arial"},
 							 direction="counterclockwise",
 							 hole=.4,
-							 title={
-							     "text":"Updates",
-							     "font":{"size":24,"family":"Arial"},
-							 	 "position":"top center"
-							 },
+							#  title={
+							#      "text":"Updates",
+							#      "font":{"size":24,"family":"Arial"},
+							#  	 "position":"top center"
+							#  },
 							 outsidetextfont={
 							     "size":18,
 								 "family":"Arial"
