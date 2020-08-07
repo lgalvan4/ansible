@@ -66,9 +66,10 @@ P10000_INICIA()
     ENTORNO_WLS=$(find / -name setDomainEnv.sh -type f 2> /dev/null)
     . $ENTORNO_WLS
     #DOMAIN_HOME 
-    DOMAIN_SERVERS_HOME=$DOMAIN_HOME/servers
-    export DOMAIN_SERVERS_HOME
+    DMH=$DOMAIN_HOME/servers
   fi
+
+  export DOMAIN_SERVERS_HOME=${DMH}
   echo $DOMAIN_SERVERS_HOME
   #export SCRIPT_HOME="/weblogic/scripts" # Se va a comentar $1
   export SCRIPT_HOME=$1
