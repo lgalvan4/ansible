@@ -58,15 +58,18 @@
 ##############################################################################
 P10000_INICIA()
 {
-  export SCRIPT_HOME="/weblogic/scripts"
-  export DOMAIN_SERVERS_HOME="/weblogic/oracle/Middleware/user_projects/domains/zapdir01_domain/servers"
+  #export SCRIPT_HOME="/weblogic/scripts" # Se va a comentar $1
+  export SCRIPT_HOME=$1
+  #export DOMAIN_SERVERS_HOME="/weblogic/oracle/Middleware/user_projects/domains/zapdir01_domain/servers" # Se modifica en base al server donde va a correr $2
+  export DOMAIN_SERVERS_HOME=$2
   export MANAGED_SERVER_LIST=$(ls -1 ${DOMAIN_SERVERS_HOME} | egrep -v "domain_bak|AdminServerTag|AdminServer")
-  export DEPURATION_THRESHOLD=80
+  #export DEPURATION_THRESHOLD=80 # SE puede poner variable dependiendo el cliente $3
+  export DEPURATION_THRESHOLD=$3
   export LOG_FILE=${SCRIPT_HOME}/logs/depuraLogsWLS-$(date +%d%m%Y).log
   #VARIABLES API NIRVANA
-  export APIREST=http://10.255.14.150:8180/registroEjecuciones/addEjecucion
+  export APIREST=http://10.255.14.150:8180/registroEjecuciones/addEjecucion #Api va por red bkp 
   export ID_SCRIPT="10"
-  export ARGUMENTOS="$(hostname) ${DOMAIN_SERVERS_HOME}"
+  export ARGUMENTOS="$(hostname) ${DOMAIN_SERVERS_HOME}" #Agregar comentario ejecucion desde AWX
   export USUARIO="crontab"
   export FECHA_INICIO=""
   export FECHA_FIN=""
@@ -90,12 +93,13 @@ P20000_PROCESA()
   FS_USED=$(df -k ${DOMAIN_SERVERS_HOME} | tail -1 | awk '{print $4}' | sed 's/.$//g')
   if [ "${FS_USED}" -ge "${DEPURATION_THRESHOLD}" ]
   then
+  echo "Limpiando"
    #SE ELIMINAN LOS REGISTROS ROTADOS Y SE LIMPIAN LOS ARCHIVOS ACTUALES
-   find ${DOMAIN_SERVERS_HOME} -name *.log0* -type f -exec rm -f {} \;
-   find ${DOMAIN_SERVERS_HOME} -name *.out0* -type f -exec rm -f {} \;
-   find ${DOMAIN_SERVERS_HOME} -name *.out-* -type f -exec rm -f {} \;
-   find ${DOMAIN_SERVERS_HOME} -name *diagnostic-*.log -type f -exec rm -f {} \;
-   find ${DOMAIN_SERVERS_HOME} -name *.gz -type f -exec rm -f {} \;
+   #find ${DOMAIN_SERVERS_HOME} -name *.log0* -type f -exec rm -f {} \;
+   #find ${DOMAIN_SERVERS_HOME} -name *.out0* -type f -exec rm -f {} \;
+   #find ${DOMAIN_SERVERS_HOME} -name *.out-* -type f -exec rm -f {} \;
+   #find ${DOMAIN_SERVERS_HOME} -name *diagnostic-*.log -type f -exec rm -f {} \;
+   #find ${DOMAIN_SERVERS_HOME} -name *.gz -type f -exec rm -f {} \;
    for MANAGED_SERVER_NAME in ${MANAGED_SERVER_LIST}
    do
      > ${DOMAIN_SERVERS_HOME}/${MANAGED_SERVER_NAME}/logs/${MANAGED_SERVER_NAME}.out
@@ -138,6 +142,6 @@ P30000_FIN()
   unset SCRIPT_HOME
 }
 
-P10000_INICIA
+P10000_INICIA $1 $2 $3
 P20000_PROCESA
 P30000_FIN

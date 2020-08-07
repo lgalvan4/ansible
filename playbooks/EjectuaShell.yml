@@ -3,16 +3,19 @@
 - name: Depura Logs Web Logic Server
   hosts: all
   vars:
-    start: "" 
+    script_home: placeholder
+    domain_server_home: placeholder
+    depuration_theshold: placeholder
+
   gather_facts: false
 
   tasks:
   #------------------------------- CREANDO VARIABLES Y LANZANDO EJECUCION DEL SCRIPT
-    - set_fact: comando="export SCRIPT_HOME='/weblogic/scripts' && export DOMAIN_SERVERS_HOME='/weblogic/oracle/Middleware/user_projects/domains/zapdir01_domain/servers' && export MANAGED_SERVER_LIST=$(ls -1 ${DOMAIN_SERVERS_HOME} | egrep -v 'domain_bak|AdminServerTag|AdminServer') && export DEPURATION_THRESHOLD=80 && export LOG_FILE=${SCRIPT_HOME}/logs/depuraLogsWLS-$(date +%d%m%Y).log"
+    #- set_fact: comando="export SCRIPT_HOME='/weblogic/scripts' && export DOMAIN_SERVERS_HOME='/weblogic/oracle/Middleware/user_projects/domains/zapdir01_domain/servers' && export MANAGED_SERVER_LIST=$(ls -1 ${DOMAIN_SERVERS_HOME} | egrep -v 'domain_bak|AdminServerTag|AdminServer') && export DEPURATION_THRESHOLD=80 && export LOG_FILE=${SCRIPT_HOME}/logs/depuraLogsWLS-$(date +%d%m%Y).log"
 
-    - name: Setting script variables
-      command: bash -c "{{ comando }}"
+    #- name: Setting script variables
+    #  command: bash -c "{{ comando }}"
 
     - name: Exec Script
-      shell: Nirvana/depuraLogsWLS.sh
+      shell: Nirvana/depuraLogsWLS.sh $( pwd ) {{ domain_server_home }} {{ depuration_theshold }}
 
