@@ -59,6 +59,9 @@
 P10000_INICIA()
 {
   tst=$3
+  echo $3
+  echo $tst
+
   if [ -z "$DOMAIN_SERVERS_HOME" ]
   then
     OLD_PWD=$(pwd)
