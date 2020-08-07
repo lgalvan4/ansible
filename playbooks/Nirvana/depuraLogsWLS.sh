@@ -62,11 +62,13 @@ P10000_INICIA()
 
   if [ -z "$DOMAIN_SERVERS_HOME" ]
   then
+    OLD_PWD=$(pwd)
     echo "Extrallendo variable"
     ENTORNO_WLS=$(find / -name setDomainEnv.sh -type f 2> /dev/null)
     . $ENTORNO_WLS
     #DOMAIN_HOME 
     DMH=$DOMAIN_HOME/servers
+    cd $OLD_PWD
   fi
 
   export DOMAIN_SERVERS_HOME=${DMH}
@@ -103,7 +105,9 @@ P20000_PROCESA()
   
   #OBTENER EL ESPACIO ACTUAL OCUPADO EN EL FS OBJETIVO, Y VALIDAR CONTRA EL 
   #UMBRAL ESTABLECIDO
+  echo $DOMAIN_SERVERS_HOME
   FS_USED=$(df -k ${DOMAIN_SERVERS_HOME} | tail -1 | awk '{print $4}' | sed 's/.$//g')
+  echo $FS_USED
   if [ "${FS_USED}" -ge "${DEPURATION_THRESHOLD}" ]
   then
   echo "Limpiando"
