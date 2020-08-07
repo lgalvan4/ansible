@@ -88,6 +88,7 @@ P10000_INICIA()
   export FECHA_INICIO=""
   export FECHA_FIN=""
   export TIEMPO_EJECUCION=""
+  echo ${DEPURATION_THRESHOLD}
 }
 
 ##############################################################################
