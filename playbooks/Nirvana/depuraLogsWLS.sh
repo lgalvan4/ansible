@@ -58,9 +58,8 @@
 ##############################################################################
 P10000_INICIA()
 {
-  tst=$3
-  echo $3
-  echo $tst
+  export SCRIPT_HOME=$1
+  export DEPURATION_THRESHOLD=$3
 
   if [ -z "$DOMAIN_SERVERS_HOME" ]
   then
@@ -75,13 +74,13 @@ P10000_INICIA()
   tst=$3
   test=$( expr $tst - 0)
   #export SCRIPT_HOME="/weblogic/scripts" # Se va a comentar $1
-  export SCRIPT_HOME=$1
+  #export SCRIPT_HOME=$1
   #export DOMAIN_SERVERS_HOME="/weblogic/oracle/Middleware/user_projects/domains/zapdir01_domain/servers" # Se modifica en base al server donde va a correr $2
   #export DOMAIN_SERVERS_HOME=$2
   export DOMAIN_SERVERS_HOME=${DMH}
   export MANAGED_SERVER_LIST=$(ls -1 ${DOMAIN_SERVERS_HOME} | egrep -v "domain_bak|AdminServerTag|AdminServer")
   #export DEPURATION_THRESHOLD=80 # SE puede poner variable dependiendo el cliente $3
-  export DEPURATION_THRESHOLD=${test}
+  #export DEPURATION_THRESHOLD=${test}
   export LOG_FILE=${SCRIPT_HOME}/logs/depuraLogsWLS-$(date +%d%m%Y).log
   #VARIABLES API NIRVANA
   export APIREST=http://10.255.14.150:8180/registroEjecuciones/addEjecucion #Api va por red bkp 
@@ -92,8 +91,6 @@ P10000_INICIA()
   export FECHA_FIN=""
   export TIEMPO_EJECUCION=""
   echo ${DEPURATION_THRESHOLD}
-  echo $3
-  echo $tst
 }
 
 ##############################################################################
