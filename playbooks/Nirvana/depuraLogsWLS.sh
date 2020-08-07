@@ -70,7 +70,7 @@ P10000_INICIA()
     cd $OLD_PWD
   fi
   tst=$3
-  test=expr $tst - 0
+  test=$( expr $tst - 0)
   #export SCRIPT_HOME="/weblogic/scripts" # Se va a comentar $1
   export SCRIPT_HOME=$1
   #export DOMAIN_SERVERS_HOME="/weblogic/oracle/Middleware/user_projects/domains/zapdir01_domain/servers" # Se modifica en base al server donde va a correr $2
