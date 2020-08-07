@@ -58,10 +58,21 @@
 ##############################################################################
 P10000_INICIA()
 {
+
+
+  if [ -z "$DOMAIN_SERVERS_HOME" ]
+  then
+    ENTORNO_WLS=$(find / -name setDomainEnv.sh -type f 2> /dev/null)
+    . $ENTORNO_WLS
+    #DOMAIN_HOME 
+    DOMAIN_SERVERS_HOME=$DOMAIN_HOME/servers
+    export DOMAIN_SERVERS_HOME
+  fi
+
   #export SCRIPT_HOME="/weblogic/scripts" # Se va a comentar $1
   export SCRIPT_HOME=$1
   #export DOMAIN_SERVERS_HOME="/weblogic/oracle/Middleware/user_projects/domains/zapdir01_domain/servers" # Se modifica en base al server donde va a correr $2
-  export DOMAIN_SERVERS_HOME=$2
+  #export DOMAIN_SERVERS_HOME=$2
   export MANAGED_SERVER_LIST=$(ls -1 ${DOMAIN_SERVERS_HOME} | egrep -v "domain_bak|AdminServerTag|AdminServer")
   #export DEPURATION_THRESHOLD=80 # SE puede poner variable dependiendo el cliente $3
   export DEPURATION_THRESHOLD=$3
@@ -95,11 +106,11 @@ P20000_PROCESA()
   then
   echo "Limpiando"
    #SE ELIMINAN LOS REGISTROS ROTADOS Y SE LIMPIAN LOS ARCHIVOS ACTUALES
-   #find ${DOMAIN_SERVERS_HOME} -name *.log0* -type f -exec rm -f {} \;
-   #find ${DOMAIN_SERVERS_HOME} -name *.out0* -type f -exec rm -f {} \;
-   #find ${DOMAIN_SERVERS_HOME} -name *.out-* -type f -exec rm -f {} \;
-   #find ${DOMAIN_SERVERS_HOME} -name *diagnostic-*.log -type f -exec rm -f {} \;
-   #find ${DOMAIN_SERVERS_HOME} -name *.gz -type f -exec rm -f {} \;
+   find ${DOMAIN_SERVERS_HOME} -name *.log0* -type f -exec rm -f {} \;
+   find ${DOMAIN_SERVERS_HOME} -name *.out0* -type f -exec rm -f {} \;
+   find ${DOMAIN_SERVERS_HOME} -name *.out-* -type f -exec rm -f {} \;
+   find ${DOMAIN_SERVERS_HOME} -name *diagnostic-*.log -type f -exec rm -f {} \;
+   find ${DOMAIN_SERVERS_HOME} -name *.gz -type f -exec rm -f {} \;
    for MANAGED_SERVER_NAME in ${MANAGED_SERVER_LIST}
    do
      > ${DOMAIN_SERVERS_HOME}/${MANAGED_SERVER_NAME}/logs/${MANAGED_SERVER_NAME}.out
