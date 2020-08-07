@@ -17,5 +17,5 @@
     #  command: bash -c "{{ comando }}"
 
     - name: Exec Script
-      shell: Nirvana/depuraLogsWLS.sh $( pwd ) {{ domain_server_home }} {{ depuration_theshold }}
-
+      #shell: Nirvana/depuraLogsWLS.sh $( pwd ) {{ domain_server_home }} {{ depuration_theshold }}
+      shell: ls -la
