@@ -69,7 +69,7 @@ P10000_INICIA()
     DMH=$DOMAIN_HOME/servers
     cd $OLD_PWD
   fi
-  
+
   test=$(expr $3 - 0)
   #export SCRIPT_HOME="/weblogic/scripts" # Se va a comentar $1
   export SCRIPT_HOME=$1
@@ -78,7 +78,7 @@ P10000_INICIA()
   export DOMAIN_SERVERS_HOME=${DMH}
   export MANAGED_SERVER_LIST=$(ls -1 ${DOMAIN_SERVERS_HOME} | egrep -v "domain_bak|AdminServerTag|AdminServer")
   #export DEPURATION_THRESHOLD=80 # SE puede poner variable dependiendo el cliente $3
-  export DEPURATION_THRESHOLD=test
+  export DEPURATION_THRESHOLD=${test}
   export LOG_FILE=${SCRIPT_HOME}/logs/depuraLogsWLS-$(date +%d%m%Y).log
   #VARIABLES API NIRVANA
   export APIREST=http://10.255.14.150:8180/registroEjecuciones/addEjecucion #Api va por red bkp 
@@ -105,6 +105,9 @@ P20000_PROCESA()
   #OBTENER EL ESPACIO ACTUAL OCUPADO EN EL FS OBJETIVO, Y VALIDAR CONTRA EL 
   #UMBRAL ESTABLECIDO
   FS_USED=$(df -k ${DOMAIN_SERVERS_HOME} | tail -1 | awk '{print $4}' | sed 's/.$//g')
+
+  echo "-"${FS_USED}"- -"${DEPURATION_THRESHOLD}"-"
+
   if [ "${FS_USED}" -ge "${DEPURATION_THRESHOLD}" ]
   then
   echo "Limpiando"
@@ -158,6 +161,6 @@ P30000_FIN()
   unset SCRIPT_HOME
 }
 
-P10000_INICIA $1 $2 expr $3 - 0
+P10000_INICIA $1 $2 $3
 P20000_PROCESA
 P30000_FIN
