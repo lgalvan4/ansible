@@ -104,7 +104,8 @@ P20000_PROCESA()
    do
      > ${DOMAIN_SERVERS_HOME}/${MANAGED_SERVER_NAME}/logs/${MANAGED_SERVER_NAME}.out
    done
-   echo "$(date +%d/%m/%Y" "%H:%M) Depuracion correcta de los registros en ${DOMAIN_SERVERS_HOME} FileSystem se encontro al ${FS_USED}% de espacio ocupado" >> ${LOG_FILE}
+   #echo "$(date +%d/%m/%Y" "%H:%M) Depuracion correcta de los registros en ${DOMAIN_SERVERS_HOME} FileSystem se encontro al ${FS_USED}% de espacio ocupado" >> ${LOG_FILE}
+   echo "$(date +%d/%m/%Y" "%H:%M) Depuracion correcta de los registros en ${DOMAIN_SERVERS_HOME} FileSystem se encontro al ${FS_USED}% de espacio ocupado"
    FECHA_FIN="$(date "+%Y-%m-%d %H:%M:%S")"
    let TIEMPO_EJECUCION=$(date +%s)-INICIO
    P21000_GUARDAEJECUCIONNIRVANA
@@ -119,7 +120,8 @@ P20000_PROCESA()
 P21000_GUARDAEJECUCIONNIRVANA()
 {
   SALIDA_GUARDADO_BD_NIRVANA=$(curl ${APIREST} -d script="${ID_SCRIPT}" -d argumentos="${ARGUMENTOS}" -d usuario="${USUARIO}" -d fechaInicio="${FECHA_INICIO}" -d fechaFin="${FECHA_FIN}" -d tiempoEjecucion="${TIEMPO_EJECUCION}" 2>&1)
-  echo ${SALIDA_GUARDADO_BD_NIRVANA} >> ${LOG_FILE}
+  #echo ${SALIDA_GUARDADO_BD_NIRVANA} >> ${LOG_FILE}
+  echo ${SALIDA_GUARDADO_BD_NIRVANA}
 }
 
 ##############################################################################
