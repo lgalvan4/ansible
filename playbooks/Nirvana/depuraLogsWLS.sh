@@ -69,8 +69,8 @@ P10000_INICIA()
     DMH=$DOMAIN_HOME/servers
     cd $OLD_PWD
   fi
-
-  test=$( expr ${3} - 0 )
+  tst=$3
+  test=expr $tst - 0
   #export SCRIPT_HOME="/weblogic/scripts" # Se va a comentar $1
   export SCRIPT_HOME=$1
   #export DOMAIN_SERVERS_HOME="/weblogic/oracle/Middleware/user_projects/domains/zapdir01_domain/servers" # Se modifica en base al server donde va a correr $2
