@@ -62,13 +62,14 @@ P10000_INICIA()
 
   if [ -z "$DOMAIN_SERVERS_HOME" ]
   then
+    echo "Extrallendo variable"
     ENTORNO_WLS=$(find / -name setDomainEnv.sh -type f 2> /dev/null)
     . $ENTORNO_WLS
     #DOMAIN_HOME 
     DOMAIN_SERVERS_HOME=$DOMAIN_HOME/servers
     export DOMAIN_SERVERS_HOME
   fi
-
+  echo $DOMAIN_SERVERS_HOME
   #export SCRIPT_HOME="/weblogic/scripts" # Se va a comentar $1
   export SCRIPT_HOME=$1
   #export DOMAIN_SERVERS_HOME="/weblogic/oracle/Middleware/user_projects/domains/zapdir01_domain/servers" # Se modifica en base al server donde va a correr $2
