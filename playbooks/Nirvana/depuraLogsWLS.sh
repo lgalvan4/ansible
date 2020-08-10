@@ -50,18 +50,22 @@
 #   FECHA        VERSION  DESCRIPCION                         AUTOR                                #
 # 16/MAR/2016    1.0      Version Inicial                     Jorge Francisco Varela Gutierrez     #
 # 11/JUN/2020    2.0      Consumo de API REST Nirvana         Jorge Francisco Varela Gutiérrez     #
+# 10/AGO/2020    3.0      Adecuacion para Asible/AWX          Erick Benitez Hernandez              #
 ####################################################################################################
 
 ##############################################################################
 # Procedimiento: P10000_INICIA                                               #
 # Objetivo     : CARGA LAS VARIABLES                                         #
+# Parametros   : $1 DEPURATION_THRESHOLD   $2 DOMAIN_SERVERS_HOME (Opcional) #
 ##############################################################################
 P10000_INICIA()
 {
-  export SCRIPT_HOME=$1
-  export DEPURATION_THRESHOLD=$3
+  export DEPURATION_THRESHOLD=$1
 
-  if [ -z "$DOMAIN_SERVERS_HOME" ]
+  if [ -z "$2" ]
+  then
+    DMH=$2
+  elif [ -z "$DOMAIN_SERVERS_HOME" ]
   then
     OLD_PWD=$(pwd)
     echo "Extrallendo variable"
@@ -71,17 +75,13 @@ P10000_INICIA()
     DMH=$DOMAIN_HOME/servers
     cd $OLD_PWD
   fi
-  tst=$3
-  test=$( expr $tst - 0)
-  #export SCRIPT_HOME="/weblogic/scripts" # Se va a comentar $1
-  #export SCRIPT_HOME=$1
+  
+  #export SCRIPT_HOME="/weblogic/scripts" # Se va a comentar dentro de AWX no es nesesaria. $1
   #export DOMAIN_SERVERS_HOME="/weblogic/oracle/Middleware/user_projects/domains/zapdir01_domain/servers" # Se modifica en base al server donde va a correr $2
-  #export DOMAIN_SERVERS_HOME=$2
   export DOMAIN_SERVERS_HOME=${DMH}
   export MANAGED_SERVER_LIST=$(ls -1 ${DOMAIN_SERVERS_HOME} | egrep -v "domain_bak|AdminServerTag|AdminServer")
   #export DEPURATION_THRESHOLD=80 # SE puede poner variable dependiendo el cliente $3
-  #export DEPURATION_THRESHOLD=${test}
-  export LOG_FILE=${SCRIPT_HOME}/logs/depuraLogsWLS-$(date +%d%m%Y).log
+  #export LOG_FILE=${SCRIPT_HOME}/logs/depuraLogsWLS-$(date +%d%m%Y).log
   #VARIABLES API NIRVANA
   export APIREST=http://10.255.14.150:8180/registroEjecuciones/addEjecucion #Api va por red bkp 
   export ID_SCRIPT="10"
@@ -90,7 +90,6 @@ P10000_INICIA()
   export FECHA_INICIO=""
   export FECHA_FIN=""
   export TIEMPO_EJECUCION=""
-  echo ${DEPURATION_THRESHOLD}
 }
 
 ##############################################################################
@@ -164,8 +163,6 @@ P30000_FIN()
   unset SCRIPT_HOME
 }
 
-echo $1 $2 $3
-
-P10000_INICIA $1 $2 $3
+P10000_INICIA $1 $2
 P20000_PROCESA
 P30000_FIN
