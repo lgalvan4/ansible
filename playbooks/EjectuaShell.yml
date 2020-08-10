@@ -2,14 +2,14 @@
 #------------------------------- PLAYBOOK SCRIPT NIRVANA
 - name: Depura Logs Web Logic Server
   hosts: all
-  vars:
-    domain_server_home: ""
-    depuration_theshold: placeholder
+  # vars:
+  #   domain_server_home: ""
+  #   depuration_theshold: placeholder
 
   gather_facts: false
 
   tasks:
   #------------------------------- LANZANDO EJECUCION DEL SCRIPT
     - name: Exec Script
-      script: Nirvana/depuraLogsWLS.sh {{ depuration_theshold }} {{ domain_server_home }} 
+      script: Nirvana/depuraLogsWLS.sh {{ depuration_theshold }} {{ domain_server_home | default([]) }} 
 
