@@ -65,15 +65,18 @@ P10000_INICIA()
   if [ -z "$2" ]
   then
     DMH=$2
+    echo "Variable DOMAIN_SERVERS_HOME recibida desde AWX"
   elif [ -z "$DOMAIN_SERVERS_HOME" ]
   then
     OLD_PWD=$(pwd)
-    echo "Extrallendo variable"
+    echo "Extrallendo variable DOMAIN_SERVERS_HOME programaticamente"
     ENTORNO_WLS=$(find / -name setDomainEnv.sh -type f 2> /dev/null)
     . $ENTORNO_WLS
     #DOMAIN_HOME 
     DMH=$DOMAIN_HOME/servers
     cd $OLD_PWD
+  else
+    echo "Variable DOMAIN_SERVERS_HOME delcarada localmente"
   fi
   
   #export SCRIPT_HOME="/weblogic/scripts" # Se va a comentar dentro de AWX no es nesesaria. $1
@@ -107,8 +110,6 @@ P20000_PROCESA()
   #OBTENER EL ESPACIO ACTUAL OCUPADO EN EL FS OBJETIVO, Y VALIDAR CONTRA EL 
   #UMBRAL ESTABLECIDO
   FS_USED=$(df -k ${DOMAIN_SERVERS_HOME} | tail -1 | awk '{print $4}' | sed 's/.$//g')
-
-  echo "-"${FS_USED}"- -"${DEPURATION_THRESHOLD}"-"
 
   if [ "${FS_USED}" -ge "${DEPURATION_THRESHOLD}" ]
   then
@@ -160,7 +161,7 @@ P30000_FIN()
   unset DEPURATION_THRESHOLD
   unset MANAGED_SERVER_LIST
   unset DOMAIN_HOME
-  unset SCRIPT_HOME
+  #unset SCRIPT_HOME
 }
 
 P10000_INICIA $1 $2
