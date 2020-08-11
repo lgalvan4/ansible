@@ -1,0 +1,10 @@
+---
+#------------------------------- PLAYBOOK SCRIPT NIRVANA
+- name: Depura Logs Web Logic Server
+  hosts: all
+  gather_facts: false
+
+  tasks:
+  #------------------------------- LANZANDO EJECUCION DEL SCRIPT
+    - name: Exec Script
+      script: Nirvana/depuraLogsWLScopy.sh {{ depuration_theshold }} {{ domain_server_home | default([]) }}
