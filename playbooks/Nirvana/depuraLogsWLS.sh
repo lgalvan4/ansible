@@ -62,6 +62,8 @@ P10000_INICIA()
 {
   export DEPURATION_THRESHOLD=$1
 
+  echo $1 $2
+
   if [ -z "$2" ]
   then
     DMH=$2
@@ -164,8 +166,6 @@ P30000_FIN()
   unset DOMAIN_HOME
   #unset SCRIPT_HOME
 }
-
-echo $1 $2
 
 P10000_INICIA $1 $2
 P20000_PROCESA
