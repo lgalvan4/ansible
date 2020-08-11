@@ -62,7 +62,7 @@ P10000_INICIA()
 {
   export DEPURATION_THRESHOLD=$1
 
-  echo $1 $2
+  echo $1"-"$2
 
   if [ -z "$2" ]
   then
