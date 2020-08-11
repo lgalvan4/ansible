@@ -62,11 +62,12 @@ P10000_INICIA()
 {
   export DEPURATION_THRESHOLD=$1
 
-  if [ ! -z "$2" ]
-  then
-    echo "Variable DOMAIN_SERVERS_HOME recibida desde AWX"
-    DMH=$2
-  elif [ -z "$DOMAIN_SERVERS_HOME" ]
+  # if [ ! -z "$2" ]
+  # then
+  #   echo "Variable DOMAIN_SERVERS_HOME recibida desde AWX"
+  #   DMH=$2
+  # el
+  if [ -z "$DOMAIN_SERVERS_HOME" ]
   then
     OLD_PWD=$(pwd)
     echo "Extrallendo variable DOMAIN_SERVERS_HOME programaticamente"
