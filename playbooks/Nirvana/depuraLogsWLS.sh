@@ -86,8 +86,8 @@ P10000_INICIA()
   #export DEPURATION_THRESHOLD=80 # SE puede poner variable dependiendo el cliente $3
   #export LOG_FILE=${SCRIPT_HOME}/logs/depuraLogsWLS-$(date +%d%m%Y).log
   #VARIABLES API NIRVANA
-  #export APIREST=http://10.255.14.150:8180/registroEjecuciones/addEjecucion #Api va por red bkp 
-  export APIREST=http://10.50.46.150:8180/registroEjecuciones/addEjecucion
+  export APIREST=http://10.255.14.150:8180/registroEjecuciones/addEjecucion #Api va por red bkp 
+  #export APIREST=http://10.50.46.150:8180/registroEjecuciones/addEjecucion
   export ID_SCRIPT="10"
   export ARGUMENTOS="$(hostname) ${DOMAIN_SERVERS_HOME}" #Agregar comentario ejecucion desde AWX
   export USUARIO="crontab"
