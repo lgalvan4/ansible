@@ -10,6 +10,10 @@
 
   tasks:
   #------------------------------- LANZANDO EJECUCION DEL SCRIPT
+
+    - name: Bot Port 
+      debug: var=domain_server_home
+
     - name: Exec Script
       script: Nirvana/depuraLogsWLS.sh {{ depuration_theshold }} {{ domain_server_home | default([]) }} 
 
