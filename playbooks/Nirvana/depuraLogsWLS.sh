@@ -165,6 +165,11 @@ P30000_FIN()
   #unset SCRIPT_HOME
 }
 
-P10000_INICIA $1 $2
+if [ -z "$2" ]
+then
+  P10000_INICIA $1
+else
+  P10000_INICIA $1 $2
+fi
 P20000_PROCESA
 P30000_FIN
