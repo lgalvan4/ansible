@@ -117,8 +117,8 @@ P20000_PROCESA()
   then
   echo "Limpiando"
    #SE ELIMINAN LOS REGISTROS ROTADOS Y SE LIMPIAN LOS ARCHIVOS ACTUALES
-   find ${DOMAIN_SERVERS_HOME} -name *.log0* -type f -exec rm -f {} \;
-   find ${DOMAIN_SERVERS_HOME} -name *.out0* -type f -exec rm -f {} \;
+   find ${DOMAIN_SERVERS_HOME} -name *.log[0-9]* -type f -exec rm -f {} \;
+   find ${DOMAIN_SERVERS_HOME} -name *.out[0-9]* -type f -exec rm -f {} \;
    find ${DOMAIN_SERVERS_HOME} -name *.out-* -type f -exec rm -f {} \;
    find ${DOMAIN_SERVERS_HOME} -name *diagnostic-*.log -type f -exec rm -f {} \;
    find ${DOMAIN_SERVERS_HOME} -name *.gz -type f -exec rm -f {} \;
@@ -131,7 +131,7 @@ P20000_PROCESA()
    FECHA_FIN="$(date "+%Y-%m-%d %H:%M:%S")"
    let TIEMPO_EJECUCION=$(date +%s)-INICIO
    P21000_GUARDAEJECUCIONNIRVANA
-  fi
+  # fi
 }
 
 ##############################################################################
