@@ -48,6 +48,7 @@
     - name: List Windows "{{ update_type }}"
       register: res
       win_updates:
+        server_selection: managed_server
         category_names:
           - Application
           - Connectors
