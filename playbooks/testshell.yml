@@ -7,4 +7,24 @@
   tasks:
   #------------------------------- LANZANDO EJECUCION DEL SCRIPT
     - name: Exec Script
+      register: script_out
       script: Nirvana/depuraLogsWLScopy.sh {{ depuration_theshold }} {{ domain_server_home | default([]) }}
+
+    - name: Create Work Order en Helix
+      when: script_out.stdout.find('Limpiando') != -1
+      delegate_to: 192.10.20.50
+      remote_user: ubuntu
+      register: wo
+      shell: node /home/ubuntu/BMC/createWO.js --data '{"shortDescr":"Ticket creado por AWX PB EjecutaShell.yml","detailedDescr":"Depuracion FS WLS {{ inventory_hostname }}"}'
+
+    - set_fact: comando="echo {{ wo.stdout }} | awk '{ print $3 }' | sed 's/id://g'"
+      when: script_out.stdout.find('Limpiando') != -1
+
+    - name: Cleaning wo out 
+      command: bash -c "{{ comando }}"
+      register: wo_out
+      when: script_out.stdout.find('Limpiando') != -1
+
+    - name: debug WO
+      debug: var=wo_out.stdout
+      when: script_out.stdout.find('Limpiando') != -1
