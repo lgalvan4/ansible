@@ -51,7 +51,7 @@
     - name: List Windows "{{ update_type }}"
       register: res
       win_updates:
-        #server_selection: managed_server
+        server_selection: managed_server
         category_names:
           - Application
           - Connectors
@@ -65,7 +65,7 @@
           - SecurityUpdates
           - UpdateRollups
           - Updates
-        state: installed
+        state: searched
         log_path: C:\ansible_wu.txt
 
     - set_fact: archname="report_{{ inventory_hostname }}"
