@@ -65,7 +65,7 @@
           - SecurityUpdates
           - UpdateRollups
           - Updates
-        state: searched
+        state: downloaded
         log_path: C:\ansible_wu.txt
 
     - set_fact: archname="report_{{ inventory_hostname }}"
