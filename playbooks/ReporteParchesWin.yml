@@ -44,6 +44,9 @@
   gather_facts: false
 
   tasks:
+    - name: Print Garthered facts
+      debug: var=hostvars
+
     #---Extrallendo lista de updates
     - name: List Windows "{{ update_type }}"
       register: res
